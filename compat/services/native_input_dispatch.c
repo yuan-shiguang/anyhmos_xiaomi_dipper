@@ -8,7 +8,7 @@
 int main(void)
 {
     alarm(10);
-    FILE *f = fopen("/data/local/tmp/sheng-input.args", "r");
+    FILE *f = fopen("/data/local/tmp/dipper-input.args", "r");
     if (!f) {
         return 2;
     }
@@ -39,7 +39,7 @@ int main(void)
         }
         args[1] = "/system/bin/aa";
     }
-    if (!freopen("/data/local/tmp/sheng-input-last.log", "w", stdout)) {
+    if (!freopen("/data/local/tmp/dipper-input-last.log", "w", stdout)) {
         return 5;
     }
     dup2(fileno(stdout), STDERR_FILENO);

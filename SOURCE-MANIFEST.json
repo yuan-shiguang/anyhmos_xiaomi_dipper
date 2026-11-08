@@ -9,8 +9,8 @@
     },
     {
       "path": ".github/workflows/build-ipc-gki.yml",
-      "bytes": 1250,
-      "sha256": "06b9b47254d0bff54df24a2ec8ae81db749187cd205d9f46935cbf35914861e2"
+      "bytes": 1254,
+      "sha256": "ccb9ab8c9204893425d2456daf2c6617eb353f691baaf819f8746d2428deae79"
     },
     {
       "path": ".gitignore",
@@ -18,99 +18,119 @@
       "sha256": "6760b1aa3b2227f5f443cdc411a782db5a6dcb69a1e28938eabd0236df68509b"
     },
     {
+      "path": "README.en.md",
+      "bytes": 11553,
+      "sha256": "0a2f6ded4dd2f956338cc0b9add5b7ebbca780b8fa3b280dc592d134f2b32c94"
+    },
+    {
+      "path": "README.md",
+      "bytes": 9931,
+      "sha256": "77dec6edb071cf12b13230092c43ae6ca7170b7c22f5deba4d743a7cdd4852c2"
+    },
+    {
+      "path": "RELEASE.json",
+      "bytes": 449,
+      "sha256": "21465db3e7aed0073e2ca0e50ce09623a66c6c594ff62983fdfd76f7e4ee28f5"
+    },
+    {
+      "path": "SOURCE-SELECTION.json",
+      "bytes": 108925,
+      "sha256": "75b1286025814c7017026dcb6cdbdb810d0feb931ad7a9d90443bb0578150c8c"
+    },
+    {
       "path": "analysis/alpha-metadata-v130-verification.json",
-      "bytes": 1859,
-      "sha256": "a3cac64aedaa997bf50145e19a19998d04ced275d2feaceb404ab03863cfebd6"
+      "bytes": 1861,
+      "sha256": "1d9eac83c82c93896dabeabff1fcc2ee44387d69d95279484dffc4508f45f57b"
     },
     {
       "path": "analysis/audio-lifecycle-v142-verification.json",
-      "bytes": 1397,
-      "sha256": "9d9e21f66fe7133cdfbb1896e53313c3ee11aadb0c2aa79be36681b0bbb19d3c"
+      "bytes": 1401,
+      "sha256": "98cb0152a1ca48e8f9be5b80826a34ccf1e44061b32d1f3d5790f36942f4f6ea"
     },
     {
       "path": "analysis/battery-v131-verification.json",
-      "bytes": 2241,
-      "sha256": "aafe74100c7d4ebb59d23bfb5d44caefefb2bdd8b97302aaca0d85b3512efbd6"
+      "bytes": 2246,
+      "sha256": "d40f34cbfcf244ac36576e3477b84f55cce88932282bdd23176d818c991ec320"
     },
     {
       "path": "analysis/bluetooth-v139-verification.json",
-      "bytes": 1862,
-      "sha256": "787f4ce4a3d92f928cf17d0eb752b80bc357d89fbe5b51decb4cb55a0bb03fef"
+      "bytes": 1868,
+      "sha256": "37dd1431ac1e906c3cfc1406a70c36062a4a270e3b1a5a869a75e34fa83516dd"
     },
     {
       "path": "analysis/bootcontrol-v135-verification.json",
-      "bytes": 2271,
-      "sha256": "df3722d63a1a13d810e31818bf960c5dd8b293a30eccdc435251520f77a5d686"
+      "bytes": 2283,
+      "sha256": "6d477d5fd9a07aba51d3a19118f17940cfe3587783220c05c12b8cb09d330ebd"
     },
     {
       "path": "analysis/current-source-build-verification.json",
-      "bytes": 7909,
-      "sha256": "3b1b232d01ba55944459befb197394a364dd61a108d80d0b267afbf767210fd5"
+      "bytes": 8139,
+      "sha256": "76dcc2c0361d61adf83594e2df723461a429af1aff1897cc9d215a10db5c9466"
     },
     {
       "path": "analysis/nearlink-v141-verification.json",
-      "bytes": 1406,
-      "sha256": "1f9dc059eb380dac0c5c795e3609dbc588066e35416ab6692cecc1a55b5e6e22"
+      "bytes": 1409,
+      "sha256": "21635dd8d4b610d644c67a723712bc22ecb62cd45fa244a5294bdd40dfb0f319"
     },
     {
       "path": "analysis/rebuilt-source-v146-verification.json",
-      "bytes": 2940,
-      "sha256": "1f001affbbf2b9943adb831e3da420350ec67d6e07eef5d537609423d6d4d70b"
+      "bytes": 2984,
+      "sha256": "fdc513f2472ccec45a34a3b1afdf6db36a05cb51960b4d37ae75c6b09a1bc30c"
     },
     {
       "path": "analysis/screen-power-v145-verification.json",
-      "bytes": 1020,
-      "sha256": "0dce5e3baed6c6fed0d57112c9248d10b6c5ad9e8fb062a374bc199f42ea7f58"
+      "bytes": 1023,
+      "sha256": "5241e9c7c62106fc397e59de0740c1e9e8d3652d9c2faf7f6fe48eee54990a2b"
     },
     {
       "path": "analysis/softbus-v140-verification.json",
-      "bytes": 1444,
-      "sha256": "cf5c3256b8bb299d5bebc6b44b119196c795089f0c88f5a3d6aa77490c226fed"
+      "bytes": 1449,
+      "sha256": "eb93ce2370d9aa9d6f4f4b26d615559573f99ea6241453fcb7aabce010895652"
     },
     {
       "path": "analysis/storage-local-v119-verification.json",
-      "bytes": 1064,
-      "sha256": "1424131539dd522a98f9d7fa75b8457e7deace611c314ffdb1c1f7702e3d3a38"
+      "bytes": 1069,
+      "sha256": "07ead4dd20056f20af0369acdff35ac69dfab721c3dd1514a5853fe0859f67ac"
     },
     {
       "path": "analysis/usb-session-v121-verification.json",
-      "bytes": 1276,
-      "sha256": "3a95cdb020f9fbd8320f936147b941b0d8583609edb3e37959c2479cc4e1fe47"
+      "bytes": 1278,
+      "sha256": "9ad1619ebb8b0af2fb566c8bd33b746061edc2ab1d2803dc413be6895ed237ce"
     },
     {
       "path": "analysis/userdata-ext4-fix-verification.json",
-      "bytes": 1335,
-      "sha256": "34e1818e3bf7f7dd27fd7bc962e66a7bf7ce3bc379f5e548c1dc82b087e763dc"
+      "bytes": 1338,
+      "sha256": "200640649fc71afd55388f986d62c577c6ef29282732fe04167894161cd2c506"
     },
     {
       "path": "analysis/web-bootsound-v143-verification.json",
-      "bytes": 1583,
-      "sha256": "5f29c1428dc44ba9003a4fcbcff829682797748beb77d6b952cda226f2484c43"
+      "bytes": 1587,
+      "sha256": "0b58e92b001b7834fa554a3cf697490e496ecf6fa36a39824fffb3ca46463dc4"
     },
     {
       "path": "analysis/wifi-category-v134-verification.json",
-      "bytes": 2111,
-      "sha256": "d88c23bb80a42cbd26497b442cc90a8db15a87e65c8c993084d04fd7eccf242f"
+      "bytes": 2116,
+      "sha256": "37cf0d3c26c03069426f9bb622934eabb2d3c7eca2afe10c9a442cd80f420a4f"
     },
     {
       "path": "compat/audio/audio_capture_vdi.inc",
-      "bytes": 12075,
-      "sha256": "93142cf3132ab880e0323abfa83dd7bd9a58d8ee3074b59a7b8b5d9c37c8bb4f"
+      "bytes": 12123,
+      "sha256": "e5c4b43327e27937103c1b9ab28d2fcaaae89c53ab18089835617d71941e20c6"
     },
     {
       "path": "compat/audio/audio_manager_service.c",
-      "bytes": 2996,
-      "sha256": "22295caeff83a34eec29d569c899246d63a62ea9910a4e00b9d4178428e79072"
+      "bytes": 2999,
+      "sha256": "c21ea4c534218371ae213b726c2b509eb09b7687ea33766cb0d934e5bf927300"
     },
     {
       "path": "compat/audio/audio_vdi.c",
-      "bytes": 16428,
-      "sha256": "5a884256d86444b795d195ae9ec3b9881514be68b7bb4f15f6e94c6843f81692"
+      "bytes": 16464,
+      "sha256": "59d4d9185e1311ca806b448d0cc3bd7f9fab20a32ab0dcd3544a279a42a8f11c"
     },
     {
       "path": "compat/audio/audio_vdi_loader.c",
-      "bytes": 3550,
-      "sha256": "df8130cdfbc7459b6de4376597a0cac47a4aabdc287f097fd1a4bf0a85d1abf5"
+      "bytes": 3553,
+      "sha256": "9ca1aa3d853386c09e9fa739f3442ca311fd2d0bbe1ce2ae21394105ef82e12f"
     },
     {
       "path": "compat/audio/include/audio_types_vdi.h",
@@ -144,13 +164,13 @@
     },
     {
       "path": "compat/audio/native_audio_hdi_publisher.c",
-      "bytes": 3855,
-      "sha256": "d8494c0f6f53b3129a24274417f7bf0f3846a082f60fa7e8a86bb44eecdb2cca"
+      "bytes": 3856,
+      "sha256": "6c13c885d564191bfbfd1a1034b69e0e051ebe77fccfd72908c448c6c3067eaa"
     },
     {
       "path": "compat/audio/native_audio_service_launcher.c",
-      "bytes": 1011,
-      "sha256": "68c4ed716775b2074477949a685f76730d72b903fcc1e27c1f904250d758cc2b"
+      "bytes": 1014,
+      "sha256": "b5d45fe9a08a3b0a40e5375c83807aa89ddaf09e4289e6517b194b4d65996e40"
     },
     {
       "path": "compat/audio/native_system_audio_check.c",
@@ -159,23 +179,23 @@
     },
     {
       "path": "compat/audio/pal_capture_backend.inc",
-      "bytes": 5748,
-      "sha256": "92ed3e5d7c6ceb6ef3780afabe68f382ccc0d8337dede511a6cfc8064ea127ea"
+      "bytes": 5766,
+      "sha256": "8044c6fca2ef1ff03b4a900f05b0cf5baa6b5b4953bbe9a48b3e20b55affb1b3"
     },
     {
       "path": "compat/audio/pal_capture_worker.inc",
-      "bytes": 5539,
-      "sha256": "f4f9cf118618006ee62c7a2f66f13fa22300c27dcdc888bf4b143e31777d37e4"
+      "bytes": 5559,
+      "sha256": "acce0120d63ad0ddd12241875495da7dbce05a4bdf63d41e3b559881f729286e"
     },
     {
       "path": "compat/audio/pal_client.c",
-      "bytes": 2978,
-      "sha256": "e8a24a1d5a1887cfc1e8e003f05d32328e25c1f5dbfe2af80bf6bcbbc7cadfb0"
+      "bytes": 2997,
+      "sha256": "76e74cc2a78bcd33d13562044a6253c03a7e2d8def9e6186083634fb39db9be0"
     },
     {
       "path": "compat/audio/pal_client.h",
-      "bytes": 390,
-      "sha256": "88c0d466ce4ae80081cb3daaeeb1cee0f3db4befa355f06b1593a866ee0f7d9d"
+      "bytes": 397,
+      "sha256": "68912b77d3424f03325949039b131f3f0dbd07feee063444e3ede9969d4f1749"
     },
     {
       "path": "compat/audio/pal_lifecycle.c",
@@ -184,8 +204,8 @@
     },
     {
       "path": "compat/audio/pal_server.c",
-      "bytes": 13211,
-      "sha256": "ba06cd4da53bc96b8a1d5a4ba5ede6101a809a8da2b634b91c5ca83488e723ce"
+      "bytes": 13235,
+      "sha256": "20a33b71c89b042034f9b68fc2530d519303b5e7c8f53c9367de70aabe50b966"
     },
     {
       "path": "compat/audio/pd-mapper/assoc.c",
@@ -199,8 +219,8 @@
     },
     {
       "path": "compat/audio/pd-mapper/json.c",
-      "bytes": 8326,
-      "sha256": "ef7887df1f92c58623d44eb436d50b34b64c265f5ea2b7a7f9ef51dab4fee90f"
+      "bytes": 8327,
+      "sha256": "a96171ccfa8e98f65e92d17ab9a4baa0b7e2a763685d3ccd533066eb996b8c74"
     },
     {
       "path": "compat/audio/pd-mapper/json.h",
@@ -259,18 +279,23 @@
     },
     {
       "path": "compat/audio/protocol.h",
-      "bytes": 1074,
-      "sha256": "a1d1f8a281ebb21d71357bdd1c450962774906d6e6f215039f8386e0cf074be0"
+      "bytes": 1105,
+      "sha256": "d6a9f91a9d442082012149d7cd42ba44b017f83ab10c874b4a16447496c54b9a"
+    },
+    {
+      "path": "compat/audio/tinyalsa_server.c",
+      "bytes": 38347,
+      "sha256": "9d3a7edaa4f4efbf94882727ce92f6e6ab44878e5d8518e43c6e12146faa0e49"
     },
     {
       "path": "compat/battery/battery_charge_adapter.cpp",
-      "bytes": 7464,
-      "sha256": "c4cfab729eb51e3b2f4b7ef4f714877a679ea7b7f16f39e4460a7068b2b87cc3"
+      "bytes": 7466,
+      "sha256": "76126da08b37e73a68eec81e0cbb980fbd4b7ca8d8b426b79b6e68fe303c4ca5"
     },
     {
       "path": "compat/battery/battery_charge_adapter.h",
-      "bytes": 821,
-      "sha256": "2cf8bd06ee47aa839e7d71637cbce8b35b49d3201c9e859afacfb37edef52f09"
+      "bytes": 825,
+      "sha256": "242e9e14316467c7eee2eb45de6b284d9187be79be8d8dea082ee5aae646bae5"
     },
     {
       "path": "compat/battery/include/battery/v2_0/battery_callback_proxy.h",
@@ -324,8 +349,8 @@
     },
     {
       "path": "compat/battery/native_battery_hdi_publisher_v131.cpp",
-      "bytes": 4295,
-      "sha256": "585c33d3599fe29d178ca05d9b315c6b8324007ef2f18e83c920fba83a75468f"
+      "bytes": 4297,
+      "sha256": "43db7fe6474c03cec98678ba69efdab028c523c543eb723791392eac632f820d"
     },
     {
       "path": "compat/battery/native_battery_probe_v131.cpp",
@@ -334,8 +359,8 @@
     },
     {
       "path": "compat/bluetooth/bluetooth_bridge_v136.cpp",
-      "bytes": 5830,
-      "sha256": "d99fc819f4b4a4f3d6a0ae2fe1030c01102d1644ce18575b707f9812a3b00d38"
+      "bytes": 5834,
+      "sha256": "69867b76b73879566e03b12435dd7ed4ef0cf27e5727b5b3782822776042ed0c"
     },
     {
       "path": "compat/bluetooth/bluetooth_identity_v136.cpp",
@@ -344,13 +369,13 @@
     },
     {
       "path": "compat/bluetooth/bluetooth_initialize_v136.cpp",
-      "bytes": 6442,
-      "sha256": "7733038143294da48e254d26973753b862ab51a765ecb76ece7ec33eaa9cb52b"
+      "bytes": 6445,
+      "sha256": "726660ecf2fa0e439623ca1530cab3830b51453cc1e0b7492f5f7dfb0e9f0d83"
     },
     {
       "path": "compat/bluetooth/bluetooth_vendor_v136.cpp",
-      "bytes": 2700,
-      "sha256": "b97011db3cacffdb92f7be78569613135fea10d9a1008963dfd57ad4fda8960f"
+      "bytes": 2701,
+      "sha256": "579a0860d7461b844671445543ae2bd597f30786713a491aa204d7b77b5a3dcb"
     },
     {
       "path": "compat/bluetooth/include/bluetooth/hci/v1_0/hci_callback_proxy.h",
@@ -399,33 +424,33 @@
     },
     {
       "path": "compat/bluetooth/native_bt_current_v139.cpp",
-      "bytes": 519,
-      "sha256": "ba662f90f74d43f950e97d7f211b95d831f07ff996994c9478199a2c66c48e0c"
+      "bytes": 520,
+      "sha256": "3525c219a46557f2a162096a7cf683ddd2ce416e06b400d4a6c898a5736bd319"
     },
     {
       "path": "compat/bluetooth/native_bt_hdi_publisher_v136.cpp",
-      "bytes": 4069,
-      "sha256": "6b155cb4c812f907e52ea6a2f373bb25bcdbe675612d06f475a43820bf1c88f6"
+      "bytes": 4070,
+      "sha256": "7dfe5d030b5c390bbdd6a89068e22eb58628f3d2695332e552b4f950db1bffb8"
     },
     {
       "path": "compat/bluetooth/native_bt_host_check_v137.c",
-      "bytes": 2475,
-      "sha256": "d5262f24684c24e64e37b918ca37b0329a936a0b7b2053f5663f51fc97e8c78a"
+      "bytes": 2481,
+      "sha256": "2eba2ec3a265bbb1c3a9edbfdab25b0ef184c53f8b4288d8fe76ade04634bcfb"
     },
     {
       "path": "compat/bootcontrol/bootcontrol_readonly.c",
-      "bytes": 5550,
-      "sha256": "7535729f925a59d87fef097749e86b2ffdd851feb2d789ea93032dce5d43f318"
+      "bytes": 5553,
+      "sha256": "73f10d38c9c574da1c46b4060094df94cedd2b963fd0f16662471334d60bea8c"
     },
     {
       "path": "compat/bootstrap/hmos_probe_v121.c",
-      "bytes": 73578,
-      "sha256": "e10246b131deec076acb8f03e14f37720eeaeec6ff737f6066fd6641a2b4cea8"
+      "bytes": 80429,
+      "sha256": "45c4513a8bbd0d197cbff2e40085460577925dc712ded88b7625c5a7298d868c"
     },
     {
       "path": "compat/bootstrap/init_entry.c",
-      "bytes": 2287,
-      "sha256": "c91a57cafbaca13348cc6fc284667a7591803ffeaa9635fe870995af2c536505"
+      "bytes": 2289,
+      "sha256": "2e7a385e6391fd6d1cbc3522084a226d37ecd3008e334fdf9f776bacfc7fd1dd"
     },
     {
       "path": "compat/bootstrap/probe_command_v116.inc",
@@ -434,8 +459,8 @@
     },
     {
       "path": "compat/bootstrap/probe_graphics_v118.inc",
-      "bytes": 13774,
-      "sha256": "b9dead627b0f02f6b3f55850005e848d8e8c291b41f72ece9bb6c9bc3c5eb18c"
+      "bytes": 13703,
+      "sha256": "2f99602dd347bc8ebd10b17fff33f02ce11d48b12639eb54ff62db4030f09aa3"
     },
     {
       "path": "compat/bootstrap/probe_serial_v121.inc",
@@ -454,8 +479,8 @@
     },
     {
       "path": "compat/display/composer_vdi.cpp",
-      "bytes": 61611,
-      "sha256": "0402ea8b2c2810c1c09e56fc60c274eba2d32036248076de435f8ce7ee837fa5"
+      "bytes": 62203,
+      "sha256": "3fe07bf224b00ff3481b0be4237dee7774ca627744528f27a08f287fbf9aaa1b"
     },
     {
       "path": "compat/display/direct_scanout_state.h",
@@ -524,18 +549,18 @@
     },
     {
       "path": "compat/display/native_display_wake.cpp",
-      "bytes": 5114,
-      "sha256": "4998a1e5778f4fe571b22f942fd110c4f53cc204411d8fe5dc6476bb464c0d77"
+      "bytes": 5115,
+      "sha256": "c71771c60b6a9dfe406340740be49eb798b30da198b5fbbe7a016d92062a2efa"
     },
     {
       "path": "compat/display/native_refresh_rate.cpp",
-      "bytes": 3748,
-      "sha256": "76f104bdeaf8f60a997c9adf4f31fe51989c04907eabb9b6ce46e5c74c2d6e24"
+      "bytes": 3751,
+      "sha256": "d309058bc2cda55029acde019560c7ee66a35146b0f5be754d23caf4632fae77"
     },
     {
       "path": "compat/framework/account/account_hmac.c",
-      "bytes": 8787,
-      "sha256": "7922f0236e08ee895890fb5bc551ac1592c9cb84319dca4205c76275d9a5f821"
+      "bytes": 8789,
+      "sha256": "fb3f6556dc7b0428b1a28196d8055d4b62565f5b1fd8b13525afa1c19e1cbc74"
     },
     {
       "path": "compat/framework/account/exports.map",
@@ -544,8 +569,8 @@
     },
     {
       "path": "compat/framework/account/storage_ram_launcher.c",
-      "bytes": 1343,
-      "sha256": "ee5fe47c480c5b97a56ffa51d17cd644ed84f5684179ae1eba905bb658db6a1e"
+      "bytes": 1344,
+      "sha256": "4f654cecacbaa382a26b3cb6e2e83111a66b5b737d57944650b1d0c19709b554"
     },
     {
       "path": "compat/framework/account/storage_ram_no_tee.c",
@@ -559,8 +584,8 @@
     },
     {
       "path": "compat/framework/database/db_key.c",
-      "bytes": 12323,
-      "sha256": "19284a1efc6e388563cbc2e46532f1ba6db8b9708e920a6a7e087ca1a588c04b"
+      "bytes": 12326,
+      "sha256": "a85ce09de9a8d8db1cc81a84ffdf6033582b7578f7ec75e7c45a6c40c19236f5"
     },
     {
       "path": "compat/framework/database/exports.map",
@@ -574,13 +599,13 @@
     },
     {
       "path": "compat/framework/fallbacks/el5_unavailable.c",
-      "bytes": 1206,
-      "sha256": "b02f534a1895148143a4f699a65930d771e4b69db48ea8c7051fe8f95ece17e5"
+      "bytes": 1211,
+      "sha256": "1757605ace8092aac630413098e4e95cecb9ba3ae998b8e8f813b7ee62647e1b"
     },
     {
       "path": "compat/framework/fallbacks/sceneboard_optional_sa.cpp",
-      "bytes": 3118,
-      "sha256": "f2c2ca5b3371cbb9e8eec275a0179e9a957d8834364cca4e34f44fc7883bfd61"
+      "bytes": 3121,
+      "sha256": "76d0812cb1b3b64f84ab1b989b8f10f38871bc856bc0d15e8c95fc1b775c930f"
     },
     {
       "path": "compat/framework/fallbacks/wifi_ui_unavailable.c",
@@ -589,8 +614,8 @@
     },
     {
       "path": "compat/framework/memmgr/memavailable.S",
-      "bytes": 2350,
-      "sha256": "bcd2e9560453dfdcdb8051e9e81333f6d52b67ba9fd2f45155c8088b5502d5f7"
+      "bytes": 2355,
+      "sha256": "9ae98b827beaa95b6ecffa915b4ed6d202561070c8458e60b495ee1e624219c6"
     },
     {
       "path": "compat/graphics/apply_mesa.py",
@@ -599,28 +624,33 @@
     },
     {
       "path": "compat/graphics/dmabuf_sync/kernel/Makefile",
-      "bytes": 29,
-      "sha256": "340f425bd8c2586db0c0f13e6834d8810be4c4fdd042a97bde29edf7bf0cfae8"
+      "bytes": 30,
+      "sha256": "e90ccc7b95f4c42ce1428a17c95548ed4e9f53dd208014089c01522b86c71f22"
     },
     {
-      "path": "compat/graphics/dmabuf_sync/kernel/sheng_dmabuf_sync.c",
-      "bytes": 9351,
-      "sha256": "ae6142f7d510283d243caa1c5b083c131c9ed34e7b870f2b35c7167f9e2faef2"
+      "path": "compat/graphics/dmabuf_sync/kernel/dipper_dmabuf_sync.c",
+      "bytes": 9435,
+      "sha256": "01777c0f31fd1192e897492ba5ab868fcbce2c660dadfaffdff6247f0c94c38d"
     },
     {
-      "path": "compat/graphics/dmabuf_sync/uapi/sheng_dmabuf_sync.h",
-      "bytes": 1221,
-      "sha256": "aa1424897971824aaf871fb6e1926baf83805d44791204311231a3e2b04353e1"
+      "path": "compat/graphics/dmabuf_sync/uapi/dipper_dmabuf_sync.h",
+      "bytes": 1244,
+      "sha256": "82a03b6e5418d14a888ff376446670ecf7c2ab63337d8a91feee1508940174c0"
     },
     {
       "path": "compat/graphics/mesa-gallium-egl.patch",
-      "bytes": 97900,
-      "sha256": "55e426985c2b6a5f5054cba157314b972ef105373eba0c4d5c1cda06a02856bb"
+      "bytes": 97934,
+      "sha256": "e35e9d70527e36b24a75265aa1bb5bd0b2b3b55943aeebb35fd3f0956e7cfa71"
     },
     {
       "path": "compat/graphics/mesa-turnip.patch",
-      "bytes": 55870,
-      "sha256": "6582ed51b09e8fe117feb35370f8a417e3c13d79d1ea6965e34cb3313d7af94f"
+      "bytes": 55884,
+      "sha256": "035172d8157db8456f46359afd2cff8ead8f23145f5aa3913bc0a9ee8fa67c8e"
+    },
+    {
+      "path": "compat/ipc/Makefile",
+      "bytes": 205,
+      "sha256": "cf0b8ab3449b6b7198a96644fccae98bc96e2505690b62c952aea5de46c9fdf5"
     },
     {
       "path": "compat/ipc/access_tokenid.c",
@@ -634,8 +664,8 @@
     },
     {
       "path": "compat/ipc/ace5_tokens.c",
-      "bytes": 6716,
-      "sha256": "bf27e6cf6a312a793cf854b0501e53680d49703b23dd33dd5dad457f8b7f7a75"
+      "bytes": 6728,
+      "sha256": "24bdcefb797082e426a6ee6946cf517b2a5fce01173e1c5f77d7c036783c832a"
     },
     {
       "path": "compat/ipc/ace5_tokens.h",
@@ -673,29 +703,24 @@
       "sha256": "4e30d8f64337735bdda142193db861cc809759373cd7ce92a17ffcad145de1b9"
     },
     {
+      "path": "compat/ipc/dipper_hmos_api_v1.h",
+      "bytes": 1659,
+      "sha256": "4addbf7a50426e7ac1289a8c788d5e87b1f146eb68eb547cfbf0208c2a02187c"
+    },
+    {
       "path": "compat/ipc/hmos_config.h",
       "bytes": 562,
       "sha256": "7da98ae3267b9f16b714ec379e221d1d97f441ca8ae65b8196ed3b5868736cf6"
     },
     {
-      "path": "compat/ipc/Makefile",
-      "bytes": 203,
-      "sha256": "12cb7846d2394b14ab13043ca2639deaeb3c1c118b4e3103547f284cd1409bf1"
-    },
-    {
       "path": "compat/ipc/private_api.c",
-      "bytes": 7029,
-      "sha256": "15c33183a4e8b3cd2d47d0531b400c88e66abbd9385d4110dc995ae78d62878c"
+      "bytes": 7056,
+      "sha256": "8ea2b36f9554204673811dda49f5bd1418768455c322e56a004f28992a36570a"
     },
     {
       "path": "compat/ipc/private_api.h",
       "bytes": 3166,
       "sha256": "1acfd6090fe2d6b9781db299f6d02921995c54c9112be76f40a4c61185dbfb75"
-    },
-    {
-      "path": "compat/ipc/sheng_hmos_api_v1.h",
-      "bytes": 1655,
-      "sha256": "6363ed42233aa642437f33a8364ff407bb62787301b9580913f6e492639c55fa"
     },
     {
       "path": "compat/kernel/kernel.config",
@@ -709,8 +734,8 @@
     },
     {
       "path": "compat/power/batterysecret_process_compat.c",
-      "bytes": 1034,
-      "sha256": "2887269b5f775977b448cc26a34d3851f8a0f17dcceebc40642bcadee78d250a"
+      "bytes": 1036,
+      "sha256": "ae5f31c8fdd142f7e1fa80355cb50d39e1d700fb3e303ae99e2dc0ce01bf8eb7"
     },
     {
       "path": "compat/power/thermal/init-fusion-services-r2.cfg",
@@ -719,8 +744,8 @@
     },
     {
       "path": "compat/power/thermal/init-xiaomi-thermal.cfg",
-      "bytes": 611,
-      "sha256": "234464ea9fe311a2ec3a549387e1eda10591cd194a661469bd8065c032f918da"
+      "bytes": 616,
+      "sha256": "691a03406d8bdd42acd8a650a17e5295ad1c126860f8b38cf3b452f55ac22da2"
     },
     {
       "path": "compat/power/thermal/native_thermal_launcher.c",
@@ -729,8 +754,8 @@
     },
     {
       "path": "compat/power/thermal/stage-xiaomi-thermal.sh",
-      "bytes": 1051,
-      "sha256": "aa5f5d1f93115cd693a9eeb346b994c497e4e1e33ba40522c1e5bebf84e16136"
+      "bytes": 1053,
+      "sha256": "9b1bbaac5e17acfa4fa9f7a47a9a9154a6ac121834bf38a771d10f65885120a3"
     },
     {
       "path": "compat/sensors/native_sensorspd_launcher.c",
@@ -739,8 +764,8 @@
     },
     {
       "path": "compat/sensors/sensor_hdi_publisher.cpp",
-      "bytes": 9519,
-      "sha256": "472250cc7503ca3730543a89d4f907a367ef24147cfcca185cfb89dca49f11d7"
+      "bytes": 9520,
+      "sha256": "6c103e93f0abbf7f329d0a6995429cf9c2293d15695c68c4605d4181216a3143"
     },
     {
       "path": "compat/sensors/sensor_interface_service.cpp",
@@ -779,13 +804,13 @@
     },
     {
       "path": "compat/services/bootanimation_launcher.c",
-      "bytes": 535,
-      "sha256": "3726ee8bd719ee55134b555b24da3b0292b831887d2de5cac59b7258c0a4f33d"
+      "bytes": 538,
+      "sha256": "aef5a0dc24c8c43e1bcf267a93a44bc3cd1d8312f9b2cdd9a4f11573b76b56d7"
     },
     {
       "path": "compat/services/bootanimation_vulkan_adapter.cpp",
-      "bytes": 2377,
-      "sha256": "9bcec6b4381177241ee84b4c0b50d0b277489ab624da35ee2c7eea2eaaf86814"
+      "bytes": 2385,
+      "sha256": "98f07d455cce6ec16712df0d8e30b69d3d3a9929364082f26b7ffbf80a4435b4"
     },
     {
       "path": "compat/services/capture_scanout.c",
@@ -793,34 +818,64 @@
       "sha256": "7478f22bf30d26a697b08293dd6c42a251d5604c5b0999deb510650ae31a95ad"
     },
     {
+      "path": "compat/services/dipper_display_scanout.cpp",
+      "bytes": 6793,
+      "sha256": "99ba39e915c051e84f1888bc49ea0e99aa22d27098f034a8780d515a7c9fd07e"
+    },
+    {
+      "path": "compat/services/dipper_hardware_display.cpp",
+      "bytes": 1581,
+      "sha256": "1c3595a181157fc790089679bec1317e71edce2d36ba6e0554c7de667a5d7c08"
+    },
+    {
+      "path": "compat/services/dipper_hdi_query.cpp",
+      "bytes": 1823,
+      "sha256": "c5487fbb40f178dd85f43edd315904e1ceb09f8ba04683ca2be8ac44d3755f80"
+    },
+    {
+      "path": "compat/services/dipper_hdi_scanout.cpp",
+      "bytes": 3099,
+      "sha256": "f3bdfb0da6fef375d36a3f266678ad3918203c2f3237f472a9994d86ccbfa289"
+    },
+    {
+      "path": "compat/services/dipper_hdi_smq.cpp",
+      "bytes": 1296,
+      "sha256": "870170a2aa2bdbf6a9a9237ed1cad855aa6f13c3541e73b89dd0d0aab406467d"
+    },
+    {
+      "path": "compat/services/dipper_kms_diagnostic.cpp",
+      "bytes": 8342,
+      "sha256": "6f419fee219ade47ec469c8cb878c7779585a0fde88bdae8adc3efd6cce06d9f"
+    },
+    {
       "path": "compat/services/drm_probe.c",
-      "bytes": 12992,
-      "sha256": "c3322395a40add8317f23f7f8eff2cd97268ca8b36436408ab81e5c29a3f378e"
+      "bytes": 12993,
+      "sha256": "fa48a921985c09e7be6a390a86a96fbcea53550e57099f2453cd05bb5c8a4638"
     },
     {
       "path": "compat/services/hardware_observe.c",
-      "bytes": 2803,
-      "sha256": "fc8288be00ab1a1bf171690de12092b5759533289953bece803b3cb4bd2ebce8"
+      "bytes": 2854,
+      "sha256": "54236214b4eacf7388c65ae03839cc481f9ccd36265d48dce176aaea0c26e78e"
     },
     {
       "path": "compat/services/hiview_namespace_launcher.c",
-      "bytes": 18717,
-      "sha256": "3c077d401cbec55d3d8de498c5d269c92e09d10fcce83fb5edf89035c0603e44"
+      "bytes": 18720,
+      "sha256": "f2160a95e5ffb0985ef11df8ad37febfcda15ad92b4717f857cdf9a915997079"
     },
     {
       "path": "compat/services/native_brightness_launcher.c",
-      "bytes": 1459,
-      "sha256": "bc70db4f961bc733c18eebc28b4e11c67b185c002441cc8f0329c737335be6ee"
+      "bytes": 1460,
+      "sha256": "55b694cdc11f0d8616d1d0f78753eb382cd17181e9007630d79c1f91c0b376ee"
     },
     {
       "path": "compat/services/native_buffer_import_observer.S",
-      "bytes": 1327,
-      "sha256": "397cdcbd8d84a5d43bb40d77b218ea246dc3803bd284444326d95fbe85f0b07d"
+      "bytes": 1329,
+      "sha256": "4b65231475fae4a899e039c5c53e6b40d1518f8a8f75a9126ae476f7e8aa9c0a"
     },
     {
       "path": "compat/services/native_bundle_cli.c",
-      "bytes": 3263,
-      "sha256": "9e144911ea61786b395136bbcc7f24b8fa45eadac77de084b4e684dc66d21ae8"
+      "bytes": 3265,
+      "sha256": "ed8f19d0ec3f7f6b47938ce9162185222da443a2fa94d91a129272689cabcf3e"
     },
     {
       "path": "compat/services/native_image_alloc_probe.c",
@@ -829,13 +884,13 @@
     },
     {
       "path": "compat/services/native_input_dispatch.c",
-      "bytes": 1654,
-      "sha256": "e5e453e0f9b7aa75e79b077a2b612597ce9bc944af5d2fcb832a7b65102c7224"
+      "bytes": 1656,
+      "sha256": "a850dfbf49650ba4a5ac2379bcf90be7d1cb03fdd4abcde649e537b40fc0f76f"
     },
     {
       "path": "compat/services/native_render_launcher.c",
-      "bytes": 736,
-      "sha256": "8a524429a30f3043bd8e2445bc8b29521a45752f8d930ececbf5aa86e3d2385e"
+      "bytes": 738,
+      "sha256": "2a9300ef2ded51e3ffc5bbf21ebfc68764e486f09fd3dc7d3617502c4ca44104"
     },
     {
       "path": "compat/services/native_rs_commit_sync.c",
@@ -854,88 +909,23 @@
     },
     {
       "path": "compat/services/native_screenlock_request.cpp",
-      "bytes": 5989,
-      "sha256": "1acd7e62e8109bc9a9aff77ffcbf29defc13394fadf06d523d5b89a282cb3a6b"
-    },
-    {
-      "path": "compat/services/sheng_display_scanout.cpp",
-      "bytes": 6793,
-      "sha256": "851c27415dd404a928d30de55a22bbd2ab692da6e7656d129fd6bd37fd64dedd"
-    },
-    {
-      "path": "compat/services/sheng_hardware_display.cpp",
-      "bytes": 1581,
-      "sha256": "1c3595a181157fc790089679bec1317e71edce2d36ba6e0554c7de667a5d7c08"
-    },
-    {
-      "path": "compat/services/sheng_hdi_query.cpp",
-      "bytes": 1822,
-      "sha256": "fb4e0c8fc9504cc584ce9311d88308a28ea70a2b03373140423ba2a0509eb1c2"
-    },
-    {
-      "path": "compat/services/sheng_hdi_scanout.cpp",
-      "bytes": 3064,
-      "sha256": "a07b80c9b96df8a34b71359403363fd0cc778122fadf0f0db3af21db74112d16"
-    },
-    {
-      "path": "compat/services/sheng_hdi_smq.cpp",
-      "bytes": 1296,
-      "sha256": "870170a2aa2bdbf6a9a9237ed1cad855aa6f13c3541e73b89dd0d0aab406467d"
-    },
-    {
-      "path": "compat/services/sheng_kms_diagnostic.cpp",
-      "bytes": 8279,
-      "sha256": "3c6698668e711db624ef390124693a21039288e11ed5bb15ce4cd6833966afec"
+      "bytes": 5991,
+      "sha256": "9dd7cb612925d64dca9c242842d698d8911ebfdb3d3cecc0a724410fd9259ac1"
     },
     {
       "path": "compat/services/surface_post.cpp",
-      "bytes": 14781,
-      "sha256": "6dd51168c88ad41dec3d5a575885ff4616af838554bd8239c788e54d24f17fa2"
+      "bytes": 14814,
+      "sha256": "1e48e500c1d550a3169ca95b2c6d241904102d9865b580a4aa7d037c280f2fc2"
     },
     {
-      "path": "compat/touch/bridge.cpp",
-      "bytes": 10001,
-      "sha256": "189a178d31168f2b0997a7472812cd5cc19c3d16cf4391646bb58eab99e6dca5"
-    },
-    {
-      "path": "compat/touch/launcher.c",
-      "bytes": 2824,
-      "sha256": "14c5910d588f7b030be66c94e7c542487d3f802fb593650acb631ec64cfd5040"
-    },
-    {
-      "path": "compat/touch/LICENSE",
-      "bytes": 11358,
-      "sha256": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30"
-    },
-    {
-      "path": "compat/touch/nvt_finger_filter.cpp",
-      "bytes": 26644,
-      "sha256": "e3c910c6d3e561d4ecafeab6b1b5d6259a21820e8c84c263d40cd73e511d75c1"
-    },
-    {
-      "path": "compat/touch/nvt_finger_filter.hpp",
-      "bytes": 4526,
-      "sha256": "f5c379edfcb660643e6f63e8b07148a20963d8c46248d4b89ed799ba12d02fbf"
-    },
-    {
-      "path": "compat/touch/nvt_touch_core.cpp",
-      "bytes": 69724,
-      "sha256": "e6408f4fa609f1ffd1718b3c67effb02d3db09e5d79e24c6c046b692097f4516"
-    },
-    {
-      "path": "compat/touch/nvt_touch_core.hpp",
-      "bytes": 3762,
-      "sha256": "42515bb7b4c138cf1148ff2d23f5fbf2838a98bf870500aa89b6b783e53a0c83"
-    },
-    {
-      "path": "compat/touch/ORIGIN.md",
-      "bytes": 547,
-      "sha256": "8179a99e0d7bd5b9733a70d2a5a8b420804d56ecc99cd4bfeb4a41acf937d289"
+      "path": "compat/touch/README.md",
+      "bytes": 3372,
+      "sha256": "6fdf6555a3a93902d6f4fcf235db0c42f5dfbe9d78507c9c8fc67fc41ed3cb00"
     },
     {
       "path": "compat/useriam/adapter41.cpp",
-      "bytes": 8265,
-      "sha256": "bc744cade2b24da4ffebb5e008dbc5950f68ee6192afc98ea2f694904a8b0a51"
+      "bytes": 8270,
+      "sha256": "97d210de758df78d51853f667807354bd645e3f03b099e4aaf110557f46090b0"
     },
     {
       "path": "compat/useriam/build_backend.py",
@@ -1089,8 +1079,8 @@
     },
     {
       "path": "compat/wifi/native_wifi_category_probe_v134.c",
-      "bytes": 2905,
-      "sha256": "1e39c44b14e466c3afe91d252bc4c8d74253d0f4d996dca44d0193d94dc80851"
+      "bytes": 2907,
+      "sha256": "197199e3de1241e24c9794e3757d79e430c1562f37e7b920018cb37b1373b66b"
     },
     {
       "path": "compat/wifi/native_wifi_hal_probe.c",
@@ -1104,23 +1094,28 @@
     },
     {
       "path": "compat/wifi/wifi_caps_v134.c",
-      "bytes": 7883,
-      "sha256": "d61d3005f6698dd7a092ad18252882cebc3701d27371b7ae991a966517dec290"
+      "bytes": 7887,
+      "sha256": "d29fc744bff2486409a08a55a2e6e07463a29ce07821fd8bbaaebf18bf3465b2"
     },
     {
       "path": "compat/wifi/wifi_caps_v134.h",
-      "bytes": 252,
-      "sha256": "7cc2348d789f3f47afc80d8af96d08c3b09d34bb5a15937588f984cecce016bd"
+      "bytes": 257,
+      "sha256": "af1f93468b07b623d6435668dee6bbba3101e7acfc75b6d48cbba519888cc961"
     },
     {
       "path": "compat/wifi/wifi_category_ioctl_v134.c",
-      "bytes": 2719,
-      "sha256": "4cb4b34ee145ef69e3342ed03ccba77eeafccdbb28d275227aef22b990b5d1c4"
+      "bytes": 2723,
+      "sha256": "6f58292a4d086978c299d776126440ad7d770291eb3e0d6f951f9b9538ce137f"
     },
     {
       "path": "docs/BUILDING.md",
-      "bytes": 5284,
-      "sha256": "b169d9702a9634eb70f8e2cdd18d908bb9b279456dad27f04c5690675822a4e5"
+      "bytes": 7816,
+      "sha256": "6146ea6366e87677015738186af892132fe947b9daa2603cf50eda22f9d91219"
+    },
+    {
+      "path": "docs/DEVICE-PARTITIONS.md",
+      "bytes": 6715,
+      "sha256": "fe4d2dd515d8cbb926f4203f2cff6ca3fdba526022f9160b0a8fab2100d727ce"
     },
     {
       "path": "docs/PACKAGING.md",
@@ -1129,23 +1124,23 @@
     },
     {
       "path": "docs/PROVENANCE.md",
-      "bytes": 3561,
-      "sha256": "4121b7f43e520c5afc1927e99eeb87aea81d33bb3a2be921c91fb98b53700fde"
+      "bytes": 3667,
+      "sha256": "b2a466a2f63b3ed9e1a990dfc7fdde0688660eca8dda9c0d9444a8574405d24d"
     },
     {
       "path": "docs/SOURCE_MAP.md",
-      "bytes": 3930,
-      "sha256": "de9d2a696d4e5b23d307a301242b031dcd821a80bd1ee1854c38bb49d316beb9"
+      "bytes": 4502,
+      "sha256": "5ccf58c1c23a42fea1c984d245ba02394dbe311913a1bc4828931bd066cf3aaf"
     },
     {
       "path": "docs/USERDATA.md",
-      "bytes": 3451,
-      "sha256": "619b4f535b3721194936daff6dc38577bea936d4d94223d9296c5d530d7b5f57"
+      "bytes": 3618,
+      "sha256": "0ca89da69a9b1ee1098020e0901fbed9232e70bdbcaa48ce5aa4fb3a5d0680ba"
     },
     {
       "path": "docs/VERIFICATION.md",
-      "bytes": 7256,
-      "sha256": "4b99c32f8c4c4474fbbd3ddb8083cd4b0143f81315052a126b6e1870ba4df354"
+      "bytes": 8056,
+      "sha256": "959fedf2fdae0eb6239d8405ce61ca982bd001bc8e5c92d25296183783ca84dc"
     },
     {
       "path": "evidence/graphics/bootanimation-context-v2-manifest.json",
@@ -1159,13 +1154,13 @@
     },
     {
       "path": "evidence/graphics/bootanimation-eof-v1-patch.json",
-      "bytes": 1094,
-      "sha256": "a545d6a923856980e6c5dcf7083680d956e7e0294653b4c6aba6f4d7e7097cd2"
+      "bytes": 1095,
+      "sha256": "c469475b699b940ffbf351c7232f6427867d8d36cf237a096daa1f4794df82fa"
     },
     {
       "path": "evidence/graphics/render-callback-sync-v1-manifest.json",
-      "bytes": 821,
-      "sha256": "34d3d1cd95936d7a1a6a0bbdde21184a9c657b8e77dd36016f654cca339c0932"
+      "bytes": 822,
+      "sha256": "09ef99f3d45b2741c8a183120deec1e653ed0b1d1f1a3d51056cd9024f1e2e5d"
     },
     {
       "path": "evidence/graphics/rs-commit-sync-v1-manifest.json",
@@ -1174,8 +1169,8 @@
     },
     {
       "path": "external/dependency-records/build-report.json",
-      "bytes": 17723,
-      "sha256": "f06ca9d26322e7eff724fcf56ffcfd44b57894a031a11104246e692446118dfe"
+      "bytes": 17732,
+      "sha256": "e91bf7b27d6ec07640893736b233f92f55f86fb2dba94134a98ad5a237e192d8"
     },
     {
       "path": "external/dependency-records/sources.json",
@@ -1213,6 +1208,16 @@
       "sha256": "59899c6091b540582ed617e8eeaac4919dc985ccfc35459ee9752b699be5205b"
     },
     {
+      "path": "external/licenses/hmos-reference--dipper-audio-kernel/NOTICE",
+      "bytes": 1111,
+      "sha256": "628dbecb3dd8d6c4e494921d7c7583fa2082140353d81543230db5323b82f3cf"
+    },
+    {
+      "path": "external/licenses/hmos-reference--dipper-display-drivers/NOTICE",
+      "bytes": 4490,
+      "sha256": "8e73ad81c5a10e891cd42d033ec5c46b97dcf41d2f1fb9d4b480496006dd7ce3"
+    },
+    {
       "path": "external/licenses/hmos-reference--memmgr-upstream/LICENSE",
       "bytes": 10175,
       "sha256": "809fa1ed21450f59827d1e9aec720bbc4b687434fa22283c6cb5dd82a47ab9c0"
@@ -1228,27 +1233,12 @@
       "sha256": "e04f492e71bc5cfe131942eb127c7906d2627831ab910bb894402b476b5d7488"
     },
     {
-      "path": "external/licenses/hmos-reference--sheng-audio-kernel/NOTICE",
-      "bytes": 1111,
-      "sha256": "628dbecb3dd8d6c4e494921d7c7583fa2082140353d81543230db5323b82f3cf"
-    },
-    {
-      "path": "external/licenses/hmos-reference--sheng-display-drivers/NOTICE",
-      "bytes": 4490,
-      "sha256": "8e73ad81c5a10e891cd42d033ec5c46b97dcf41d2f1fb9d4b480496006dd7ce3"
-    },
-    {
-      "path": "external/licenses/hmos-reference--xiaomi-sheng-thp/LICENSE",
-      "bytes": 11358,
-      "sha256": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30"
-    },
-    {
       "path": "external/licenses/hmos-work--gki-5.15.178/COPYING",
       "bytes": 496,
       "sha256": "fb5a425bd3b3cd6071a3a9aff9909a859e7c1158d54d32e07658398cd67eb6a0"
     },
     {
-      "path": "external/licenses/hmos-work--gki-sheng-exports/COPYING",
+      "path": "external/licenses/hmos-work--gki-dipper-exports/COPYING",
       "bytes": 496,
       "sha256": "fb5a425bd3b3cd6071a3a9aff9909a859e7c1158d54d32e07658398cd67eb6a0"
     },
@@ -1343,19 +1333,19 @@
       "sha256": "0cec06e0e55fbc3dc5cee4fca9b607f66cb8f4e4dbcf3b3c013594dd156732e9"
     },
     {
-      "path": "external/overlays/hmos-work--gki-sheng-exports/drivers/android/sheng_hmos_api_v1.h",
-      "bytes": 1655,
-      "sha256": "6363ed42233aa642437f33a8364ff407bb62787301b9580913f6e492639c55fa"
+      "path": "external/overlays/hmos-work--gki-dipper-exports/drivers/android/dipper_hmos_api_v1.h",
+      "bytes": 1659,
+      "sha256": "4addbf7a50426e7ac1289a8c788d5e87b1f146eb68eb547cfbf0208c2a02187c"
     },
     {
-      "path": "external/overlays/hmos-work--gki-sheng-exports/drivers/android/sheng_hmos_exports.c",
-      "bytes": 1661,
-      "sha256": "5e3867b5e9562616d8a12f641ab79d364b12e1b7f9096644139b7bab1e06c959"
+      "path": "external/overlays/hmos-work--gki-dipper-exports/drivers/android/dipper_hmos_exports.c",
+      "bytes": 1667,
+      "sha256": "dd3e5afbc09bb2e74005898fb588340b6b4b34b95e0f70b307ab62c5caaf6aff"
     },
     {
       "path": "external/overlays/source--mesa3d/src/freedreno/vulkan/tu_ohos.cc",
-      "bytes": 15280,
-      "sha256": "e3ce96bd5989fb1ba75b64545a883c9ac0fe15d416c8edb77a23c501dbb462f1"
+      "bytes": 15286,
+      "sha256": "0243385f0e49e1ce887f3986d7fede4b6d27fbf6d8b0d02870baa044653fd3e8"
     },
     {
       "path": "external/overlays/source--mesa3d/src/freedreno/vulkan/tu_ohos.h",
@@ -1363,29 +1353,29 @@
       "sha256": "8c845fac3a1f655f72b42b88ab16f64aafd9ee16f4e075c001a801868eced945"
     },
     {
-      "path": "external/patches/hmos-work--gki-sheng-exports.patch",
-      "bytes": 456,
-      "sha256": "65a28c8f464e3db34e4ec602cdb0414d25cdf319ec713d6991837a9c3cf1d420"
+      "path": "external/patches/hmos-work--gki-dipper-exports.patch",
+      "bytes": 457,
+      "sha256": "fd7871c27e8524caadcb3fd84987ca255c25f9590dfc92bdd139f29ef07bbbbe"
     },
     {
       "path": "external/patches/source--mesa3d.patch",
-      "bytes": 35009,
-      "sha256": "0715d42aa228ea909552c91ce897c0d70d30d85c6c7d717209d713852ec304cf"
+      "bytes": 35017,
+      "sha256": "5e5832402298d90f448c3957b24d95f2c9aa15ee9116237313860d3e50dfc1d7"
     },
     {
       "path": "external/upstream-sources.json",
-      "bytes": 11719,
-      "sha256": "a916036a67af6b9ee5d18b94c47df9ed9f37499b480c0ce7868485ce66dee0d3"
+      "bytes": 11462,
+      "sha256": "b8d14ff9ffbbf91e9c512b0a9657554c003e9fcf2356ac185ed1cb78436e36e8"
     },
     {
       "path": "output/00-Backup-Recovery.ps1",
-      "bytes": 1901,
-      "sha256": "79b63ec6e79ce53b46be1a9357de46878bfea2dc1ca09b67830505fdf858caf9"
+      "bytes": 1760,
+      "sha256": "58e878358cb6de53a306b797aef0b483dbe4c349fbbcc0057aee0adaf31a7732"
     },
     {
       "path": "output/03-Restore-BootChain.ps1",
-      "bytes": 1051,
-      "sha256": "acae2c71446f0f4521d6bbf5ea8c23da1f13b748616a652b1de327bfa66ed9c6"
+      "bytes": 1149,
+      "sha256": "2b667cf2905762bd0ab349a4de4df66edad07c598cdcfb3ab8fbaf75ca9f4a7b"
     },
     {
       "path": "output/Capture-Serial.ps1",
@@ -1399,8 +1389,8 @@
     },
     {
       "path": "output/Collect-PortBaseline.ps1",
-      "bytes": 1005,
-      "sha256": "0e2a813308aa643928908688ded0d2d8dce54caa6eae23a2a9cfde5b7893a78d"
+      "bytes": 1007,
+      "sha256": "a3f37ff3983b4c3b3023b0212a68a808dd17d66fc8a03289bb3ca3c54bcb0954"
     },
     {
       "path": "output/Common.ps1",
@@ -1409,28 +1399,28 @@
     },
     {
       "path": "output/Flash-Current.ps1",
-      "bytes": 2216,
-      "sha256": "9cb880d6b554eedaa4925592a4ca6d7b3fa920285c0d8ec12a0ab2562c02ea4a"
+      "bytes": 698,
+      "sha256": "2c0bb23130c79de9e2121ecc6d898a91a880dd905b6fcb38aefc8b74d82a9de6"
     },
     {
       "path": "output/Get-NativeScreenshot.ps1",
-      "bytes": 1271,
-      "sha256": "dd2ab7ea8a27c9392e23ba6b8e41400e6da677a2f6434994b4da7535bb9aa504"
+      "bytes": 1274,
+      "sha256": "e33c1b48bc1e05828186223e3dfa009ce85daa661efa517c8d2a7dde4c0a4eb6"
     },
     {
       "path": "output/Get-SceneBoardState.ps1",
-      "bytes": 886,
-      "sha256": "af11b665333c3c4c2c404522aa8dda527a1b8240e59e8ea9062cfe88d65d6698"
+      "bytes": 887,
+      "sha256": "6f446410ae010669a103fadd7db3cebb562970b22a50a5858f993fecdcadda7b"
     },
     {
       "path": "output/Invoke-NativeBundle.ps1",
-      "bytes": 1375,
-      "sha256": "7d0f0f4b5a5cc7adcda1e731d1f4a44bf7ee592a422223f1dcc54764c3b73bca"
+      "bytes": 1381,
+      "sha256": "37a515dc45c52e01cf305ed6670a2d24650d140f8f1353c39f128b3e7782479e"
     },
     {
       "path": "output/Invoke-NativeInput.ps1",
-      "bytes": 895,
-      "sha256": "88712a6b1f0aec816721023234427c62eea62c718732b9a50082c0474f3f6b05"
+      "bytes": 903,
+      "sha256": "cc710e4269889d3c0382d7173852fd60a9e1c7b86cea561c94624480f1366a93"
     },
     {
       "path": "output/Invoke-ProbeCommand.ps1",
@@ -1454,8 +1444,8 @@
     },
     {
       "path": "output/Return-To-Recovery.ps1",
-      "bytes": 1417,
-      "sha256": "528a077aba49d72ab9d7342ac29f7ea6f54cc8bd0d28bcf392cd6e4866a799a5"
+      "bytes": 1416,
+      "sha256": "c52293dab5807c28091c32e087dda9122dfa0e7e4968e24fbc479ce163d32785"
     },
     {
       "path": "output/Send-ProbeCommand.ps1",
@@ -1593,74 +1583,9 @@
       "sha256": "72f895e562b1faf6ae63c266e43bd6671f2aa1f5945af94b37748a1850dd4fb8"
     },
     {
-      "path": "README.en.md",
-      "bytes": 9319,
-      "sha256": "198b1136e75c50ec56ad2b76d8bca347080f00630fd72bb413f9c3cae7cb02be"
-    },
-    {
-      "path": "README.md",
-      "bytes": 7931,
-      "sha256": "e054d7c431bf00b4d4a4d7f8b1bb2e315b332040d194391f40eb0778c11af6a1"
-    },
-    {
-      "path": "RELEASE.json",
-      "bytes": 449,
-      "sha256": "21465db3e7aed0073e2ca0e50ce09623a66c6c594ff62983fdfd76f7e4ee28f5"
-    },
-    {
-      "path": "runtime/audio/audio/scripts/load-official303-audio-card.sh",
-      "bytes": 12621,
-      "sha256": "ad8aea789e09bc3b854a66d22d16500e97d64338a45a954c285feda3b3550c90"
-    },
-    {
-      "path": "runtime/audio/audio/scripts/load-official303-audio-transport.sh",
-      "bytes": 4333,
-      "sha256": "91f0df7dd89c0a08f008ded3660d349a8fa9aaf01a8e875acd05145e149d6622"
-    },
-    {
-      "path": "runtime/audio/audio/scripts/load-official303-audio_pkt_dlkm.sh",
-      "bytes": 5684,
-      "sha256": "fbea23958ffdfff69e4ea8b932640e679adc64d5e1669248523e1553c970268d"
-    },
-    {
-      "path": "runtime/audio/audio/scripts/load-official303-bt_fm_slim.sh",
-      "bytes": 2645,
-      "sha256": "e5dfb99ceb71f67f1af7291f769ec9bab2b0e853d3093be5c505b5c0b6fac591"
-    },
-    {
-      "path": "runtime/audio/audio/scripts/load-official303-qcom_q6v5_pas.sh",
-      "bytes": 4373,
-      "sha256": "11ae239c05d867bdff4ab991303e4fa927093f59d83ad5d81bcca430d541e25c"
-    },
-    {
-      "path": "runtime/audio/audio/scripts/load-official303-qrtr-smd.sh",
-      "bytes": 1024,
-      "sha256": "a2daed902b58d6c81e1cbc5ecb5a5225b3308497f1393cc8461119d50abb6ffd"
-    },
-    {
-      "path": "runtime/audio/audio/scripts/load-official303-slim-qcom-ngd-ctrl.sh",
-      "bytes": 3585,
-      "sha256": "7f569da75bc7974d3b1719fc679b5fbb4cb92f15d2b332d3e6e47db1413fdbe5"
-    },
-    {
-      "path": "runtime/audio/audio/scripts/load-official303-smp2p.sh",
-      "bytes": 598,
-      "sha256": "948a64268d3463642abbcec8c158277f171ace4db40d980643494f9047328ae1"
-    },
-    {
-      "path": "runtime/audio/audio/scripts/load-official303-wcd938x_slave_dlkm.sh",
-      "bytes": 1100,
-      "sha256": "d1607d8f632c422ca90bac5247b52d165f5342ec81ffab6c8a270c9c7fbea6b5"
-    },
-    {
-      "path": "runtime/audio/audio/scripts/stage-audio-firmware.sh",
-      "bytes": 946,
-      "sha256": "b1093f5ed6ce827d5957554aaccd7baf81fcf58cbb985ec9865a90cff7772a9e"
-    },
-    {
       "path": "runtime/audio/audio/scripts/stage-audio-nodes.sh",
-      "bytes": 1306,
-      "sha256": "3992982a5068a5117689071d2baee279090550c74de10e8abc7fd513cf3fae60"
+      "bytes": 1513,
+      "sha256": "5d26a2427bd1a6e642e271fb50e5b280b9cfbdbb300aa4dc3c8c346b670f350b"
     },
     {
       "path": "runtime/audio/audio/scripts/stage-audio-supplement.sh",
@@ -1674,18 +1599,8 @@
     },
     {
       "path": "runtime/compat/bluetooth-v136/init-bluetooth-v136.cfg",
-      "bytes": 8190,
-      "sha256": "aa486f25247529a1fecaa80284e839772f4609dd350f8cc9552f9e8b259fcc36"
-    },
-    {
-      "path": "runtime/compat/bluetooth-v136/load-official303-btpower.sh",
-      "bytes": 1862,
-      "sha256": "cf07d4619bf64b93013fd58a94834a405eb2301a67744b94dd775f945fbe89c9"
-    },
-    {
-      "path": "runtime/compat/bluetooth-v136/load-official303-msm_geni_serial.sh",
-      "bytes": 688,
-      "sha256": "6ef311234b11c7d31963647223136ef274e92c26f039910b61ddf1081cea94bb"
+      "bytes": 8198,
+      "sha256": "0d9f4d85b1f6c82ad9e4ab1683318e3d828211ff846f3c1d784299b7401aa025"
     },
     {
       "path": "runtime/compat/bluetooth-v136/softbus_server.json",
@@ -1694,8 +1609,8 @@
     },
     {
       "path": "runtime/compat/bluetooth-v136/start-bluetooth-v136.sh",
-      "bytes": 5132,
-      "sha256": "219705913aa0ee291a8d69e35513d9c3e45e69c7874bbef967ea007060c7dd7f"
+      "bytes": 5406,
+      "sha256": "569958dfb26368d534a5dff343cf8e6a1a1cf1e856268b39e4d0d827c2916bb2"
     },
     {
       "path": "runtime/compat/graphics/appdata-sandbox-isolated.json",
@@ -1709,8 +1624,8 @@
     },
     {
       "path": "runtime/compat/graphics/apply-account-hmac.sh",
-      "bytes": 1228,
-      "sha256": "1286af75d40f023e2856bf83241c0496282163b8f2d2888f0e10e4475dd7b96a"
+      "bytes": 1233,
+      "sha256": "f2ca498eeeead16e0f3348188bb9a474eda9b145b20ed0e41a8a510ae2ce8f90"
     },
     {
       "path": "runtime/compat/graphics/apply-app-sandbox.sh",
@@ -1719,8 +1634,8 @@
     },
     {
       "path": "runtime/compat/graphics/apply-audio-v116.sh",
-      "bytes": 1305,
-      "sha256": "68bc52c72c559ae69b66e2b90ee4fb112ff74e671b10170176ec3ec42827227c"
+      "bytes": 2108,
+      "sha256": "abecf940013e63833dfe371d4dd036b4499ddb913af73404453217e1fbbccd57"
     },
     {
       "path": "runtime/compat/graphics/apply-audio-wait-v1.sh",
@@ -1739,8 +1654,8 @@
     },
     {
       "path": "runtime/compat/graphics/apply-db-key-v2.sh",
-      "bytes": 4731,
-      "sha256": "ffea0d69424612a8dfdb83403a1f675a542b121fecc62acd3aae04376a2ec5ce"
+      "bytes": 4735,
+      "sha256": "742b9110426c827b5528af19237211788b4af1a9f046932d477b85e739614ca8"
     },
     {
       "path": "runtime/compat/graphics/apply-framework-dev.sh",
@@ -1749,8 +1664,8 @@
     },
     {
       "path": "runtime/compat/graphics/apply-hardware-v116.sh",
-      "bytes": 4724,
-      "sha256": "9c48ad3aa81781b93120db36d136773dee1c11655536891e4f2a56f8e9e161b4"
+      "bytes": 4748,
+      "sha256": "b8822718c95d27865c54e463ceb9866f930f6a30b5f35eb3ed4f07c1303326d4"
     },
     {
       "path": "runtime/compat/graphics/apply-memmgr-v2.sh",
@@ -1764,28 +1679,28 @@
     },
     {
       "path": "runtime/compat/graphics/apply-preload.sh",
-      "bytes": 847,
-      "sha256": "e91d2afd1cc664fdc31d5ce3f32b69c418923c1514bbfa288952baea537b7b74"
+      "bytes": 848,
+      "sha256": "328c781665e672cc218e50737e11180764ea868fec384f1e4240e0583f201224"
     },
     {
       "path": "runtime/compat/graphics/apply-render-usage.sh",
-      "bytes": 436,
-      "sha256": "9ac1ff2a9daf6f89f4581c2f204a798f3ef5744083a548c4a90158d53bfbf35d"
+      "bytes": 437,
+      "sha256": "6c0ab3e5f3b0d57be69ca57c5d9217c41e61f24c0c196198b149a9ff8ce88004"
     },
     {
       "path": "runtime/compat/graphics/apply-rosen-handle.sh",
-      "bytes": 781,
-      "sha256": "b3eada18083f458317469738808d708dadd42c8e7feaee0801e62e1b194d9b16"
+      "bytes": 786,
+      "sha256": "b39d8cd5e3d5b252dd39850da94cd60339a3462015615ef9656c2eac36e47d99"
     },
     {
       "path": "runtime/compat/graphics/apply-rs-commit-sync-v1.sh",
-      "bytes": 498,
-      "sha256": "cb012197d121c82aecac84fecc99a8b2761a589bb998cd50f66987e98d165200"
+      "bytes": 499,
+      "sha256": "a247a5df40ea7ef5beecb4edb71812a77b8628fb6709a33b951218b51c2011ba"
     },
     {
       "path": "runtime/compat/graphics/apply-runtime-v116.sh",
-      "bytes": 2238,
-      "sha256": "fbc5d533a6848f1b0c323180f5ae73399bb0b973b401b3319753ae1582406201"
+      "bytes": 1674,
+      "sha256": "4b190ddf132144629b5e872ff7ea1a8741a755ab13def140db5cf28f7fb6f391"
     },
     {
       "path": "runtime/compat/graphics/apply-storage-local-v1.sh",
@@ -1799,13 +1714,13 @@
     },
     {
       "path": "runtime/compat/graphics/apply-touch.sh",
-      "bytes": 944,
-      "sha256": "ae1539305b71cc84e2b4104e44890cf261411fed6afc3fc9d461d6b69292a23e"
+      "bytes": 2243,
+      "sha256": "785f5a6854f823215ac2eaf55cc32acb3861288e7e20c95458d7ed31d2afeadc"
     },
     {
       "path": "runtime/compat/graphics/apply-useriam.sh",
-      "bytes": 1278,
-      "sha256": "e7535a668bcec38b41c9464649e96d0eef1eb69b0d1216875f90a3d8ac47618d"
+      "bytes": 1287,
+      "sha256": "9346d9e275b4a637deb6b8c89ec3e8a9f2d3b8d20547506a3331cf7c4a5c388b"
     },
     {
       "path": "runtime/compat/graphics/default_settings-pcmode.json",
@@ -1821,6 +1736,11 @@
       "path": "runtime/compat/graphics/deviceinfoservice.json",
       "bytes": 604,
       "sha256": "1606ab78640fca7e9702b6645d87e1748b14dd83c3a94a6ff9564442dcf75453"
+    },
+    {
+      "path": "runtime/compat/graphics/dipper-turnip.json",
+      "bytes": 140,
+      "sha256": "72253461d435ee1366075d53c0de84b16e11f9bb8b2bcbd8e9d063ab137431cd"
     },
     {
       "path": "runtime/compat/graphics/download_server.json",
@@ -1839,13 +1759,13 @@
     },
     {
       "path": "runtime/compat/graphics/framework-dev-patch.json",
-      "bytes": 1232,
-      "sha256": "2305de965ab8ee203aaf167b4b1402099eade6707241d4dc94dc0bcb9ff90c84"
+      "bytes": 1233,
+      "sha256": "2084cdfbfa6a56f0b9a5f703e3568d2997611701c3f7f1e1c9890718f0119cc6"
     },
     {
       "path": "runtime/compat/graphics/hw_defaults-v141.para",
-      "bytes": 11639,
-      "sha256": "3fa79d36281510333d96de8ff23844e40229b1d227ada18ca0eff2fbf24a9dc2"
+      "bytes": 11638,
+      "sha256": "d75991f6814c02cb3a4d1b500378b162dbc1a45d1259567f9e49aa1e7d35bda1"
     },
     {
       "path": "runtime/compat/graphics/i18n_service.json",
@@ -1859,18 +1779,18 @@
     },
     {
       "path": "runtime/compat/graphics/init-desktop-services.cfg",
-      "bytes": 22847,
-      "sha256": "3726614226783e19b634ecf13f082b4aa6639fde9cbcb9eff26e9289dbd943b5"
+      "bytes": 22496,
+      "sha256": "2583217b6d282d4024faa8ded8788c8de7616f7d527d61c099bf4b03b31162f2"
     },
     {
       "path": "runtime/compat/graphics/init-hardware-v116.cfg",
-      "bytes": 11180,
-      "sha256": "25bd27a13dd929d9c10028eb0262e08a49e3b1cc853e350b5c5b1957dafe813d"
+      "bytes": 11188,
+      "sha256": "fc76c476182b4193d0234dde54a30381a01ccda48d01be77a0295d207ae188d4"
     },
     {
       "path": "runtime/compat/graphics/init-platform-v116.cfg",
-      "bytes": 27572,
-      "sha256": "b3480cb239adc629568bb362cd8cdca52cfaebf739dec6076b71dbfe89146011"
+      "bytes": 27598,
+      "sha256": "b72f513bae4163590334dd5904e4653e9f5df4fa8d6d910f06c197780dbaa2e1"
     },
     {
       "path": "runtime/compat/graphics/init-userdata-ext4.sh",
@@ -1879,8 +1799,8 @@
     },
     {
       "path": "runtime/compat/graphics/init-wifi-v116.cfg",
-      "bytes": 5564,
-      "sha256": "b01f396940e3548d9960cf183fee3ec731ca85c747874b17337207d63f613b93"
+      "bytes": 5567,
+      "sha256": "35fc5cc2127dae226b02675bc4cbbfc1c2769a74e32d7919ebcd0368f4a5d38d"
     },
     {
       "path": "runtime/compat/graphics/installs-debug-start.json",
@@ -1893,14 +1813,14 @@
       "sha256": "059b99797678c579bac1e71f3a03879bd95e8af40847afd6dd982080f6c03e1e"
     },
     {
-      "path": "runtime/compat/graphics/ld-musl-namespace-aarch64-flex.ini",
-      "bytes": 9210,
-      "sha256": "07effc1d98a33562a9ab6089ffd6513657a28d8e9d1b264cb8e9936f9278af22"
-    },
-    {
       "path": "runtime/compat/graphics/ld-musl-namespace-aarch64-New.ini",
       "bytes": 10497,
       "sha256": "13adb04dacedf72f728e22c750d3b66b75e8acaad2b8357785e67a09bc045390"
+    },
+    {
+      "path": "runtime/compat/graphics/ld-musl-namespace-aarch64-flex.ini",
+      "bytes": 9210,
+      "sha256": "07effc1d98a33562a9ab6089ffd6513657a28d8e9d1b264cb8e9936f9278af22"
     },
     {
       "path": "runtime/compat/graphics/ld-musl-namespace-aarch64-test.ini",
@@ -1913,29 +1833,14 @@
       "sha256": "4d32e2b5f8ecd00ad504d8d9039430d75ae3a18f7446752b4cac632559ea4831"
     },
     {
-      "path": "runtime/compat/graphics/load-official303-cnss2.sh",
-      "bytes": 5190,
-      "sha256": "7a14f9ceddf8c6a600675c337a8aa38d5bf2480ebf267dcf3fbed4db42f3bd0f"
-    },
-    {
-      "path": "runtime/compat/graphics/load-official303-qca_cld3_kiwi_v2.sh",
-      "bytes": 8062,
-      "sha256": "caf8f67fdb1a1eaa9c86ed460cc97d281b94c2853a9e59526c3c0a873603449a"
-    },
-    {
-      "path": "runtime/compat/graphics/load-official303-qrtr-mhi.sh",
-      "bytes": 3047,
-      "sha256": "cfc9b24a9aba38f304d3dba832c6b3679f5b2e242862fbcecad6a7c4493f1375"
-    },
-    {
       "path": "runtime/compat/graphics/locationhub-state.json",
       "bytes": 290,
       "sha256": "9a6f670f9e9653e3887259db4c7dbe04c75fa50e7a0a8591c27fc451c8b42c47"
     },
     {
       "path": "runtime/compat/graphics/mark-boot-success-v135.sh",
-      "bytes": 1210,
-      "sha256": "f1dbc317afd6265c9baf2a7c7b56868d0d3c076ee16d2a5a6b734fd1804989a7"
+      "bytes": 1238,
+      "sha256": "2d2fc37327953bdd6ac2319e07690383cb2b3e8f5c0c25b9754420d1ad971645"
     },
     {
       "path": "runtime/compat/graphics/msdp-input-only.json",
@@ -1959,8 +1864,8 @@
     },
     {
       "path": "runtime/compat/graphics/prepare-native-hiview-events.sh",
-      "bytes": 4833,
-      "sha256": "2b27e32c706d7d8cacdebcac83dacb976f544bfc9e7982b319dfccd395cb151e"
+      "bytes": 4834,
+      "sha256": "6f586c380b183c86f8c3ad621199e33a78e327bbb8f01cb447b7f110cbe152ae"
     },
     {
       "path": "runtime/compat/graphics/prepare-parentcontrol-el1.sh",
@@ -1969,8 +1874,8 @@
     },
     {
       "path": "runtime/compat/graphics/prepare-private-persist.sh",
-      "bytes": 7695,
-      "sha256": "c89f86181da8736182a71e642c93a7f5fd8d7bbdb5f7bad5aa979931db75c289"
+      "bytes": 7696,
+      "sha256": "2ad0bbbda54ed4ed6862730433428b852f74c52cdc6b2e56c3657f162c98808b"
     },
     {
       "path": "runtime/compat/graphics/service_router.json",
@@ -1978,9 +1883,9 @@
       "sha256": "d5b28711846bfb4d1ae77f20f095e8fab1ce401235acca5ec0dc5d3aa154bb68"
     },
     {
-      "path": "runtime/compat/graphics/sheng-turnip.json",
-      "bytes": 140,
-      "sha256": "72253461d435ee1366075d53c0de84b16e11f9bb8b2bcbd8e9d063ab137431cd"
+      "path": "runtime/compat/graphics/stage-device-firmware.sh",
+      "bytes": 2807,
+      "sha256": "4b2ab7024fc2874bfc427c85bcf031537cf0c8c5f73adea274332430f26c0ae2"
     },
     {
       "path": "runtime/compat/graphics/stage-wifi-ram.sh",
@@ -1989,28 +1894,28 @@
     },
     {
       "path": "runtime/compat/graphics/start-audio-v116.sh",
-      "bytes": 2758,
-      "sha256": "5e8bf6f2e7b076aa039c3be29de5515dc466fcee9ce04c07ffd746d793939369"
+      "bytes": 3475,
+      "sha256": "91020e011ca9de6fa903ff99460e4b97b864e5dbd2ef62693b98e307d3f791ed"
     },
     {
       "path": "runtime/compat/graphics/start-graphics-v116.sh",
-      "bytes": 899,
-      "sha256": "3c707af23e1594d6f08a83cbf0e899fba458002c9cbae60a0f357dd52c8e4d52"
+      "bytes": 1224,
+      "sha256": "fbdd6bbcd59eba6908a8d94ff580bce526cfa1c53fc0ffef71c29eacade0d898"
     },
     {
       "path": "runtime/compat/graphics/start-native-desktop-v116.sh",
-      "bytes": 9241,
-      "sha256": "80193add9993cbd797d7cf7acc38b02d52efe9f9571b147dd479e280b3782de8"
+      "bytes": 9379,
+      "sha256": "3a0787b64c4bd84f936d4e9b2d1392fe0634f96a31da0cb7ccefc04928c29e3c"
     },
     {
       "path": "runtime/compat/graphics/start-wifi-v116.sh",
-      "bytes": 1095,
-      "sha256": "2aec5130f654a01da19cc4a4182fa0a755f0385f77928ef00654a2bbce85cb5d"
+      "bytes": 1810,
+      "sha256": "e312bfbc2878cce896aa3a869cd2dd4e4ee904524d9214d6ea4440d28d0b4e32"
     },
     {
       "path": "runtime/compat/graphics/start-xiaomi-charging.sh",
-      "bytes": 405,
-      "sha256": "f93a6c760d54138d817bb4cee79c095ae1696ef0e23a1b4aa8fa0a56621ae645"
+      "bytes": 406,
+      "sha256": "bcddeb175c38e1abbbb64c7d7b42a8cdd4370b7d49ef41f4ec200c2ca810efdb"
     },
     {
       "path": "runtime/compat/graphics/useriam-core.json",
@@ -2029,8 +1934,8 @@
     },
     {
       "path": "runtime/compat/hmos-init-debug.cfg",
-      "bytes": 29215,
-      "sha256": "dc10f2523c3d4feb8cbf765fcecd5c00fd88295a10e09c52f4870b70a97ece32"
+      "bytes": 29244,
+      "sha256": "da022024e57b099dfce9b31ad4cd70ad0d8f7b025715db977e9fd030a034ebc6"
     },
     {
       "path": "runtime/compat/sensors/prepare-private-persist.sh",
@@ -2039,18 +1944,18 @@
     },
     {
       "path": "runtime/compat/sensors/stage-fastrpc-nodes.sh",
-      "bytes": 922,
-      "sha256": "cc993824f02bf58d7e45c06021ec0a32335ff4e79d972991a0291cd7cb5eab43"
+      "bytes": 923,
+      "sha256": "4ab3f867b0c922e214515f3fe9b3f678ce054b6e270ac673439504af63fa6cd9"
     },
     {
       "path": "runtime/compat/sensors/start-sensors.sh",
-      "bytes": 3255,
-      "sha256": "45acbd403f8c5659db8a0d63129d03a5eb35e2ad7a4be5d4f7cfa49fcce2f54f"
+      "bytes": 3257,
+      "sha256": "b00888387647673639be3ea40944ddd6a0a33bd479ae9a76cee0396adbce5e14"
     },
     {
-      "path": "SOURCE-SELECTION.json",
-      "bytes": 115408,
-      "sha256": "527633ef7e0f1dcd2441a74d4e7c754260e86c361c604a710d26e94c9c02dcd4"
+      "path": "tests/Test-FlashPreflight.ps1",
+      "bytes": 4317,
+      "sha256": "25b85260158573e61053e099e6eee6d4fdc276a22051e746a938e3df9d5603c3"
     },
     {
       "path": "tests/bootstrap/test_probe_serial_v121.c",
@@ -2064,18 +1969,18 @@
     },
     {
       "path": "tests/display/direct_scanout_contract.cpp",
-      "bytes": 15310,
-      "sha256": "d4acae8ea30f95a2858117f999935e5f398fb6dde377c7c252bd3fb90c8fb66e"
+      "bytes": 15306,
+      "sha256": "b5be829913d651a7fcf834a7a8625dda58a8008f6a00e6719d38ac8738875d56"
     },
     {
       "path": "tests/display/display_route_policy_contract.cpp",
-      "bytes": 4198,
-      "sha256": "86b25bc4bbdd94920c513d9fea2b9272c416d64228eb32c41fe15a9a0bb7c12c"
+      "bytes": 4207,
+      "sha256": "ea9049ee67c1e491ba17f043a326b92fa7f4df36cc9469264e3f48f96ac0a337"
     },
     {
       "path": "tests/display/mode_switch_contract.cpp",
-      "bytes": 3364,
-      "sha256": "19bc24e348ed3ffbe508f4d1a4544672cc434fadbe288a0b0b6933e95e1959b2"
+      "bytes": 3366,
+      "sha256": "5014569785e9cde8307cbfde5d72975743cc676dd600d0de3bedbd24ab93c688"
     },
     {
       "path": "tests/display/plane_layout_contract.cpp",
@@ -2108,14 +2013,14 @@
       "sha256": "5828126b3c9c77dc45f613dac5a02b0b6dd34a2aa71b15aefe6874f05b846bd0"
     },
     {
-      "path": "tests/Test-FlashPreflight.ps1",
-      "bytes": 3942,
-      "sha256": "7151fe2413e8b225f34708e850cc93ed902e79d4ce98d3d88f63a5377aaa0731"
-    },
-    {
       "path": "tests/test_android_sparse.py",
       "bytes": 1958,
       "sha256": "c035ddf009b138506e428a9d5e69c5828bbf30ab3ce073f53ab9d92dea4a9b88"
+    },
+    {
+      "path": "tests/test_audio_tinyalsa_backend.py",
+      "bytes": 8656,
+      "sha256": "cec05cffe845e755c35e23fe2f35213120a5da48230fc08b0e5073de27cebef5"
     },
     {
       "path": "tests/test_audit_donor.py",
@@ -2130,27 +2035,37 @@
     {
       "path": "tests/test_bootstrap_packaging.py",
       "bytes": 9784,
-      "sha256": "160f1860d2a41602de289b861f71d3d763e0b30e43f02184d4e1d1564a0f5158"
+      "sha256": "56a19162a3a52853a7bbff7e2334921b6709d6bd52ac4796aa631f44b9465ed2"
     },
     {
       "path": "tests/test_core_runtime_services.py",
-      "bytes": 17317,
-      "sha256": "bc368f6718d1221f37d2d0b121fcb159511e88faf4806c103da8877218d33cf6"
+      "bytes": 17319,
+      "sha256": "34a852bcba1f4f5e9d63ce28daed5c5c83b62080bcddccb358e315f510757142"
+    },
+    {
+      "path": "tests/test_dipper_image_build.py",
+      "bytes": 6626,
+      "sha256": "a9e3d235c2d679001401db37303157b9709bf0e5a8e2aa2e74a80b11e869aceb"
+    },
+    {
+      "path": "tests/test_dipper_layout.py",
+      "bytes": 5431,
+      "sha256": "ee63ca1ebc1756473d55a7a6c18005d3d762aa6807f3d6e729fcc4804c859a1b"
     },
     {
       "path": "tests/test_display_log_retention.py",
-      "bytes": 11477,
-      "sha256": "294c293a5fde56d38b84d902e3e7281105d952e57e7d7b419003fb645ceebe64"
+      "bytes": 11491,
+      "sha256": "078082dbeb3dc8df9dacd64c0d0dff2c85b13922130ebb14c86b6c35cb83cdab"
     },
     {
       "path": "tests/test_experience_rule_service.py",
       "bytes": 8855,
-      "sha256": "4f9339cd66e519c6f9afe71126c7483213159456ba0cbcc1efde495921aba512"
+      "sha256": "4c2809a69311a67ac0fa30b47630dda0362446913b2b6196163ecc14e698464d"
     },
     {
       "path": "tests/test_file_migrate_hook_guard.py",
       "bytes": 9455,
-      "sha256": "2c871c0e84bfe588cb04ecd503c3d2a2e37b7fcd100e77e5b9fbc35bd4f0f41a"
+      "sha256": "84ba2d0e5a14b0d50fc84229172ce40176fd28862e6f5dabbeea20d014f7a01c"
     },
     {
       "path": "tests/test_huawei_full_ota.py",
@@ -2159,33 +2074,33 @@
     },
     {
       "path": "tests/test_huawei_id_startup.py",
-      "bytes": 6268,
-      "sha256": "4f3675d17a0d44d909cb29f9f064f0597f921016823c1566d6341f592194efe3"
+      "bytes": 6269,
+      "sha256": "397f013bf39b9e56786ccb3747ae6007461c54f6368c08f19ba630f7e1d66405"
     },
     {
       "path": "tests/test_ipc_pair_packaging.py",
-      "bytes": 10115,
-      "sha256": "d574f1e1fb8da9eb859c16d669bc50196b6dd5e03807889ee3f20a4342606a6d"
+      "bytes": 10116,
+      "sha256": "393769b1111b245fa8d32c57c04dd0dd69eee29a026ced48f7cb1185179e9f80"
     },
     {
       "path": "tests/test_native_hiview_events.py",
-      "bytes": 19437,
-      "sha256": "db34c0038e56db21fe7e85c9cc924158600f09352ec1e5c50a2cab6de3011e7c"
+      "bytes": 19441,
+      "sha256": "ac68d8f14d389cb814b3f6ee9f47d63bf2fea2134dfef2b3ea01ecbdbc5035df"
     },
     {
       "path": "tests/test_package_sensors.py",
-      "bytes": 5630,
-      "sha256": "c055b0dc4bdd7dc7847ae4bc4554a7422c11ddedb97c33781343372759a1a949"
+      "bytes": 5585,
+      "sha256": "4a9c91e05797da66a2fac77697fbd009a6c531f7981ba1737922f2bd08380c21"
     },
     {
       "path": "tests/test_parent_control_service.py",
-      "bytes": 23379,
-      "sha256": "ded416fbd1dad9037d34d4eb62b7935b3063947e114689a9566e377992facb88"
+      "bytes": 23380,
+      "sha256": "29e21723838fa1b2aa62b690d3a712f94393648aaf3d17859538c62ba1c02ce8"
     },
     {
       "path": "tests/test_privacy_service.py",
-      "bytes": 4667,
-      "sha256": "431f052823deface9fc4d83dac45afff78eb710f4dca585cc2cfc56a2a447d75"
+      "bytes": 4671,
+      "sha256": "e5a9068fd24e83a24bcf579c38536d6e1974f9fd67e94b7e54d7a96b57f04edf"
     },
     {
       "path": "tests/test_private_persist_parameters.py",
@@ -2193,34 +2108,39 @@
       "sha256": "606c720c3cf11c7bf761b0e5eaec6db9dc4247506ce8c331c0da0c9fcac0395d"
     },
     {
-      "path": "tests/test_refresh_policy.py",
-      "bytes": 1809,
-      "sha256": "1a96d9296d2921e079ecdda9499d5252565d223d9d195c8003ab1bc27f580757"
-    },
-    {
       "path": "tests/test_render_commit_async.py",
       "bytes": 6550,
-      "sha256": "6019902da9fb5865a0175272b99826e142d54d1c151f9a64336ee8b1056d9586"
+      "sha256": "81bde229457cec7c8f57b13c3d3d50589646bd245e926242232e327e693a3f1f"
     },
     {
       "path": "tests/test_samgr_original_role.py",
-      "bytes": 11708,
-      "sha256": "c310f2d60e57464a0c110ed755c9b895fcf0bd45911d2de6ae7f20e550be1b90"
+      "bytes": 11710,
+      "sha256": "cff4285a72b671f292b010d654acad288166a27e7fc9c8a869169cc24ecb4f3f"
+    },
+    {
+      "path": "tests/test_static_partitions.py",
+      "bytes": 10441,
+      "sha256": "cdc4c1eea354743545bb9471e6406425bac2c1bbd1dba811f7654cddb9a266d6"
     },
     {
       "path": "tests/test_userdata_mount.py",
-      "bytes": 7449,
-      "sha256": "78c66a8a5498b49c2645e340841266a1cbd5b0c2812f2ac8644ed1f8bb0a1713"
+      "bytes": 7452,
+      "sha256": "0fd7504a3a240a15b01180e3c6452379d23c105641ed103c5c807e7208f4ce7e"
     },
     {
       "path": "tests/test_vibrator_service.py",
-      "bytes": 13139,
-      "sha256": "dd0212b955f0438500303caa1921673c7a4d1e4683722fe4b2b0026b732873e1"
+      "bytes": 13144,
+      "sha256": "fd6faa0f4e86221eefb9f0c0bb5b402d6b0301776c7aba19d57ec8323f9cc23e"
     },
     {
       "path": "tests/useriam/empty_contract.cpp",
       "bytes": 2071,
       "sha256": "29ef143926a06f37dbe1ec2b6759a60509f6d45475938c907bb7aa17f1afdefa"
+    },
+    {
+      "path": "tools/Flash-Dipper.ps1",
+      "bytes": 8035,
+      "sha256": "b2e895b2ffb2f2b9eab09113e7972879ecc3f96a1ec0c3a19cce87a81638c671"
     },
     {
       "path": "tools/android_sparse.py",
@@ -2233,9 +2153,9 @@
       "sha256": "ac6d1b615a02855d3e03ff275e5055a98440e9d951d95b9a0964e8557ee26ce4"
     },
     {
-      "path": "tools/assemble_promax_package.py",
-      "bytes": 3820,
-      "sha256": "3e436e4cad61f9893bd540263c078df5c5e779198378b0e9e522feb0e1655e38"
+      "path": "tools/assemble_dipper_package.py",
+      "bytes": 3691,
+      "sha256": "f307a28c3c52bd86984e54c6941cb0dc9bacee3a9d3151f0460538778833b1f3"
     },
     {
       "path": "tools/audit_donor.py",
@@ -2244,8 +2164,18 @@
     },
     {
       "path": "tools/build_current.py",
-      "bytes": 16964,
-      "sha256": "ccbb7f3c38788921883bc612e4e542544996518a46e4d298b34298d46c34d6c0"
+      "bytes": 16981,
+      "sha256": "34a442ec2cb299ac94d77f77e2d6bb727229ee1288adb5015f06e0843e9a3635"
+    },
+    {
+      "path": "tools/build_dipper_images.py",
+      "bytes": 11594,
+      "sha256": "bfedeeec73710e4fe4b0ae38ee35f3a99c486ba934085a1a14b2828ece0daaa5"
+    },
+    {
+      "path": "tools/build_dipper_ramdisk.py",
+      "bytes": 92995,
+      "sha256": "d209defbe9d470c3c888a34983b3d05ce7825ae26095c22eb3188cffe33f0581"
     },
     {
       "path": "tools/build_display_drm.py",
@@ -2254,38 +2184,33 @@
     },
     {
       "path": "tools/build_ipc_gki.sh",
-      "bytes": 7691,
-      "sha256": "1d785b9784179cf14790cf23ce05c507f081b4ef0f0bc5c8f21892060b5a6906"
-    },
-    {
-      "path": "tools/build_promax_images.py",
-      "bytes": 11713,
-      "sha256": "1011fe13dce1bc9b5f056b9cdcdd105b3d9591e2756d1d21a410978e3fcbcd56"
-    },
-    {
-      "path": "tools/build_promax_ramdisk.py",
-      "bytes": 90132,
-      "sha256": "c78e27034ffb7fd3caf46e5a9c922e470930cfc19c77e8819f93ded48f2fadeb"
+      "bytes": 7696,
+      "sha256": "555ab900c2ad178d8799b6bfcfea9829577396bef6dd39302f7a7fc42c3aa5f7"
     },
     {
       "path": "tools/build_sensors.py",
-      "bytes": 4841,
-      "sha256": "793aa61d3738318a66ba7b767208b008f7a2117f381ff683915b21227700d059"
+      "bytes": 4842,
+      "sha256": "1ca8fbdeab760af46e40ac6cceceeb912a895436e94c4efff779ff7affaa7ef3"
     },
     {
       "path": "tools/build_useriam.py",
-      "bytes": 2939,
-      "sha256": "02fc4f2454edd2961cb19732e1b4a07fe4946a8bd8a2daf5dce4efd3d1afccaf"
+      "bytes": 2950,
+      "sha256": "439232cd463d3cec8e984fa69e6a0a0cf945764d297d77f54c12f7f3795ba387"
     },
     {
       "path": "tools/collect_port_baseline.sh",
-      "bytes": 1137,
-      "sha256": "b15ecce250930c185fda3e898a1e488166f4a6278e8f2524466b94b8092ee49e"
+      "bytes": 1140,
+      "sha256": "33a19b36276dfd054be0b563e48b9ff4d18151592b3042b25acb85b831d254eb"
+    },
+    {
+      "path": "tools/dipper_partitions.json",
+      "bytes": 10063,
+      "sha256": "7beaf4a724799e20577b8bb6c21ef955964bce8598deb53a40358b67c46a5b0d"
     },
     {
       "path": "tools/experience_rule_service.py",
       "bytes": 3721,
-      "sha256": "074765d6509cac4efe13476b46ce9697ae7e78348da5ab0446ca15ca36b7bdd0"
+      "sha256": "b0c969bb5c44ec25dd74924d70cab37d2cbf4fa35b77987d831c1f14cb36ae3f"
     },
     {
       "path": "tools/extract_huawei_full_ota.py",
@@ -2293,39 +2218,29 @@
       "sha256": "e799ccacb6e9146cf4051c2840cffc43b2ea536d1b760e9aeca149dcef5a682c"
     },
     {
-      "path": "tools/Flash-ProMax.ps1",
-      "bytes": 7285,
-      "sha256": "be456a7ac9aa4e7d21ffd689bd362951e98db3236a25786a1710976a93e193ab"
-    },
-    {
       "path": "tools/hiview_event_service.py",
-      "bytes": 9710,
-      "sha256": "6d6a8d4508cc0210e8ef64addb78efff87ff31f6e67d2ebdd5d9eddf61750d7f"
+      "bytes": 9715,
+      "sha256": "a7fe2ddc29c1fd7a4093b5f5a5d9894b1cdb79adced0aa6641fa233a37324f3c"
     },
     {
       "path": "tools/package_sensors.py",
-      "bytes": 13597,
-      "sha256": "b63fca2a72c6d41dd8f842d6b4d29bc779568d415c7e5a4c2fbf1ce77d17bd09"
+      "bytes": 13685,
+      "sha256": "0f0fa3c195ce6e81db0e37d7dfde7e9c8f5f5eea0587197649c4f2cf5c50f09f"
     },
     {
       "path": "tools/package_thermal.py",
-      "bytes": 2435,
-      "sha256": "6fa761c00dbca3e638a2760ebff39c4994e8926391061538b2ce486d517e41fc"
+      "bytes": 2436,
+      "sha256": "b518762b0bcc3555f028c1c44991c990963f8266f610af90ff85a4838407c015"
     },
     {
       "path": "tools/package_xiaomi_charging.py",
-      "bytes": 5235,
-      "sha256": "698e3a45714ad16dc6e3b5c23efad0147d4a87940294fcca0156a1bfb99562e1"
+      "bytes": 5237,
+      "sha256": "62ad73610011b1abf00d3ef5bc9316a7a3c1741863e530a3f5a5d58171b685c2"
     },
     {
       "path": "tools/parent_control_service.py",
-      "bytes": 9561,
-      "sha256": "1d86756f09dd0f539bd4e69855b3e2a24130d3b17a15be5a92185b81f60f27d7"
-    },
-    {
-      "path": "tools/patch_refresh_policy.py",
-      "bytes": 1971,
-      "sha256": "5e78b84c98e0f2bb094c431a236293d454a0e5ec22959056f376515e6e22aff0"
+      "bytes": 9565,
+      "sha256": "9f644b1cdd199f68e8ff80d30479db8e5358f775be5d6ac66aa2d566db72edef"
     },
     {
       "path": "tools/private_persist_parameters.py",
@@ -2343,9 +2258,9 @@
       "sha256": "7e28e3733f7e556ca12720a5a32b11ec50f979d44cb3d41809038e9510eac66e"
     },
     {
-      "path": "tools/update_promax_ramdisk_package.py",
+      "path": "tools/update_dipper_ramdisk_package.py",
       "bytes": 2077,
-      "sha256": "2392bf51307b614a2adedc53457148b13fa28fe0ef247898cecfadc3ecf45605"
+      "sha256": "31b2172df0fb63786eb1acd68d80f837172469756e0a2fa82a0784465140df38"
     },
     {
       "path": "tools/vendor_ramdisk_edit.py",

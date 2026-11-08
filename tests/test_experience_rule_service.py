@@ -14,7 +14,7 @@ from unittest.mock import patch
 
 
 ROOT = Path(__file__).resolve().parents[1]
-SOURCE = ROOT / 'tools/build_promax_ramdisk.py'
+SOURCE = ROOT / 'tools/build_dipper_ramdisk.py'
 TREE = ast.parse(SOURCE.read_text(encoding='utf-8'))
 SPEC = importlib.util.spec_from_file_location(
     'experience_rule_service', ROOT / 'tools/experience_rule_service.py'
@@ -135,7 +135,7 @@ class ExperienceRuleServiceTests(unittest.TestCase):
                         selected_sha, core_sha,
                     )
                 generated = generated.replace(
-                    '/graphics/promax/foundation-experience-rule.json', source.as_posix()
+                    '/graphics/dipper/foundation-experience-rule.json', source.as_posix()
                 )
                 shell = r'''set -eu
 B=bb

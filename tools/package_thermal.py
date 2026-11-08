@@ -1,4 +1,4 @@
-"""Prepare the stock thermal payload from external extracted sheng assets.
+"""Prepare the stock thermal payload from external extracted dipper assets.
 
 The input directory contains mi_thermald, odm/etc/*.conf and vendor/etc/*.conf.
 Compile native_thermal_launcher.c with the OHOS SDK and pass that executable.

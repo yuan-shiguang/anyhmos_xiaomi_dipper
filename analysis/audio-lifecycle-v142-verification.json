@@ -9,9 +9,9 @@
   },
   "preserved_v141_entries": true,
   "changed_entries": [
-    "sheng-audio-v1/SHA256SUMS",
-    "sheng-audio-v1/audio/native/lib64/libsheng_audio_vdi.so",
-    "sheng-audio-v1/manifest.json"
+    "dipper-audio-v1/SHA256SUMS",
+    "dipper-audio-v1/audio/native/lib64/libdipper_audio_vdi.so",
+    "dipper-audio-v1/manifest.json"
   ],
   "audio_payload_checksums_verified": true,
   "audio_library_sha256": "bdb31b5b56c379ca1141bc9bfa0d9067c45ebb2df47b4b664a83fed7964248ca",

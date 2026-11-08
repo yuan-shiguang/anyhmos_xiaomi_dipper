@@ -20,7 +20,7 @@ stage_node()
     else
         $B mknod -m "$mode" "$target" c "$major" "$minor"
     fi
-    # 沿用原 sheng ueventd 的 system 所有权和读写权限
+    # 沿用原 dipper ueventd 的 system 所有权和读写权限
     $B chown 1000:1000 "$target"
     $B chmod "$mode" "$target"
     echo "FASTRPC_NODE name=$name dev=$major:$minor mode=$mode owner=1000:1000"

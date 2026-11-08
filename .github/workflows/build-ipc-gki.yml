@@ -27,14 +27,14 @@ jobs:
             libdw-dev zlib1g-dev
       - name: Build and audit module
         env:
-          SHENG_IPC_ARTIFACT_DIR: ${{ runner.temp }}/sheng-ipc-artifacts
+          DIPPER_IPC_ARTIFACT_DIR: ${{ runner.temp }}/dipper-ipc-artifacts
         run: bash tools/build_ipc_gki.sh "$GITHUB_WORKSPACE"
       # 仅归档公开内核构建产物和验证记录
       - name: Upload build results
         if: always()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         with:
-          name: sheng-ipc-gki-${{ github.sha }}
-          path: ${{ runner.temp }}/sheng-ipc-artifacts
+          name: dipper-ipc-gki-${{ github.sha }}
+          path: ${{ runner.temp }}/dipper-ipc-artifacts
           if-no-files-found: warn
           retention-days: 7

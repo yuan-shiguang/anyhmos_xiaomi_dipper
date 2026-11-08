@@ -1,7 +1,8 @@
 /* SPDX-License-Identifier: MIT
- * sheng HMOS autonomous compatibility bootstrap with diagnostic collector.
+ * dipper HMOS autonomous compatibility bootstrap with diagnostic collector.
  * System changes are RAM overlays; framework data uses the ext4 userdata partition.
- * Vendor logical partitions remain read-only and are never covered.
+ * dipper has no super partition: system/vendor are static read-only partitions, and
+ * the compatibility payload plus sys_prod/preload live on the cust partition.
  */
 #define _GNU_SOURCE
 #include <stdio.h>
@@ -39,12 +40,12 @@
 #include <linux/watchdog.h>
 #include <linux/reboot.h>
 
-#ifndef SHENG_IPC_ONEWAY_PID
-#define SHENG_IPC_ONEWAY_PID 0
+#ifndef DIPPER_IPC_ONEWAY_PID
+#define DIPPER_IPC_ONEWAY_PID 0
 #endif
-_Static_assert(SHENG_IPC_ONEWAY_PID==0||SHENG_IPC_ONEWAY_PID==1,
-               "SHENG_IPC_ONEWAY_PID must be 0 or 1");
-#if SHENG_IPC_ONEWAY_PID
+_Static_assert(DIPPER_IPC_ONEWAY_PID==0||DIPPER_IPC_ONEWAY_PID==1,
+               "DIPPER_IPC_ONEWAY_PID must be 0 or 1");
+#if DIPPER_IPC_ONEWAY_PID
 static int ipc_pair_loaded;
 #endif
 
@@ -167,16 +168,19 @@ static void discover(void) {
 }
 static void persistent(void) {
     if(logfd>=0)return;
-    char b[128];if(readfile("/dev/block/by-name/metadata",b,sizeof(b))<0)return;
-    const char *fs[]={"f2fs","mifs","ext4"};int ok=0;
-    for(unsigned i=0;i<sizeof(fs)/sizeof(fs[0]);i++) {
-        if(mount("/dev/block/by-name/metadata","/metadata",fs[i],MS_NOSUID|MS_NODEV|MS_NOATIME,"")==0) {note("metadata mounted as %s (no format/fsck)",fs[i]);ok=1;break;}
-        if(errno==EBUSY) {ok=1;break;}
+    const char *dir=NULL;
+    if(access("/dev/block/by-name/metadata",F_OK)==0){
+        const char *fs[]={"f2fs","mifs","ext4"};
+        for(unsigned i=0;i<sizeof(fs)/sizeof(fs[0]);i++) {
+            if(mount("/dev/block/by-name/metadata","/metadata",fs[i],MS_NOSUID|MS_NODEV|MS_NOATIME,"")==0||errno==EBUSY) {note("metadata mounted as %s (no format/fsck)",fs[i]);dir="/metadata/hmos-debug";break;}
+        }
     }
-    if(!ok)return;
-    if(mkdir("/metadata/hmos-debug",0700)<0&&errno!=EEXIST)return;
+    /* 米 8 没有 metadata 分区：cust 是唯一常驻可写的静态分区，日志放这里 */
+    if(!dir&&access("/cust",F_OK)==0){dir="/cust/hmos-debug";note("no metadata partition; persistent log on cust");}
+    if(!dir)return;
+    if(mkdir(dir,0700)<0&&errno!=EEXIST)return;
     char id[128]="unknown";readfile("/proc/sys/kernel/random/boot_id",id,sizeof(id));id[strcspn(id,"\r\n")]=0;
-    snprintf(logpath,sizeof(logpath),"/metadata/hmos-debug/probe-%s.log",id);
+    snprintf(logpath,sizeof(logpath),"%s/probe-%s.log",dir,id);
     logfd=open(logpath,O_CREAT|O_EXCL|O_WRONLY|O_CLOEXEC|O_DSYNC|O_NOFOLLOW,0600);
     if(logfd<0)return;
     history_write(logfd);disk_bytes=used;note("PERSISTENT_LOG=%s",logpath);fsync(logfd);
@@ -327,6 +331,100 @@ static int logical_source(const char *part,char *path,size_t capacity) {
     if(stat(path,&st)==0&&S_ISBLK(st.st_mode))return 0;
     errno=ENOENT;note("Missing required logical partition %s (active or shared)",part);return -1;
 }
+/* dipper 的 Android 侧是单槽静态分区：system 和 vendor 是真实分区，没有 super，
+ * 也没有 sys_prod/preload/vendor_dlkm 分区。后两者以目录形式放在 cust 上，与兼容层
+ * 载荷同处一个分区。只有引导链（abl/xbl/tz 等）是 A/B，与这里的挂载无关。 */
+static int mkdirs(const char *path);
+static const char *const static_parts[]={"system","vendor"};
+static const char *const staged_parts[]={"sys_prod","preload"};
+#define PAYLOAD_DEV "/dev/block/by-name/cust"
+#define PAYLOAD_MNT "/cust"
+static int static_layout;
+static int mount_readonly(const char *dev,const char *mp) {
+    /* 镜像可能是 ext4、erofs 或 f2fs：按顺序试挂，不靠分区名猜格式 */
+    const char *fs[]={"ext4","erofs","f2fs"};
+    for(unsigned i=0;i<sizeof(fs)/sizeof(fs[0]);i++){
+        if(mount(dev,mp,fs[i],MS_RDONLY|MS_NOSUID|MS_NODEV|MS_NOATIME,"")==0)return (int)i+1;
+        if(errno==EBUSY)return 0;
+    }
+    return -1;
+}
+static int static_partitions_at(const char *devroot,const char *mntroot) {
+    unsigned total=(unsigned)(sizeof(static_parts)/sizeof(static_parts[0])),mounted=0;
+    for(unsigned i=0;i<total;i++){
+        char dev[256],mp[256];
+        snprintf(dev,sizeof(dev),"%s/%s",devroot,static_parts[i]);
+        snprintf(mp,sizeof(mp),"%s/%s",mntroot,static_parts[i]);
+        if(access(dev,F_OK)<0){note("FAIL static partition %s missing (%s)",static_parts[i],dev);continue;}
+        if(mkdirs(mp)<0)return -1;
+        int fsid=mount_readonly(dev,mp);
+        if(fsid<0){note("FAIL mount %s: %s",dev,strerror(errno));continue;}
+        mounted++;note("MOUNT %s -> %s read-only fs=%d",dev,mp,fsid);
+    }
+    if(mounted!=total){note("FAIL static layout needs both system and vendor");errno=ENODEV;return -1;}
+    return 0;
+}
+/* 载荷根整体绑到 /compat：第二阶段用 /compat/bin/init 启动。启动脚本另外按绝对
+ * 路径引用 /graphics、/busybox 和 /hmos-init-debug.cfg，这几项单独再绑一次。
+ * 刻意不整目录展开绑定：/bin、/lib64、/etc 属于 initramfs 自己，不能被载荷盖住。 */
+static const char *const payload_entries[]={"graphics","busybox","hmos-init-debug.cfg"};
+static int payload_bind(const char *root,const char *target) {
+    if(access(root,F_OK)<0){note("FAIL payload root %s missing",root);errno=ENOENT;return -1;}
+    char compat[512],init[1024];
+    snprintf(compat,sizeof(compat),"%s%scompat",target,target[1]?"/":"");
+    if(mkdirs(compat)<0)return -1;
+    if(mount(root,compat,0,MS_BIND,0)<0){note("FAIL bind %s -> %s: %s",root,compat,strerror(errno));return -1;}
+    snprintf(init,sizeof(init),"%s/bin/init",root);
+    if(access(init,F_OK)<0){note("FAIL payload %s has no bin/init; second stage would not start",root);errno=ENOENT;return -1;}
+    note("PAYLOAD bind %s -> %s",root,compat);
+    unsigned bound=1;
+    for(unsigned i=0;i<sizeof(payload_entries)/sizeof(payload_entries[0]);i++){
+        char src[1024],dst[512];struct stat st;
+        snprintf(src,sizeof(src),"%s/%s",root,payload_entries[i]);
+        if(lstat(src,&st)<0)continue;
+        /* target 为 "/" 时拼成 /name，否则拼成 target/name */
+        snprintf(dst,sizeof(dst),"%s%s%s",target,target[1]?"/":"",payload_entries[i]);
+        if(S_ISDIR(st.st_mode)){if(mkdirs(dst)<0)return -1;}
+        else {int fd=open(dst,O_CREAT|O_CLOEXEC|O_WRONLY,0600);if(fd<0)return -1;close(fd);}
+        if(mount(src,dst,0,MS_BIND,0)<0){note("FAIL bind %s -> %s: %s",src,dst,strerror(errno));return -1;}
+        note("PAYLOAD bind %s -> %s",src,dst);
+        bound++;
+    }
+    note("PAYLOAD bound entries=%u from %s",bound,root);
+    return 0;
+}
+static int staged_parts_at(const char *staged,const char *mntroot) {
+    unsigned present=0;
+    for(unsigned i=0;i<sizeof(staged_parts)/sizeof(staged_parts[0]);i++){
+        char src[1024],dst[256];
+        snprintf(src,sizeof(src),"%s/%s",staged,staged_parts[i]);
+        snprintf(dst,sizeof(dst),"%s/%s",mntroot,staged_parts[i]);
+        if(access(src,F_OK)<0){note("staged %s absent; donor partition not carried over",staged_parts[i]);continue;}
+        if(mkdirs(dst)<0)return -1;
+        if(mount(src,dst,0,MS_BIND,0)<0){note("FAIL bind %s: %s",src,strerror(errno));return -1;}
+        if(mount(0,dst,0,MS_BIND|MS_REMOUNT|MS_RDONLY|MS_NOSUID|MS_NODEV,0)<0)note("bind %s stays writable: %s",dst,strerror(errno));
+        present++;
+    }
+    note("STAGED parts mounted=%u",present);
+    return 0;
+}
+static int cust_payload_at(const char *dev,const char *mnt,const char *bindroot,const char *stagedroot) {
+    if(access(dev,F_OK)<0){note("FAIL cust partition missing (%s); no compatibility payload",dev);errno=ENODEV;return -1;}
+    if(mkdirs(mnt)<0)return -1;
+    /* cust 必须可写：载荷脚本会 chmod 自己的文件，只读挂载会让 set -eu 直接退出 */
+    if(mount(dev,mnt,"ext4",MS_NOSUID|MS_NODEV|MS_NOATIME,"")<0&&errno!=EBUSY){note("FAIL cust mount: %s",strerror(errno));return -1;}
+    char root[256],staged[512];snprintf(root,sizeof(root),"%s/compat",mnt);snprintf(staged,sizeof(staged),"%s/hmos",mnt);
+    if(access(root,F_OK)<0){note("FAIL compatibility payload missing at %s",root);errno=ENOENT;return -1;}
+    if(payload_bind(root,bindroot)<0)return -1;
+    return staged_parts_at(staged,stagedroot);
+}
+static int static_layout_mount(void) {
+    if(static_partitions_at("/dev/block/by-name","/hmos")<0)return -1;
+    if(cust_payload_at(PAYLOAD_DEV,PAYLOAD_MNT,"/","/hmos")<0)return -1;
+    static_layout=1;
+    note("STATIC LAYOUT ready: system+vendor read-only, payload from %s/compat",PAYLOAD_MNT);
+    return 0;
+}
 static void partitions(const char *superpath,int inspect) {
     int fd=open(superpath,O_RDONLY|O_CLOEXEC);if(fd<0){note("super not found: %s",strerror(errno));return;}
     uint8_t geom[4096];int valid=0;
@@ -379,7 +477,7 @@ static void usb_setup(void) {
      * causing another probe; this small init must request that retry itself. */
     if(access("/sys/bus/i2c/devices/1-0028",F_OK)==0&&access("/sys/bus/i2c/devices/1-0028/driver",F_OK)!=0){int r=put("/sys/bus/i2c/drivers_probe","1-0028");note("USB PS5169 reprobe result=%d errno=%d",r,r<0?errno:0);}
     if(access("/sys/bus/platform/devices/a600000.ssusb",F_OK)==0&&access("/sys/bus/platform/devices/a600000.ssusb/driver",F_OK)!=0){int r=put("/sys/bus/platform/drivers_probe","a600000.ssusb");note("USB controller reprobe result=%d errno=%d",r,r<0?errno:0);}
-    /* sheng recovery explicitly switches the Qualcomm wrapper to peripheral
+    /* dipper recovery explicitly switches the Qualcomm wrapper to peripheral
      * before waiting for its child UDC. Waiting for UDC first deadlocks setup. */
     const char *mode="/sys/bus/platform/devices/a600000.ssusb/mode";
     if(!usb_mode_set&&access(mode,F_OK)==0){if(put(mode,"peripheral")==0){usb_mode_set=1;note("USB Qualcomm mode set to peripheral");}else note("USB peripheral mode: %s",strerror(errno));}
@@ -390,7 +488,7 @@ static void usb_setup(void) {
     const char *g="/config/usb_gadget/hmos_probe";makedir(g);char p[512];
 #define ATTR(k,v) do{snprintf(p,sizeof(p),"%s/%s",g,k);if(put(p,v)<0)note("USB attr %s: %s",k,strerror(errno));}while(0)
     ATTR("idVendor","0x1d6b");ATTR("idProduct","0x0104");ATTR("bcdUSB","0x0200");ATTR("bcdDevice","0x0100");ATTR("bDeviceClass","0x02");
-    makedir("/config/usb_gadget/hmos_probe/strings/0x409");ATTR("strings/0x409/serialnumber","sheng-hmos-probe");ATTR("strings/0x409/manufacturer","Local bring-up");ATTR("strings/0x409/product","sheng HMOS early log");
+    makedir("/config/usb_gadget/hmos_probe/strings/0x409");ATTR("strings/0x409/serialnumber","dipper-hmos-probe");ATTR("strings/0x409/manufacturer","Local bring-up");ATTR("strings/0x409/product","dipper HMOS early log");
     makedir("/config/usb_gadget/hmos_probe/configs/c.1");ATTR("configs/c.1/MaxPower","250");
     makedir("/config/usb_gadget/hmos_probe/functions/acm.usb0");
     if(access("/config/usb_gadget/hmos_probe/functions/acm.usb0/port_num",F_OK)){note("FAIL USB ACM function unavailable");return;}
@@ -429,7 +527,7 @@ static int ipc_nodes(const char *directory) {
         }line=strtok_r(NULL,"\n",&save);
     }return count;
 }
-#if SHENG_IPC_ONEWAY_PID
+#if DIPPER_IPC_ONEWAY_PID
 /* 封印候选副本并核对完整内容 */
 static int ipc_verified_fd(int source) {
     static const uint8_t expected[32]={
@@ -451,7 +549,7 @@ static int ipc_verified_fd(int source) {
         if(n<=0){if(!n)errno=EIO;goto failed;}
         used+=(size_t)n;
     }
-    sealed=memfd_create("sheng-ipc-verified",MFD_CLOEXEC|MFD_ALLOW_SEALING);
+    sealed=memfd_create("dipper-ipc-verified",MFD_CLOEXEC|MFD_ALLOW_SEALING);
     if(sealed<0)goto failed;
     for(size_t used=0;used<size;){
         ssize_t n=write(sealed,data+used,size-used);
@@ -485,7 +583,7 @@ static int ipc_pair_params(char *buffer,size_t size,int stage) {
 /* 仅验证内存文件与参数，不调用模块加载 */
 static int ipc_pair_selftest(void) {
     alarm(10);
-    int fd=memfd_create("sheng-ipc-selftest",MFD_CLOEXEC|MFD_ALLOW_SEALING);
+    int fd=memfd_create("dipper-ipc-selftest",MFD_CLOEXEC|MFD_ALLOW_SEALING);
     if(fd<0){perror("selftest memfd");return 1;}
     int sealed=-1,failed=1;
     sealed=ipc_verified_fd(fd);
@@ -538,15 +636,15 @@ static int ipc_pid_nodes(void) {
 #endif
 static void ipc_test(int which) {
     if(ipc_test_pid>0||ipc_pid>0){note("IPC test rejected: another IPC operation is running");return;}
-    if(access("/sys/module/sheng_hmos_ipc",F_OK)<0||ipc_nodes("/dev")!=4){note("IPC test requires a loaded driver and all four verified misc nodes");return;}
+    if(access("/sys/module/dipper_hmos_ipc",F_OK)<0||ipc_nodes("/dev")!=4){note("IPC test requires a loaded driver and all four verified misc nodes");return;}
     const char *program=which==1?"/token_contract":"/binder_nested";
     int timeout=35;
-#if SHENG_IPC_ONEWAY_PID
+#if DIPPER_IPC_ONEWAY_PID
     /* 仅在独立节点验证保留发送方标识 */
     if(which==3){
         char mode[16];
         if(!ipc_pair_loaded||
-           readfile("/sys/module/sheng_hmos_ipc/parameters/oneway_sender_pid",mode,sizeof(mode))<0||
+           readfile("/sys/module/dipper_hmos_ipc/parameters/oneway_sender_pid",mode,sizeof(mode))<0||
            (strcmp(mode,"Y\n")&&strcmp(mode,"1\n"))||ipc_pid_nodes()!=2){
             note("IPC PID contract requires the verified pair, retained mode and both private nodes");return;
         }
@@ -556,7 +654,7 @@ static void ipc_test(int which) {
     note("IPC CONTRACT begin %s; %d-second process-group timeout",program,timeout);
     pid_t child=fork();
     if(child==0){if(setsid()<0)_exit(126);int out=open("/dev/kmsg",O_WRONLY|O_CLOEXEC);if(out<0)_exit(126);dup2(out,1);dup2(out,2);close(out);
-#if SHENG_IPC_ONEWAY_PID
+#if DIPPER_IPC_ONEWAY_PID
         if(which==3){
             char *args[]={(char*)program,"/dev/hmos_pidtest","/dev/hmos_pidtest_ns","1",NULL};
             execv(program,args);dprintf(2,"IPC PID contract exec failed: %s\n",strerror(errno));_exit(126);
@@ -573,13 +671,13 @@ static void ipc_test_tick(void) {
 }
 static void ipc_load(void) {
     if(ipc_pid>0){note("IPC LOAD already running pid=%ld",(long)ipc_pid);return;}
-    if(access("/sys/module/sheng_hmos_ipc",F_OK)==0){note("IPC module already loaded; reboot before another load");return;}
+    if(access("/sys/module/dipper_hmos_ipc",F_OK)==0){note("IPC module already loaded; reboot before another load");return;}
     int fd=open("/hmos-ipc.ko",O_RDONLY|O_CLOEXEC
-#if SHENG_IPC_ONEWAY_PID
+#if DIPPER_IPC_ONEWAY_PID
                 |O_NOFOLLOW
 #endif
     );if(fd<0){note("IPC candidate missing: %s",strerror(errno));return;}
-#if SHENG_IPC_ONEWAY_PID
+#if DIPPER_IPC_ONEWAY_PID
     /* 校验失败时保留串口与恢复入口 */
     int verified=ipc_verified_fd(fd),saved=errno;close(fd);fd=verified;
     if(fd<0){note("IPC pair verification failed: %s; HOLD",strerror(saved));return;}
@@ -591,7 +689,7 @@ static void ipc_load(void) {
     pid_t child=fork();
     if(child==0){
         close(result[0]);
-#if SHENG_IPC_ONEWAY_PID
+#if DIPPER_IPC_ONEWAY_PID
         char params[256];
         if(ipc_pair_params(params,sizeof(params),ipc_stage)<0){
             int values[2]={-1,errno};allwrite(result[1],values,sizeof(values));_exit(125);
@@ -600,9 +698,9 @@ static void ipc_load(void) {
         char params[64];snprintf(params,sizeof(params),"diagnostic_stage=%d",ipc_stage);
 #endif
         int out=open("/dev/kmsg",O_WRONLY|O_CLOEXEC);
-        if(out>=0)dprintf(out,"<6>SHENG_IPC user-loader pid=%ld params=%s\n",(long)getpid(),params);
+        if(out>=0)dprintf(out,"<6>DIPPER_IPC user-loader pid=%ld params=%s\n",(long)getpid(),params);
         int values[2];values[0]=(int)syscall(SYS_finit_module,fd,params,0);values[1]=values[0]<0?errno:0;
-        if(out>=0)dprintf(out,"<6>SHENG_IPC user-loader result=%d errno=%d\n",values[0],values[1]);
+        if(out>=0)dprintf(out,"<6>DIPPER_IPC user-loader result=%d errno=%d\n",values[0],values[1]);
         allwrite(result[1],values,sizeof(values));_exit(values[0]<0?125:0);
     }
     close(fd);close(result[1]);
@@ -617,7 +715,7 @@ static void reap_children(void) {
             int values[2];ssize_t n=read(ipc_resultfd,values,sizeof(values));
             if(n==(ssize_t)sizeof(values))note("IPC LOAD result=%d errno=%d %s",values[0],values[1],values[1]?strerror(values[1]):"success");
             else note("IPC child ended without syscall result; status=%d signal=%d",status,WIFSIGNALED(status)?WTERMSIG(status):0);
-#if SHENG_IPC_ONEWAY_PID
+#if DIPPER_IPC_ONEWAY_PID
             ipc_pair_loaded=n==(ssize_t)sizeof(values)&&values[0]==0&&values[1]==0&&
                             WIFEXITED(status)&&WEXITSTATUS(status)==0;
 #endif
@@ -634,7 +732,7 @@ static void serial_command(char *cmd) {
         serial_pos=used;command_start(cmd+4);return;
     }
     char *ipc=strstr(cmd,"ipc");if(ipc){ipc_stage=ipc[3]>='0'&&ipc[3]<='3'?ipc[3]-'0':-1;ipc_requested=1;}if(strstr(cmd,"test-token"))ipc_test_requested=1;if(strstr(cmd,"test-binder"))ipc_test_requested=2;if(strstr(cmd,"replay"))serial_pos=0;if(strstr(cmd,"status"))note("status: pid=%ld traced=%ld held=%d syscalls=%d ipc_child=%ld test_child=%ld; %zu bytes history; persistent=%s",(long)getpid(),(long)traced_pid,trace_held,trace_syscalls,(long)ipc_pid,(long)ipc_test_pid,used,logfd>=0?logpath:"unavailable");if(strstr(cmd,"diag"))process_diag();if(strstr(cmd,"sync")&&logfd>=0)fsync(logfd);if(strstr(cmd,"trace"))trace_requested=1;if(strstr(cmd,"hmos-list"))trace_requested=2;else if(strstr(cmd,"hmos"))trace_requested=3;
-#if SHENG_IPC_ONEWAY_PID
+#if DIPPER_IPC_ONEWAY_PID
     if(strstr(cmd,"test-oneway"))ipc_test_requested=3;
 #endif
     if(strstr(cmd,"reboot-recovery")){note("USB requested reboot to recovery");if(logfd>=0)fsync(logfd);sync();syscall(SYS_reboot,LINUX_REBOOT_MAGIC1,LINUX_REBOOT_MAGIC2,LINUX_REBOOT_CMD_RESTART2,"recovery");note("reboot syscall returned: %s",strerror(errno));}
@@ -691,8 +789,9 @@ static int hmos_root(void) {
     if(ram_mount("/hmos-ram","mode=0755,size=2048m")<0)return -1;
     if(ram_overlay("/hmos/system","/hmos-root","root")<0)return -1;
     struct stat root_mode;if(stat("/hmos-root",&root_mode)<0)return -1;note("HMOS RAM root mode=%o uid=%u gid=%u",(unsigned)(root_mode.st_mode&07777),(unsigned)root_mode.st_uid,(unsigned)root_mode.st_gid);if((root_mode.st_mode&0777)!=0755){errno=EACCES;return -1;}
-    const char *parts[]={"vendor","sys_prod","vendor_dlkm","preload"};
-    for(unsigned i=0;i<sizeof(parts)/sizeof(parts[0]);i++){char lower[256],target[256];snprintf(lower,sizeof(lower),"/hmos/%s",parts[i]);snprintf(target,sizeof(target),"/hmos-root/%s",parts[i]);if(!strcmp(parts[i],"vendor")||!strcmp(parts[i],"vendor_dlkm")){
+    /* compat 也在 cust 上，用 RAM overlay 挂进新根：载荷脚本改写的是内存副本 */
+    const char *parts[]={"vendor","sys_prod","vendor_dlkm","preload","compat"};
+    for(unsigned i=0;i<sizeof(parts)/sizeof(parts[0]);i++){char lower[256],target[256];snprintf(lower,sizeof(lower),"/hmos/%s",parts[i]);snprintf(target,sizeof(target),"/hmos-root/%s",parts[i]);/* 本机没有独立 vendor_dlkm 分区：内核模块在 vendor/lib/modules */if(!strcmp(parts[i],"vendor_dlkm")&&access(lower,F_OK)<0){note("HMOS vendor_dlkm absent; modules stay in vendor/lib/modules");continue;}if(!strcmp(parts[i],"vendor")||!strcmp(parts[i],"vendor_dlkm")){
             if(mkdirs(target)<0||mount(lower,target,0,MS_BIND,0)<0||mount(0,target,0,MS_BIND|MS_REMOUNT|MS_RDONLY|MS_NOSUID,0)<0)return -1;
         }else if(ram_overlay(lower,target,parts[i])<0)return -1;}
     if(ram_mount("/hmos-root/data","mode=0771,size=256m")<0||ram_mount("/hmos-root/metadata","mode=0755,size=16m")<0||ram_mount("/hmos-root/log","mode=0755,size=64m")<0||ram_mount("/hmos-root/mnt","mode=0755,size=64m")<0||ram_mount("/hmos-root/storage","mode=0755,size=64m")<0)return -1;
@@ -708,9 +807,14 @@ static int hmos_root(void) {
     const char *state_dirs[]={"/hmos-root/dev/__parameters__","/hmos-root/data/service/el0/startup/init","/hmos-root/data/service/el1/startup/parameters","/hmos-root/data/local/tmp","/hmos-root/data/service/el1/public","/hmos-root/data/app/el1","/hmos-root/data/storage/el1","/hmos-root/data/storage/el2","/hmos-root/data/service/el1/public/for-all-app","/hmos-root/data/service/el1/startup","/hmos-root/data/data"};
     for(unsigned i=0;i<sizeof(state_dirs)/sizeof(state_dirs[0]);i++)if(mkdirs(state_dirs[i])<0)return -1;
     if(graphics_ram_root()<0)return -1;
+    if(static_layout){
+        /* 单槽静态分区：system/vendor 的 by-name 节点由 discover() 直接从内核
+         * 分区名建立，sys_prod/preload 是 cust 上的目录，没有块设备可给。 */
+        note("HMOS static layout: by-name nodes come from the kernel partition table");
+    }else{
     for(unsigned i=0;i<sizeof(logical_parts)/sizeof(logical_parts[0]);i++){
         char source[256],dest[256],alias[256],link[256];struct stat st;
-        if(logical_source(logical_parts[i],source,sizeof(source))<0||stat(source,&st)<0)return -1;
+        if(logical_source(logical_parts[i],source,sizeof(source))<0||stat(source,&st)<0){if(!strcmp(logical_parts[i],"vendor_dlkm")){note("HMOS vendor_dlkm not in super; alias skipped");continue;}return -1;}
         const char *actual=strrchr(source,'/')+1+5; /* skip hmos_, preserve real LP name */
         snprintf(dest,sizeof(dest),"/hmos-root/dev/block/mapper/%s",actual);
         if(mknod(dest,S_IFBLK|0600,st.st_rdev)<0&&errno!=EEXIST)return -1;
@@ -718,9 +822,9 @@ static int hmos_root(void) {
         snprintf(link,sizeof(link),"/dev/block/mapper/%s",actual);
         if(symlink(link,alias)<0&&errno!=EEXIST)return -1;
         note("HMOS logical alias %s -> %s (read-only DM)",logical_parts[i],actual);
-    }
+    }}
     char misc[4096];if(readfile("/proc/misc",misc,sizeof(misc))>0){char *save,*line=strtok_r(misc,"\n",&save);while(line){unsigned minor;char name[128];if(sscanf(line,"%u %127s",&minor,name)==2&&(!strcmp(name,"binder")||!strcmp(name,"hwbinder")||!strcmp(name,"vndbinder"))){char target[256];snprintf(target,sizeof(target),"/hmos-root/dev/%s",name);if(mknod(target,S_IFCHR|0666,makedev(10,minor))<0&&errno!=EEXIST)return -1;note("HMOS stock Android IPC node %s minor=%u; OHOS extensions not assumed",name,minor);}line=strtok_r(NULL,"\n",&save);}}
-    if(access("/sys/module/sheng_hmos_ipc",F_OK)==0&&ipc_nodes("/hmos-root/dev")!=4)return -1;
+    if(access("/sys/module/dipper_hmos_ipc",F_OK)==0&&ipc_nodes("/hmos-root/dev")!=4)return -1;
     /* Replace the diagnostic sysfs mount with the flags expected by init. */
     umount2("/sys/kernel/debug",MNT_DETACH);umount2("/sys",MNT_DETACH);
     if(mount("sysfs","/sys","sysfs",0,"")<0)return -1;
@@ -731,13 +835,13 @@ static int hmos_root(void) {
     const char *hide[]={"/hmos-root/system/etc/init","/hmos-root/sys_prod/etc/init","/hmos-root/preload/etc/init"};
     for(unsigned i=0;i<sizeof(hide)/sizeof(hide[0]);i++)if(ram_mount(hide[i],"mode=0755,size=1m")<0)return -1;
     char cfg[32768];if(readfile("/hmos-init-debug.cfg",cfg,sizeof(cfg))<0)return -1;
-    if(textfile("/hmos-root/system/etc/init.cfg",cfg)<0||textfile("/hmos-root/system/etc/fstab.required","# Physical userdata already mounted by sheng bootstrap; never format here.\n")<0)return -1;
-    if(textfile("/hmos-root/system/etc/param/sheng_debug.para","persist.init.debug.loglevel=0\n")<0)return -1;
+    if(textfile("/hmos-root/system/etc/init.cfg",cfg)<0||textfile("/hmos-root/system/etc/fstab.required","# Physical userdata already mounted by dipper bootstrap; never format here.\n")<0)return -1;
+    if(textfile("/hmos-root/system/etc/param/dipper_debug.para","persist.init.debug.loglevel=0\n")<0)return -1;
     char cmdline[32768];if(readfile("/proc/cmdline",cmdline,sizeof(cmdline))<0)return -1;
-    size_t n=strlen(cmdline);if(n+150>=sizeof(cmdline))return -1;strcat(cmdline," ohos.boot.hardware=sheng ohos.boot.selinux=permissive androidboot.selinux=permissive\n");
+    size_t n=strlen(cmdline);if(n+150>=sizeof(cmdline))return -1;strcat(cmdline," ohos.boot.hardware=dipper ohos.boot.selinux=permissive androidboot.selinux=permissive\n");
     if(textfile("/hmos-ram/cmdline",cmdline)<0||mount("/hmos-ram/cmdline","/hmos-root/proc/cmdline",0,MS_BIND,0)<0)return -1;
     char bootconfig[32768];ssize_t z=readfile("/proc/bootconfig",bootconfig,sizeof(bootconfig));if(z<0)bootconfig[0]=0;
-    if(strlen(bootconfig)+150<sizeof(bootconfig)){strcat(bootconfig,"\nohos.boot.hardware = \"sheng\"\nohos.boot.selinux = \"permissive\"\n");if(textfile("/hmos-ram/bootconfig",bootconfig)<0||mount("/hmos-ram/bootconfig","/hmos-root/proc/bootconfig",0,MS_BIND,0)<0)return -1;}
+    if(strlen(bootconfig)+150<sizeof(bootconfig)){strcat(bootconfig,"\nohos.boot.hardware = \"dipper\"\nohos.boot.selinux = \"permissive\"\n");if(textfile("/hmos-ram/bootconfig",bootconfig)<0||mount("/hmos-ram/bootconfig","/hmos-root/proc/bootconfig",0,MS_BIND,0)<0)return -1;}
     put("/sys/fs/selinux/enforce","0");
     note("HMOS debug root prepared: RAM overlays, direct whole-partition ext4 userdata, RAM metadata");return 0;
 }
@@ -871,8 +975,8 @@ static int trace_selftest(int seize,int stress) {
 }
 static void trace_handoff(int kind) {
     if(getpid()!=1)return;
-    if(kind!=0&&access("/sys/module/sheng_hmos_ipc",F_OK)<0){note("HMOS handoff rejected: load the verified IPC module first with ipc");return;}
-#if SHENG_IPC_ONEWAY_PID
+    if(kind!=0&&access("/sys/module/dipper_hmos_ipc",F_OK)<0){note("HMOS handoff rejected: load the verified IPC module first with ipc");return;}
+#if DIPPER_IPC_ONEWAY_PID
     if(kind!=0&&!ipc_pair_loaded){note("HMOS handoff rejected: verified retained-mode IPC pair is required; HOLD");return;}
 #endif
     if(logfd<0&&serialfd<0){note("TRACE ABORT: neither metadata nor USB log available; HOLD");return;}
@@ -931,7 +1035,7 @@ static void trace_handoff(int kind) {
     }
 }
 int main(int argc,char **argv) {
-#if SHENG_IPC_ONEWAY_PID
+#if DIPPER_IPC_ONEWAY_PID
     if(argc==2&&!strcmp(argv[1],"--ipc-pair-selftest"))return ipc_pair_selftest();
 #endif
     if(argc==2&&!strcmp(argv[1],"--fb-info"))return framebuffer_probe(0);
@@ -953,14 +1057,17 @@ int main(int argc,char **argv) {
     mknod("/dev/console",S_IFCHR|0600,makedev(5,1));consolefd=open("/dev/console",O_WRONLY|O_NONBLOCK|O_CLOEXEC);
     kmsg=open("/dev/kmsg",O_RDONLY|O_NONBLOCK|O_CLOEXEC);makedir("/dev/block");makedir("/dev/block/by-name");makedir("/dev/mapper");makedir("/metadata");makedir("/hmos");
 #ifdef TRACE_ANDROID
-    note("sheng HMOS trace v116 -- collect early logs, then execute original Android init");
+    note("dipper HMOS trace v116 -- collect early logs, then execute original Android init");
 #else
-    note("sheng HMOS probe v121 USB-session recovery payload -- autonomous native startup; vendor read-only; existing isolated data only");
+    note("dipper HMOS probe v121 USB-session recovery payload -- autonomous native startup; vendor read-only; existing isolated data only");
 #endif
-    slot_detect();drain();discover();persistent();loadmodules();
+    slot_detect();drain();discover();
+    /* 米 8 没有 super：system/vendor 是静态分区，载荷和 sys_prod/preload 在 cust 上 */
+    if(static_layout_mount()<0)note("STATIC LAYOUT INCOMPLETE: boot continues only for diagnostics");
+    persistent();loadmodules();
     for(int i=0;i<50;i++){discover();persistent();drain();watchdog();usb_setup();serial_tick();usleep(100000);}
     char misc[2048];if(readfile("/proc/misc",misc,sizeof(misc))>0){char *save,*p=strtok_r(misc,"\n",&save);while(p){unsigned n;char name[128];if(sscanf(p,"%u %127s",&n,name)==2&&!strcmp(name,"device-mapper"))mknod("/dev/mapper/control",S_IFCHR|0600,makedev(10,n));p=strtok_r(NULL,"\n",&save);}}
-    partitions("/dev/block/by-name/super",0);snapshots();drain();
+    snapshots();drain();
 #ifdef TRACE_ANDROID
     trace_handoff(0);
 #else

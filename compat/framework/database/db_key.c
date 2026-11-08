@@ -82,11 +82,11 @@ static int params_ok(const struct HksParamSet *p, int generate)
 static int keydir(char *path, size_t cap)
 {
 #ifdef CONTRACT_MAIN
-    snprintf(path,cap,"/data/local/tmp/sheng-dbkey-contract");
+    snprintf(path,cap,"/data/local/tmp/dipper-dbkey-contract");
 #else
     uid_t uid=getuid();
-    if(uid>=20000000) snprintf(path,cap,"/data/storage/el1/base/.sheng-dbkeys");
-    else snprintf(path,cap,"/data/service/el1/public/database/.sheng-dbkeys/%u",(unsigned)uid);
+    if(uid>=20000000) snprintf(path,cap,"/data/storage/el1/base/.dipper-dbkeys");
+    else snprintf(path,cap,"/data/service/el1/public/database/.dipper-dbkeys/%u",(unsigned)uid);
 #endif
     if(mkdir(path,0700)<0&&errno!=EEXIST) return FAIL;
     struct stat s;

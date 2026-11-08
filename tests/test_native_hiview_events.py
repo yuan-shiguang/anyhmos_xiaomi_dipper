@@ -15,7 +15,7 @@ from unittest.mock import patch
 
 
 ROOT = Path(__file__).resolve().parents[1]
-SOURCE = ROOT / 'tools/build_promax_ramdisk.py'
+SOURCE = ROOT / 'tools/build_dipper_ramdisk.py'
 TREE = ast.parse(SOURCE.read_text(encoding='utf-8'))
 SPEC = importlib.util.spec_from_file_location(
     'hiview_event_service', ROOT / 'tools/hiview_event_service.py'
@@ -145,7 +145,7 @@ class NativeHiViewEventsTests(unittest.TestCase):
                 elif mode == 'duplicate':
                     desktop['services'].append({'name': 'hiview'})
                 else:
-                    desktop['jobs'].append({'name': 'param:sheng-native-hiview-events'})
+                    desktop['jobs'].append({'name': 'param:dipper-native-hiview-events'})
                 with self.subTest(mode=mode), self.assertRaises(ValueError):
                     MODULE.select_hiview_service(desktop, inputs)
 
@@ -165,7 +165,7 @@ class NativeHiViewEventsTests(unittest.TestCase):
                 self.assertEqual(files['config-tree/' + name.removeprefix('/system/etc/hiview/')], data)
         self.assertEqual(MODULE.digest(LAUNCHER_SOURCE.read_bytes()), MODULE.HIVIEW_LAUNCHER_SOURCE)
         self.assertNotIn(b'LD_PRELOAD', helper)
-        self.assertNotIn(b'SHENG_RDB', helper)
+        self.assertNotIn(b'DIPPER_RDB', helper)
         self.assertNotIn(b'setparam', helper)
 
     # 真实执行文件操作，设备属主和模式元数据由替身提供
@@ -179,19 +179,19 @@ class NativeHiViewEventsTests(unittest.TestCase):
             with self.subTest(mode=mode), tempfile.TemporaryDirectory() as temporary:
                 root = Path(temporary)
                 runtime, payload = root / 'runtime', root / 'payload'
-                for directory in ('compat/bin', 'data/local/tmp/sheng-hiview-events-v1',
+                for directory in ('compat/bin', 'data/local/tmp/dipper-hiview-events-v1',
                                   'data/system', 'data/log', 'log'):
                     (runtime / directory).mkdir(parents=True, exist_ok=True)
                 payload.mkdir()
                 (payload / 'hiview_namespace_launcher').write_bytes(self.launcher)
                 (payload / 'hiview-events-assets.tar.gz').write_bytes(archive)
-                request = runtime / 'data/local/tmp/sheng-hiview-events-v1/request'
+                request = runtime / 'data/local/tmp/dipper-hiview-events-v1/request'
                 request.write_bytes(b'abcd\n')
                 mountinfo = root / 'mountinfo'
                 mountinfo.write_bytes(b'')
                 script = helper.decode().replace('B=/busybox', 'B=bb').replace(
                     'R=/hmos-root', 'R=' + shell_path(runtime)
-                ).replace('P=/graphics/promax', 'P=' + shell_path(payload)).replace(
+                ).replace('P=/graphics/dipper', 'P=' + shell_path(payload)).replace(
                     '/busybox chmod', 'chmod'
                 ).replace('/proc/self/mountinfo', shell_path(mountinfo))
                 stub = r'''bb() {

@@ -9,9 +9,9 @@
   },
   "preserved_v140_entries": true,
   "changed_entries": [
-    "sheng-compat-v118/MANIFEST.json",
-    "sheng-compat-v118/graphics/apply-hardware-v116.sh",
-    "sheng-compat-v118/graphics/hw_defaults-v141.para"
+    "dipper-compat-v118/MANIFEST.json",
+    "dipper-compat-v118/graphics/apply-hardware-v116.sh",
+    "dipper-compat-v118/graphics/hw_defaults-v141.para"
   ],
   "init_boot_unchanged": true,
   "dtb_unchanged": true,

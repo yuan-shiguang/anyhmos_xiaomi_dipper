@@ -1,5 +1,5 @@
 {
-  "name": "sheng-render-callback-sync-v1",
+  "name": "dipper-render-callback-sync-v1",
   "input_sha256": "0a699e2317dab4699117a90e7e21d5727bd823e3474a70ebaed4d32667e519ff",
   "output_sha256": "14ebe64529fe31bba13b65e59d5af27588466b80147a977ae8a28d079c4c9351",
   "function": "RSClientToServiceConnectionProxy::SetScreenChangeCallback",

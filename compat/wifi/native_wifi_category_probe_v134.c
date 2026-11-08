@@ -18,8 +18,8 @@ int main(int argc,char **argv)
     setvbuf(stdout,NULL,_IOLBF,0); alarm(7);
     if (argc!=3) return 2;
     if (!strcmp(argv[1],"caps")) {
-        struct ShengWifiCaps caps;
-        int rc=ShengReadWifiCaps(argv[2],&caps);
+        struct DipperWifiCaps caps;
+        int rc=DipperReadWifiCaps(argv[2],&caps);
         printf("WIFI_OWN_WIPHY rc=%d ifindex=%u wiphy=%u he=%u eht=%u records=%u mask=%u\n",
             rc,caps.ifindex,caps.wiphy,caps.he,caps.eht,caps.records,caps.mask);
         return rc?3:0;

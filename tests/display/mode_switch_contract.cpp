@@ -45,31 +45,31 @@ int main()
     std::vector<DisplayModeInfo> modes;
     std::vector<DisplayModeInfoExt> extended;
     Check(GetDisplaySupportedModes(0, modes) == 0 && modes.size() == 2, "mode enumeration");
-    Check(modes[0].id == 0 && modes[0].freshRate == 120 && modes[1].id == 1 &&
-        modes[1].freshRate == 144, "mode identity");
+    Check(modes[0].id == 0 && modes[0].freshRate == 60 && modes[1].id == 1 &&
+        modes[1].freshRate == 30, "mode identity");
     Check(GetDisplaySupportedModesExt(0, extended) == 0 && extended.size() == 2 &&
         extended[1].v1_0.id == 1 && extended[0].groupId != extended[1].groupId, "non-seamless groups");
     Check(SetDisplayMode(0, 99) == -3 && tests == 0, "invalid mode rejected");
-    State(0, 8333333);
+    State(0, 16666666);
     testFailure = -1;
     Check(SetDisplayMode(0, 1) != 0 && tests == 1 && commits == 0 && destroyed == 1,
         "failed test does not commit");
-    State(0, 8333333);
+    State(0, 16666666);
     testFailure = 0; commitFailure = -1;
     Check(SetDisplayMode(0, 1) != 0 && tests == 2 && commits == 1 && destroyed == 2,
         "failed commit releases candidate");
-    State(0, 8333333);
+    State(0, 16666666);
     commitFailure = 0;
     Check(SetDisplayMode(0, 1) == 0 && tests == 3 && commits == 2 && destroyed == 3,
         "successful commit releases previous blob");
-    State(1, 6944444);
+    State(1, 33333333);
     Check(SetDisplayMode(0, 1) == 0 && tests == 3 && commits == 2, "same mode is unchanged");
     Check(SetDisplayModeAsync(0, 0, Callback, nullptr) == 0 && callbacks == 1, "callback completed");
-    State(0, 8333333);
+    State(0, 16666666);
     testFailure = -1;
     Check(SetDisplayModeAsync(0, 1, Callback, nullptr) != 0 && callbacks == 1,
         "failed switch does not report completion");
     Check(SetDisplayModeAsync(0, 0, nullptr, nullptr) == -3, "missing callback rejected");
-    puts("MODE_CONTRACT_OK enumeration invalid test_failure commit_failure 144Hz callback rollback");
+    puts("MODE_CONTRACT_OK enumeration invalid test_failure commit_failure 60Hz callback rollback");
     return 0;
 }

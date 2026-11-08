@@ -104,7 +104,7 @@
     "untracked_source_files": 0
   },
   {
-    "name": "hmos-reference--sheng-audio-kernel",
+    "name": "hmos-reference--dipper-audio-kernel",
     "origin": "https://github.com/MiCode/vendor_qcom_opensource_audio-kernel.git",
     "commit": "ecb48c9495fc9aff0c340f9de53cb944a58b448a",
     "worktree_dirty": false,
@@ -112,7 +112,7 @@
     "untracked_source_files": 0
   },
   {
-    "name": "hmos-reference--sheng-display-drivers",
+    "name": "hmos-reference--dipper-display-drivers",
     "origin": "https://github.com/MiCode/vendor_opensource_display-drivers.git",
     "commit": "6461221b68908b990e1fa2b60feaa812cb944ef5",
     "worktree_dirty": false,
@@ -120,15 +120,7 @@
     "untracked_source_files": 0
   },
   {
-    "name": "hmos-reference--xiaomi-sheng-thp",
-    "origin": "https://github.com/ianchb/xiaomi-sheng-thp.git",
-    "commit": "34046210932d654a4c0df0121ecc31c008f8148c",
-    "worktree_dirty": false,
-    "patch_bytes": 0,
-    "untracked_source_files": 0
-  },
-  {
-    "name": "hmos-reference--xiaomi-sheng-wlan",
+    "name": "hmos-reference--xiaomi-dipper-wlan",
     "origin": "https://github.com/MiCode/vendor_qcom_opensource_wlan.git",
     "commit": "fb3ed419a7447dae9bdfb05913e34b0b75dd7e68",
     "worktree_dirty": false,
@@ -337,12 +329,12 @@
     "untracked_source_files": 0
   },
   {
-    "name": "hmos-work--gki-sheng-exports",
+    "name": "hmos-work--gki-dipper-exports",
     "origin": "https://android.googlesource.com/kernel/common",
     "commit": "6f2f96be86b93de6ed58a2c46b456fb49734c382",
     "worktree_dirty": true,
     "patch_bytes": 456,
-    "patch": "patches/hmos-work--gki-sheng-exports.patch",
+    "patch": "patches/hmos-work--gki-dipper-exports.patch",
     "untracked_source_files": 2
   }
 ]

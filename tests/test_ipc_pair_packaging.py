@@ -18,7 +18,7 @@ from elftools.elf.elffile import ELFFile
 
 
 ROOT = pathlib.Path(__file__).resolve().parents[1]
-SOURCE = ROOT / 'tools/build_promax_ramdisk.py'
+SOURCE = ROOT / 'tools/build_dipper_ramdisk.py'
 TREE = ast.parse(SOURCE.read_text(encoding='utf-8'))
 HELPERS = {
     'inspect_linux_bootstrap', 'validate_bootstrap_binary',
@@ -69,7 +69,7 @@ class IpcPairPackagingTests(unittest.TestCase):
             self.expected['bootstrap_sha256']: {'variant': 'test-fixture'},
         }
         self.member = self.expected['module_member']
-        self.manifest_name = 'sheng-compat-v118/MANIFEST.json'
+        self.manifest_name = 'dipper-compat-v118/MANIFEST.json'
         self.fields = [31, 0o100600, 0, 0, 1, 1234, len(self.previous), 0, 0, 0, 0, 30, 0]
         manifest = {'hmos-ipc.ko': {
             'bytes': len(self.previous), 'mode': '0o100600',

@@ -56,7 +56,7 @@ static int receive(struct Query *q, unsigned char *buf, size_t cap)
     if (!n || (msg.msg_flags&MSG_TRUNC) || peer.nl_pid!=0) return -EPROTO;
     return (int)n;
 }
-static void iftype(const struct nlattr *entry, struct ShengWifiCaps *caps)
+static void iftype(const struct nlattr *entry, struct DipperWifiCaps *caps)
 {
     int left=alen(entry),station=0,he=0,eht=0;
     ATTRS(a,adata(entry),left) {
@@ -70,7 +70,7 @@ static void iftype(const struct nlattr *entry, struct ShengWifiCaps *caps)
     }
     if (station) { caps->records++; caps->he|=(unsigned)he; caps->eht|=(unsigned)eht; }
 }
-static void bands(const struct nlattr *bands_attr, struct ShengWifiCaps *caps)
+static void bands(const struct nlattr *bands_attr, struct DipperWifiCaps *caps)
 {
     int left=alen(bands_attr);
     ATTRS(band,adata(bands_attr),left) {
@@ -87,7 +87,7 @@ static int error_message(const struct nlmsghdr *h)
     const struct nlmsgerr *e=NLMSG_DATA(h);
     return e->error?e->error:-EPROTO;
 }
-int ShengReadWifiCaps(const char *ifname, struct ShengWifiCaps *caps)
+int DipperReadWifiCaps(const char *ifname, struct DipperWifiCaps *caps)
 {
     if (!ifname || !caps || !*ifname || strnlen(ifname,IFNAMSIZ)>=IFNAMSIZ) return -EINVAL;
     memset(caps,0,sizeof(*caps)); caps->ifindex=if_nametoindex(ifname);

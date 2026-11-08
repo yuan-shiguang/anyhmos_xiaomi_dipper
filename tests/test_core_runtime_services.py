@@ -16,7 +16,7 @@ from unittest.mock import patch
 
 
 ROOT = Path(__file__).resolve().parents[1]
-SOURCE = ROOT / 'tools/build_promax_ramdisk.py'
+SOURCE = ROOT / 'tools/build_dipper_ramdisk.py'
 TREE = ast.parse(SOURCE.read_text(encoding='utf-8'))
 NAMES = {
     'sha',
@@ -218,7 +218,7 @@ class CoreRuntimeServiceTests(unittest.TestCase):
     ):
         for kind, value in [
             ('services', {'name': 'resource_schedule_service'}),
-            ('jobs', {'name': 'param:sheng-core-runtime-services'}),
+            ('jobs', {'name': 'param:dipper-core-runtime-services'}),
         ]:
             desktop = copy.deepcopy(self.desktop)
             desktop[kind].append(value)
@@ -368,7 +368,7 @@ bb() {
                     self.assertNotIn('SERVICE_REQUEST=', run.stdout)
                 else:
                     self.assertEqual(run.returncode, 0, run.stderr)
-                    self.assertIn('sheng.debug.start.resourceschedule true', run.stdout)
+                    self.assertIn('dipper.debug.start.resourceschedule true', run.stdout)
                     self.assertIn('DESKTOP_CONTINUED=1', run.stdout)
                     self.assertEqual('CORE_RUNTIME_START_REQUEST_FAILED=1' in run.stdout,
                                      case == 'requestfail')

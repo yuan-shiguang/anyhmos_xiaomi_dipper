@@ -6,19 +6,19 @@
 #include <string.h>
 #include <unistd.h>
 #include <fcntl.h>
-#ifdef SHENG_CURRENT_BT_API
-extern int ShengBtEnableCurrent(void *, void *);
+#ifdef DIPPER_CURRENT_BT_API
+extern int DipperBtEnableCurrent(void *, void *);
 #endif
 int main(int argc, char **argv)
 {
     setbuf(stdout, NULL); alarm(20);
     char action[16] = "state";
     if (argc==2 && !strcmp(argv[1],"--service")) {
-        FILE *f=fopen("/data/local/tmp/sheng-bluetooth-check.args","re");
+        FILE *f=fopen("/data/local/tmp/dipper-bluetooth-check.args","re");
         if (!f || fscanf(f,"%15s",action)!=1) return 6;
         fclose(f);
         if (strcmp(action,"state") && strcmp(action,"enable") && strcmp(action,"scan") && strcmp(action,"current")) return 6;
-        int fd=open("/data/local/tmp/sheng-bluetooth-check.txt",O_WRONLY|O_APPEND|O_CLOEXEC|O_NOFOLLOW);
+        int fd=open("/data/local/tmp/dipper-bluetooth-check.txt",O_WRONLY|O_APPEND|O_CLOEXEC|O_NOFOLLOW);
         if(fd<0 || dup2(fd,1)<0 || dup2(fd,2)<0) return 7;
         if(fd>2) close(fd);
         printf("BT_NATIVE_DIAGNOSTIC_ACTION=%s uid=%d\n",action,getuid());
@@ -37,9 +37,9 @@ int main(int argc, char **argv)
     int s = -1, rc = state(host,&s);
     printf("BT_HOST_STATE_RC=%d STATE=%d uid=%d\n",rc,s,getuid());
     if (!strcmp(action,"enable") || !strcmp(action,"current")) {
-#ifdef SHENG_CURRENT_BT_API
+#ifdef DIPPER_CURRENT_BT_API
         if (!strcmp(action,"current")) {
-            rc=ShengBtEnableCurrent(lib,host); printf("BT_HOST_CURRENT_ENABLE_RC=%d\n",rc);
+            rc=DipperBtEnableCurrent(lib,host); printf("BT_HOST_CURRENT_ENABLE_RC=%d\n",rc);
         } else
 #endif
         {

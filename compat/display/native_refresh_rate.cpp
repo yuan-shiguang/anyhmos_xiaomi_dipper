@@ -12,13 +12,13 @@ int main(int argc, char **argv)
     char *serviceArgs[]{argv[0], serviceOption, serviceValue};
     // 从原生服务请求文件读取参数，记录接口调用结果
     if (argc == 1) {
-        FILE *request = fopen("/data/local/tmp/sheng-refresh-request.txt", "re");
+        FILE *request = fopen("/data/local/tmp/dipper-refresh-request.txt", "re");
         if (!request) return 2;
         int fields = fscanf(request, "%15s %15s %c", serviceOption, serviceValue, &extra);
         fclose(request);
         if (fields != 2 && !(fields == 1 && !strcmp(serviceOption, "--query"))) return 2;
-        if (!freopen("/data/local/tmp/sheng-refresh-result.txt", "ae", stdout) ||
-            !freopen("/data/local/tmp/sheng-refresh-result.txt", "ae", stderr)) return 2;
+        if (!freopen("/data/local/tmp/dipper-refresh-result.txt", "ae", stdout) ||
+            !freopen("/data/local/tmp/dipper-refresh-result.txt", "ae", stderr)) return 2;
         argc = fields + 1;
         argv = serviceArgs;
     }

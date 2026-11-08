@@ -46,9 +46,9 @@ static bool listed_scene_board(int id)
 }
 using NextCheck = RemoteRefCarrier (*)(void *, int, bool *, int *);
 static void *next_check;
-extern "C" RemoteRefCarrier sheng_optional_check(void *, int, bool *, int *)
+extern "C" RemoteRefCarrier dipper_optional_check(void *, int, bool *, int *)
     __asm__("_ZN4OHOS25SystemAbilityManagerProxy18CheckSystemAbilityEiRbRi");
-extern "C" RemoteRefCarrier sheng_optional_check(void *self, int id, bool *exists, int *error)
+extern "C" RemoteRefCarrier dipper_optional_check(void *self, int id, bool *exists, int *error)
 {
     void *symbol = __atomic_load_n(&next_check, __ATOMIC_ACQUIRE);
     if (!symbol) {
@@ -66,7 +66,7 @@ extern "C" RemoteRefCarrier sheng_optional_check(void *self, int id, bool *exist
         // connected/enabled state or successful operation is fabricated.
         *error = 1;
         auto print = reinterpret_cast<int (*)(int,int,unsigned,const char *,const char *,...)>(dlsym(RTLD_DEFAULT, "HiLogPrint"));
-        if (print) print(3, 5, 0xD001810, "SHENG_OPTIONAL_SA", "absent optional SA %{public}d: stop SceneBoard retry", id);
+        if (print) print(3, 5, 0xD001810, "DIPPER_OPTIONAL_SA", "absent optional SA %{public}d: stop SceneBoard retry", id);
     }
     return result;
 }

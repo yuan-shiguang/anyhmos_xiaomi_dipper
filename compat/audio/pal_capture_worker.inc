@@ -1,7 +1,7 @@
 /* 单个输入工作线程独占输入连接，主循环不等待 PAL 采集读 */
 struct capture_worker {
     struct client client;
-    struct sheng_pal_request first;
+    struct dipper_pal_request first;
     uint64_t operation_started;
     int input_slot;
     struct capture_worker *next;
@@ -26,10 +26,10 @@ static void capture_list_unlock(void)
 {
     __atomic_store_n(&capture_workers_lock,0,__ATOMIC_RELEASE);
 }
-static int capture_send_reply(struct client *c, const struct sheng_pal_request *h,
-    unsigned char *pcm, struct sheng_pal_reply *reply)
+static int capture_send_reply(struct client *c, const struct dipper_pal_request *h,
+    unsigned char *pcm, struct dipper_pal_reply *reply)
 {
-    int payload=h->op==SHENG_PAL_CAPTURE_READ && !reply->rc && reply->bytes;
+    int payload=h->op==DIPPER_PAL_CAPTURE_READ && !reply->rc && reply->bytes;
     struct iovec iov[2]={{reply,sizeof(*reply)},{pcm,reply->bytes}};
     struct msghdr msg={.msg_iov=iov,.msg_iovlen=payload?2:1};
     size_t size=sizeof(*reply)+(payload?reply->bytes:0);
@@ -39,19 +39,19 @@ static void *capture_worker_main(void *opaque)
 {
     struct capture_worker *w=opaque;
     struct client *c=&w->client;
-    struct { struct sheng_pal_request h; unsigned char pcm[SHENG_PAL_MAX_DATA]; } packet={.h=w->first};
+    struct { struct dipper_pal_request h; unsigned char pcm[DIPPER_PAL_MAX_DATA]; } packet={.h=w->first};
     int first=1;
     for (;;) {
-        struct sheng_pal_reply reply={.magic=SHENG_PAL_MAGIC,.sequence=packet.h.sequence};
+        struct dipper_pal_reply reply={.magic=DIPPER_PAL_MAGIC,.sequence=packet.h.sequence};
         uint64_t began=capture_now_ns();
         __atomic_store_n(&w->operation_started,began,__ATOMIC_RELEASE);
         if (!began) reply.rc=-5;
-        else if (!first && packet.h.op==SHENG_PAL_CAPTURE_OPEN) reply.rc=-16;
+        else if (!first && packet.h.op==DIPPER_PAL_CAPTURE_OPEN) reply.rc=-16;
         else reply.rc=dispatch_capture(c,&packet.h,packet.pcm,&reply.bytes,&reply.written_frames);
         __atomic_store_n(&w->operation_started,0,__ATOMIC_RELEASE);
         if (capture_send_reply(c,&packet.h,packet.pcm,&reply) ||
-            !w->input_slot || packet.h.op==SHENG_PAL_CAPTURE_CLOSE ||
-            (first && packet.h.op==SHENG_PAL_CAPTURE_OPEN && reply.rc)) break;
+            !w->input_slot || packet.h.op==DIPPER_PAL_CAPTURE_CLOSE ||
+            (first && packet.h.op==DIPPER_PAL_CAPTURE_OPEN && reply.rc)) break;
         first=0;
         int ready=0;
         while (!__atomic_load_n(&stopping,__ATOMIC_ACQUIRE)) {
@@ -63,7 +63,7 @@ static void *capture_worker_main(void *opaque)
         if (!ready) break;
         ssize_t received=recv(c->fd,&packet,sizeof(packet),MSG_DONTWAIT|MSG_TRUNC);
         if ((size_t)received<sizeof(packet.h) || received<0 ||
-            packet.h.magic!=SHENG_PAL_MAGIC || packet.h.op<SHENG_PAL_CAPTURE_OPEN ||
+            packet.h.magic!=DIPPER_PAL_MAGIC || packet.h.op<DIPPER_PAL_CAPTURE_OPEN ||
             packet.h.bytes || (size_t)received!=sizeof(packet.h)) break;
     }
     __atomic_store_n(&w->operation_started,capture_now_ns(),__ATOMIC_RELEASE);
@@ -78,15 +78,15 @@ static void *capture_worker_main(void *opaque)
     close(c->fd); free(w);
     return 0;
 }
-static int route_capture_request(struct client *c, const struct sheng_pal_request *h)
+static int route_capture_request(struct client *c, const struct dipper_pal_request *h)
 {
-    if (!SHENG_CAPTURE_EXPERIMENTAL) return -95;
-    if (h->op!=SHENG_PAL_CAPTURE_OPEN && h->op!=SHENG_PAL_CAPTURE_STATUS &&
-        h->op!=SHENG_PAL_MIC_MUTE && h->op!=SHENG_PAL_MIC_GET_MUTE) return -19;
+    if (!DIPPER_CAPTURE_EXPERIMENTAL) return -95;
+    if (h->op!=DIPPER_PAL_CAPTURE_OPEN && h->op!=DIPPER_PAL_CAPTURE_STATUS &&
+        h->op!=DIPPER_PAL_MIC_MUTE && h->op!=DIPPER_PAL_MIC_GET_MUTE) return -19;
     if (c->stream) return -16;
     struct capture_worker *w=calloc(1,sizeof(*w));
     if (!w) return -12;
-    w->client.fd=c->fd; w->first=*h; w->input_slot=h->op==SHENG_PAL_CAPTURE_OPEN;
+    w->client.fd=c->fd; w->first=*h; w->input_slot=h->op==DIPPER_PAL_CAPTURE_OPEN;
     capture_list_lock();
     if (capture_workers_count>=MAX_CLIENTS || (w->input_slot && capture_input_count)) {
         capture_list_unlock(); free(w); return -16;

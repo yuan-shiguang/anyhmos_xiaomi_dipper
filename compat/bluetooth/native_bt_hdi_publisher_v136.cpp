@@ -24,7 +24,7 @@ int main(int argc,char **argv)
     bool serve=argc==2 && !strcmp(argv[1],"--serve");
     if(argc>1&&!serve) return 1;
     if(serve) {
-        int fd=open("/data/local/tmp/sheng-bluetooth-hdi.txt",O_WRONLY|O_APPEND|O_CLOEXEC|O_NOFOLLOW);
+        int fd=open("/data/local/tmp/dipper-bluetooth-hdi.txt",O_WRONLY|O_APPEND|O_CLOEXEC|O_NOFOLLOW);
         if(fd<0||dup2(fd,1)<0||dup2(fd,2)<0) return 2;
         if(fd>2) close(fd);
     }

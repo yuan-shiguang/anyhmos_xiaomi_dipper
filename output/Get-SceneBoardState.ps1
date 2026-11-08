@@ -5,7 +5,7 @@ R=/hmos-root
 L=$R/data/local/tmp/__VERSION__-live.txt
 $B cat /proc/sys/kernel/random/boot_id /proc/uptime
 $B ps -o pid,user,args | $B grep -E '20020020|appspawn' | $B head -5
-$B grep -E 'SHENG_OPTIONAL_SA|com.ohos.sceneboard.*(Error message:|RunPage:|initSceneBoard ok|NotifyAppFault:)' "$L" | $B tail -14
+$B grep -E 'DIPPER_OPTIONAL_SA|com.ohos.sceneboard.*(Error message:|RunPage:|initSceneBoard ok|NotifyAppFault:)' "$L" | $B tail -14
 f=$($B grep 'com.ohos.sceneboard/AppDfr:.*NotifyAppFault:' "$L" | $B tail -1 | $B sed -n 's/.*appfreezeInfo:\([^ ,]*\).*/\1/p')
 case "$f" in
  freeze_[0-9_]*.txt)

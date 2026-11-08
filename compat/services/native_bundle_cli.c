@@ -15,7 +15,7 @@ static const char *const apps[] = {
 int main(void)
 {
     alarm(240);
-    FILE *f = fopen("/data/local/tmp/sheng-bundle-request.txt", "r");
+    FILE *f = fopen("/data/local/tmp/dipper-bundle-request.txt", "r");
     if (!f) return 2;
     char mode[24], name[160] = {0}, extra[2];
     int count = fscanf(f, "%23s %159s %1s", mode, name, extra);
@@ -36,7 +36,7 @@ int main(void)
         for (const unsigned char *p = (const unsigned char *)name; *p; ++p)
             if (!isalnum(*p) && *p != '.' && *p != '_') return 4;
     } else if (strcmp(mode, "list") || count != 1) return 4;
-    if (!freopen("/data/local/tmp/sheng-bundle-last.log", "w", stdout)) return 5;
+    if (!freopen("/data/local/tmp/dipper-bundle-last.log", "w", stdout)) return 5;
     dup2(fileno(stdout), STDERR_FILENO);
     setbuf(stdout, NULL);
     printf("NATIVE_BUNDLE_CLI uid=%d gid=%d mode=%s name=%s\n", getuid(), getgid(), mode, name);

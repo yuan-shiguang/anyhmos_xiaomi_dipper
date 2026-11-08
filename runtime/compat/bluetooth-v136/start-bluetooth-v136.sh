@@ -7,7 +7,7 @@ S=/compat/bluetooth-v136
 D=$R/data/local/tmp
 stage=gate
 trap 'code=$?; echo "BT_START_EXIT=$code STAGE=$stage"' EXIT
-[ "$($B uname -r)" = 5.15.178-android13-8-00021-g6f2f96be86b9-ab13729987 ] || exit 20
+# 内核为 4.9 官方内核：不再按 5.15 GKI 版本号门禁，改由设备标识与模块存在性判断
 boot_id=$($B cat /proc/sys/kernel/random/boot_id)
 echo "$boot_id"
 # Audio uses several of the same stock modules. Wait for its loader to finish.
@@ -20,10 +20,15 @@ done
 stage=integrity
 (cd "$S" && $B sha256sum -c SHA256SUMS)
 stage=modules
-$B sh "$S/load-official303-btpower.sh"
-$B sh "$S/load-official303-msm_geni_serial.sh"
+# 米 8 的 BT 走 hci_qca + msm_geni_serial（官方内核编入），没有 btpower 设备；
+# 模块化内核时才从暂存目录补加载，缺失不算失败。
+for ko in btqca.ko hci_uart.ko msm_geni_serial.ko; do
+ for d in $R/compat/modules $R/vendor_dlkm/lib/modules $R/vendor/lib/modules; do
+  if [ -f "$d/$ko" ]; then echo "BT_MODULE_LOAD=$d/$ko"; $B insmod "$d/$ko" || echo "BT_MODULE_FAILED=$ko"; fi
+ done
+done
 stage=nodes
-for spec in bt-dev/btpower tty/ttyHS0 mem/urandom; do
+for spec in tty/ttyHS0 mem/urandom; do
  n=${spec##*/}
  v=$($B cat /sys/class/$spec/dev)
  ma=${v%:*}; mi=${v#*:}
@@ -34,12 +39,11 @@ for spec in bt-dev/btpower tty/ttyHS0 mem/urandom; do
  done
 done
 stage=readonly_inputs
-slot=$($B sed -n 's/^androidboot.slot_suffix = "\(_[ab]\)"$/\1/p' /proc/bootconfig)
-[ "$slot" = _a ] || [ "$slot" = _b ] || exit 22
-btpart=$($B readlink -f "/dev/block/by-name/bluetooth$slot")
+# 米 8 是单槽静态分区：没有 slot_suffix，按分区名直接取，不绑定具体 block 号
+btpart=$($B readlink -f /dev/block/by-name/bluetooth)
 persist=$($B readlink -f /dev/block/by-name/persist)
-[ "$btpart" = /dev/block/sde8 ] || [ "$btpart" = /dev/block/sde38 ] || exit 23
-[ "$persist" = /dev/block/sdf7 ] || exit 24
+[ -n "$btpart" ] && [ -b "$btpart" ] || exit 23
+[ -n "$persist" ] && [ -b "$persist" ] || exit 24
 $B mkdir -p /compat/original-bluetooth /compat/original-persist /mnt/vendor
 if ! $B grep -q ' /compat/original-bluetooth ' /proc/mounts; then
  $B mount -t vfat -o ro "$btpart" /compat/original-bluetooth
@@ -69,12 +73,12 @@ $B chown 3021:3021 "$R/data/vendor/bluetooth/btmac.txt.new"
 $B chmod 0640 "$R/data/vendor/bluetooth/btmac.txt.new"
 $B mv "$R/data/vendor/bluetooth/btmac.txt.new" "$R/data/vendor/bluetooth/btmac.txt"
 stage=backend
-[ ! -S "$R/dev/unix/socket/sheng.bt.h4" ] || exit 29
-$B setsid $B env LD_LIBRARY_PATH="$S/lib64:/compat/audio-runtime/lib64" LD_PRELOAD="$S/libsheng_bt_bridge_v136.so" SHENG_BT_ORIGINAL_LIBRARY="$S/lib64/android.hardware.bluetooth@1.0-impl-qti.so" /compat/audio-runtime/bin/linker64 /compat/audio-runtime/bin/agmplay -h > "$D/sheng-bluetooth-backend-v136.txt" 2>&1 </dev/null &
+[ ! -S "$R/dev/unix/socket/dipper.bt.h4" ] || exit 29
+$B setsid $B env LD_LIBRARY_PATH="$S/lib64:/compat/audio-runtime/lib64" LD_PRELOAD="$S/libdipper_bt_bridge_v136.so" DIPPER_BT_ORIGINAL_LIBRARY="$S/lib64/android.hardware.bluetooth@1.0-impl-qti.so" /compat/audio-runtime/bin/linker64 /compat/audio-runtime/bin/agmplay -h > "$D/dipper-bluetooth-backend-v136.txt" 2>&1 </dev/null &
 p=$!
-echo "$p" > "$D/sheng-bluetooth-backend-v136.pid"
+echo "$p" > "$D/dipper-bluetooth-backend-v136.pid"
 i=0
-while ! $B grep -q '^BT_BRIDGE_LISTENING=1 ' "$D/sheng-bluetooth-backend-v136.txt"; do
+while ! $B grep -q '^BT_BRIDGE_LISTENING=1 ' "$D/dipper-bluetooth-backend-v136.txt"; do
  [ -d /proc/$p ] && [ "$i" -lt 30 ] || exit 30
  i=$((i+1)); $B sleep 0.1
 done
@@ -83,8 +87,8 @@ stage=port_ready_contract
 # Apply the equivalent real Qualcomm port setup before notifying the old service.
 [ "$($B stat -c '%a:%u:%g' "$R/data/vendor/bluetooth")" = 770:3021:3021 ]
 [ "$($B stat -c '%a:%u:%g' "$R/data/service/el1/public/bluetooth")" = 711:1002:1002 ]
-[ "$($B stat -c '%a:%u:%g' "$R/dev/unix/socket/sheng.bt.h4")" = 660:0:3021 ]
-[ -c /dev/btpower ] && [ -c /dev/ttyHS0 ] && [ -S "$R/dev/unix/socket/sheng.bt.h4" ]
+[ "$($B stat -c '%a:%u:%g' "$R/dev/unix/socket/dipper.bt.h4")" = 660:0:3021 ]
+[ -c /dev/ttyHS0 ] && [ -S "$R/dev/unix/socket/dipper.bt.h4" ]
 $B mkdir -p "$R/data/service/el1/public/fcm"
 fcm_id=$($B awk -F: '$1=="fusion_connectivity_manager_ext" {print $3}' "$R/system/etc/passwd")
 [ -n "$fcm_id" ]
@@ -93,6 +97,6 @@ $B chmod 0700 "$R/data/service/el1/public/fcm"
 $B chroot "$R" /system/bin/param set vendor.setup_mpxx_dir_mode success
 echo BT_REAL_PORT_DIRECTORY_READY=1
 stage=native_services
-$B chroot "$R" /system/bin/param set sheng.debug.start.bluetooth true
+$B chroot "$R" /system/bin/param set dipper.debug.start.bluetooth true
 stage=complete
 echo BT_NATIVE_SERVICE_REQUESTED=1

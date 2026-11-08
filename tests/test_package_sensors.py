@@ -39,24 +39,24 @@ class SensorPackagingTests(unittest.TestCase):
             self.assertIs(type(selected[name]['disabled']), int)
             self.assertEqual(selected[name]['disabled'], 1)
         jobs = {j.get('condition'): j['cmds'] for j in result['jobs']}
-        self.assertNotIn('start sensors', jobs['sheng.debug.start.vibrator=true'])
-        self.assertEqual(jobs[package.READY + '=true && sheng.debug.start.vibrator=true'],
+        self.assertNotIn('start sensors', jobs['dipper.debug.start.vibrator=true'])
+        self.assertEqual(jobs[package.READY + '=true && dipper.debug.start.vibrator=true'],
                          ['start sensors'])
         self.assertEqual(jobs[package.READY + '=false'], ['stop sensors'])
-        self.assertEqual(jobs['sheng.debug.start.vibrator=false'],
+        self.assertEqual(jobs['dipper.debug.start.vibrator=false'],
                          ['stop sensors', 'stop sensor_host'])
         repeated = package.configure_services(result, host, sensors)
         self.assertEqual(repeated, result)
 
-    def test_audio_hook_runs_after_real_adsp_check_without_restarting_audio(self):
-        anchor = '[ "$($B cat /sys/class/remoteproc/remoteproc0/state)" = running ]\n'
+    def test_audio_hook_runs_after_card_check_without_restarting_audio(self):
+        anchor = 'AUDIO_CARD_CHECKED=1\n'
         original = ('keep before\n' + anchor +
                     '# ADSP首次就绪后异步采集传感器冷启动，不等待试验结束\n'
-                    '$B setsid $B sh /sheng-sensors-cold-r1/start-sensors-cold.sh </dev/null &\n'
+                    '$B setsid $B sh /dipper-sensors-cold-r1/start-sensors-cold.sh </dev/null &\n'
                     '$B sh "$S/stage-audio-nodes.sh"\nkeep after\n')
         result = package.audio_startup(original)
         self.assertNotIn('start-sensors-cold.sh', result)
-        self.assertEqual(result.count('/sheng-sensors/start-sensors.sh'), 1)
+        self.assertEqual(result.count('/dipper-sensors/start-sensors.sh'), 1)
         self.assertLess(result.index(anchor), result.index('SENSOR_STARTUP_PACKAGE='))
         self.assertLess(result.index('SENSOR_STARTUP_PACKAGE='), result.index('stage-audio-nodes.sh'))
         self.assertTrue(result.endswith('keep after\n'))

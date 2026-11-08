@@ -8,9 +8,9 @@
     "sha256": "6fd2ed9de8442a8c1301d8e8c3835a1bdf83ca145f25375491ba56e84b9fc615"
   },
   "changed_ramdisk_entries": [
-    "sheng-compat-v118/MANIFEST.json",
-    "sheng-compat-v118/graphics/init-userdata-ext4.sh",
-    "sheng-compat-v118/hmos-probe"
+    "dipper-compat-v118/MANIFEST.json",
+    "dipper-compat-v118/graphics/init-userdata-ext4.sh",
+    "dipper-compat-v118/hmos-probe"
   ],
   "bootstrap_sha256": "156f6ee5f33190ccb27581925b34c108fcb4df903aaf5b6868661248f0863013",
   "mount_script_sha256": "3c2fceed4383a256a30416a90a4fc912d0ca757eb478596a170fc25c24c2072f",

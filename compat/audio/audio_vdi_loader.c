@@ -10,12 +10,12 @@ void *dlopen(const char *path,int flags)
     void *(*real)(const char *,int)=dlsym(RTLD_NEXT,"dlopen");
     if (!real) return 0;
     if (path && !strcmp(path,"/vendor/lib64/libaudio_primary_impl.z.so"))
-        path="/compat/lib64/libsheng_audio_vdi.so";
+        path="/compat/lib64/libdipper_audio_vdi.so";
     if (path && (!strcmp(path,"/vendor/lib64/libaudio_manager_service_6.1.z.so") ||
                  !strcmp(path,"/vendor/lib64/libaudio_manager_service_6.0.z.so") ||
                  !strcmp(path,"libaudio_manager_service_6.1.z.so") ||
                  !strcmp(path,"libaudio_manager_service_6.0.z.so")))
-        path="/compat/lib64/libsheng_audio_manager_service.so";
+        path="/compat/lib64/libdipper_audio_manager_service.so";
     return real(path,flags);
 }
 
@@ -47,7 +47,7 @@ static void *get(const char *symbol,const char *name,bool stub)
     void *(*real)(const char *,bool)=proxy_symbol(symbol);
     const char *target=primary(name)?"audio_manager_service":name;
     void *result=real ? real(target,primary(name)?true:stub) : 0;
-    fprintf(stderr,"SHENG_AUDIO_PROXY_GET symbol=%s name=%s original=%p result=%p\n",symbol,name?name:"(null)",(void *)real,result);
+    fprintf(stderr,"DIPPER_AUDIO_PROXY_GET symbol=%s name=%s original=%p result=%p\n",symbol,name?name:"(null)",(void *)real,result);
     return result;
 }
 static void release(const char *symbol,const char *name,void *manager,bool stub)

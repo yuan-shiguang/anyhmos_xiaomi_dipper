@@ -201,7 +201,7 @@ const.product.device_authentication=HWWKI
 # 2026-06-26 10:08:07.0
 const.product.device_radius=12
 # 2026-06-26 10:08:07.0
-const.product.devicetype=tablet
+const.product.devicetype=phone
 # 2026-07-27 13:56:59.0
 const.product.dfx.fans.stage=1
 # 2026-09-17 19:57:42.0

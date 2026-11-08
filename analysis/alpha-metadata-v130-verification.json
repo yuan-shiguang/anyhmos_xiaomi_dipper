@@ -9,8 +9,8 @@
   "cpio_verified": true,
   "preserved_v129_entries": true,
   "changed_entries": [
-    "sheng-compat-v118/MANIFEST.json",
-    "sheng-compat-v118/graphics/libdisplay_buffer_vdi_impl.z.so"
+    "dipper-compat-v118/MANIFEST.json",
+    "dipper-compat-v118/graphics/libdisplay_buffer_vdi_impl.z.so"
   ],
   "init_boot_unchanged": true,
   "dtb_unchanged": true,

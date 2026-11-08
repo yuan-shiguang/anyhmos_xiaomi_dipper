@@ -1,6 +1,6 @@
 /* 采集构建显式开启，原播放构建保持关闭 */
-#ifndef SHENG_CAPTURE_EXPERIMENTAL
-#define SHENG_CAPTURE_EXPERIMENTAL 0
+#ifndef DIPPER_CAPTURE_EXPERIMENTAL
+#define DIPPER_CAPTURE_EXPERIMENTAL 0
 #endif
 static uint64_t capture_card_epoch;
 static int capture_monitor_ready;
@@ -24,14 +24,14 @@ static int capture_card_online(void)
 }
 static void capture_monitor_init(void)
 {
-    if (!SHENG_CAPTURE_EXPERIMENTAL || !register_global || !get_param) return;
+    if (!DIPPER_CAPTURE_EXPERIMENTAL || !register_global || !get_param) return;
     int rc=register_global(capture_card_event,0);
     capture_monitor_ready=!rc;
     printf("PAL_CAPTURE_CARD_MONITOR_RC=%d\n",rc);
 }
 static int capture_api_ready(void)
 {
-    return SHENG_CAPTURE_EXPERIMENTAL && stream_read && !capture_card_online();
+    return DIPPER_CAPTURE_EXPERIMENTAL && stream_read && !capture_card_online();
 }
 
 static int close_capture(struct client *c)
@@ -70,7 +70,7 @@ static int open_capture(struct client *c, unsigned rate, unsigned channels)
     if (rc) return rc;
     if (!c->stream) return -5;
     c->capture=1; c->state=1; c->frames=0; c->capture_epoch=epoch;
-    pal_buffer_config_t input={.buf_count=2,.buf_size=SHENG_PAL_CAPTURE_CHUNK};
+    pal_buffer_config_t input={.buf_count=2,.buf_size=DIPPER_PAL_CAPTURE_CHUNK};
     rc=stream_buffer(c->stream,&input,0);
     if (!rc && (capture_card_online() ||
         epoch!=__atomic_load_n(&capture_card_epoch,__ATOMIC_ACQUIRE))) rc=-19;
@@ -78,27 +78,27 @@ static int open_capture(struct client *c, unsigned rate, unsigned channels)
     return rc;
 }
 
-static int dispatch_capture(struct client *c, const struct sheng_pal_request *h,
+static int dispatch_capture(struct client *c, const struct dipper_pal_request *h,
     unsigned char *data, uint32_t *bytes, uint64_t *value)
 {
     *bytes=0; *value=c->frames;
-    if (h->op==SHENG_PAL_CAPTURE_STATUS)
-        return SHENG_CAPTURE_EXPERIMENTAL && stream_read?capture_card_online():-95;
-    if (h->op==SHENG_PAL_MIC_MUTE) {
+    if (h->op==DIPPER_PAL_CAPTURE_STATUS)
+        return DIPPER_CAPTURE_EXPERIMENTAL && stream_read?capture_card_online():-95;
+    if (h->op==DIPPER_PAL_MIC_MUTE) {
         if (!mic_set_mute) return -95;
         return h->arg0<=1?mic_set_mute((bool)h->arg0):-22;
     }
-    if (h->op==SHENG_PAL_MIC_GET_MUTE) {
+    if (h->op==DIPPER_PAL_MIC_GET_MUTE) {
         if (!mic_get_mute) return -95;
         bool mute=false;
         int rc=mic_get_mute(&mute);
         if (!rc) *value=mute;
         return rc;
     }
-    if (h->op==SHENG_PAL_CAPTURE_OPEN) return open_capture(c,h->arg0,h->arg1);
-    if (h->op==SHENG_PAL_CAPTURE_CLOSE) return close_capture(c);
-    if (h->op==SHENG_PAL_CAPTURE_STOP) return close_capture(c);
-    if (h->op==SHENG_PAL_CAPTURE_START) {
+    if (h->op==DIPPER_PAL_CAPTURE_OPEN) return open_capture(c,h->arg0,h->arg1);
+    if (h->op==DIPPER_PAL_CAPTURE_CLOSE) return close_capture(c);
+    if (h->op==DIPPER_PAL_CAPTURE_STOP) return close_capture(c);
+    if (h->op==DIPPER_PAL_CAPTURE_START) {
         if (!c->stream) {
             int rc=open_capture(c,48000,2);
             if (rc) return rc;
@@ -114,20 +114,20 @@ static int dispatch_capture(struct client *c, const struct sheng_pal_request *h,
         return rc;
     }
     if (!c->capture || !c->stream) return -19;
-    if (h->op==SHENG_PAL_CAPTURE_MUTE) {
+    if (h->op==DIPPER_PAL_CAPTURE_MUTE) {
         if (!stream_set_mute) return -95;
         if (h->arg0>1) return -22;
         return stream_set_mute(c->stream,(bool)h->arg0);
     }
-    if (h->op==SHENG_PAL_CAPTURE_GET_MUTE) {
+    if (h->op==DIPPER_PAL_CAPTURE_GET_MUTE) {
         if (!stream_get_mute) return -95;
         bool mute=false;
         int rc=stream_get_mute(c->stream,&mute);
         if (!rc) *value=mute;
         return rc;
     }
-    if (h->op!=SHENG_PAL_CAPTURE_READ) return -95;
-    if (c->state!=2 || !h->arg0 || h->arg0>SHENG_PAL_CAPTURE_CHUNK || (h->arg0&3)) return -22;
+    if (h->op!=DIPPER_PAL_CAPTURE_READ) return -95;
+    if (c->state!=2 || !h->arg0 || h->arg0>DIPPER_PAL_CAPTURE_CHUNK || (h->arg0&3)) return -22;
     if (capture_card_online() || c->capture_epoch!=
         __atomic_load_n(&capture_card_epoch,__ATOMIC_ACQUIRE)) return -19;
     struct { struct pal_buffer value; unsigned char tail[64]; } buffer={0};

@@ -10,7 +10,7 @@ import subprocess
 import tarfile
 
 
-HIVIEW_LAUNCHER_SOURCE = '3c077d401cbec55d3d8de498c5d269c92e09d10fcce83fb5edf89035c0603e44'
+HIVIEW_LAUNCHER_SOURCE = 'f2160a95e5ffb0985ef11df8ad37febfcda15ad92b4717f857cdf9a915997079'
 HIVIEW_LAUNCHER_BINARY = '00b4c6a66d80878465335f915cab3b3f5d7019e9a247a51b79975a0c34d019e0'
 HIVIEW_INPUTS = {
     '/system/etc/init/hiview.cfg': 'b01fa998e9d437287664b606a13712e7d161ab7c297401e815cdade193b868f7',
@@ -32,7 +32,7 @@ HIVIEW_GROUPS = {
     'file_manager': '1006', 'hmi_host': '3096', 'radio': '1001',
     'shader_cache': '3099', 'shell': '2000',
 }
-HIVIEW_JOB_NAMES = ('param:sheng-native-hiview-events', 'param:sheng-stop-native-hiview-events')
+HIVIEW_JOB_NAMES = ('param:dipper-native-hiview-events', 'param:dipper-stop-native-hiview-events')
 
 
 def digest(data):
@@ -95,9 +95,9 @@ def select_hiview_service(desktop, inputs):
     result = copy.deepcopy(desktop)
     result['services'].append(service)
     result['jobs'].extend([
-        {'name': names[0], 'condition': 'sheng.debug.start.hiview.events=true',
+        {'name': names[0], 'condition': 'dipper.debug.start.hiview.events=true',
          'cmds': ['start hiview']},
-        {'name': names[1], 'condition': 'sheng.debug.start.hiview.events=false',
+        {'name': names[1], 'condition': 'dipper.debug.start.hiview.events=false',
          'cmds': ['stop hiview']},
     ])
     return result
@@ -188,7 +188,7 @@ def prepare_hiview_payload(desktop, inputs, repo, tools, work):
     report = {
         'enabled': True,
         'started_by_default': False,
-        'startup_gate': 'sheng.debug.start.hiview.events',
+        'startup_gate': 'dipper.debug.start.hiview.events',
         'request_preparation': 'prepare-native-hiview-events.sh <nonce>',
         'donor_inputs': HIVIEW_INPUTS,
         'launcher_source_sha256': HIVIEW_LAUNCHER_SOURCE,

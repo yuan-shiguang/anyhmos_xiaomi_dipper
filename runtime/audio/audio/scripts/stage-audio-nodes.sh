@@ -24,10 +24,15 @@ node() {
     echo "AUDIO_NODE=$dst:$dev"
 }
 $B mkdir -p /dev/snd /dev/dma_heap
-node /sys/class/aud_pasthru_adsp/aud_pasthru_adsp /dev/aud_pasthru_adsp
-node /sys/class/dma_heap/system /dev/dma_heap/system
-node /sys/class/msm_audio_ion/msm_audio_ion /dev/msm_audio_ion
-node /sys/class/msm_audio_ion_cma/msm_audio_ion_cma /dev/msm_audio_ion_cma
+# aud_pasthru_adsp 只在 sm8550 级平台存在；米 8 缺这个类时跳过，不中断
+optional() {
+    [ -f "$1/dev" ] || { echo "AUDIO_NODE_ABSENT=$1"; return 0; }
+    node "$1" "$2"
+}
+optional /sys/class/aud_pasthru_adsp/aud_pasthru_adsp /dev/aud_pasthru_adsp
+optional /sys/class/dma_heap/system /dev/dma_heap/system
+optional /sys/class/msm_audio_ion/msm_audio_ion /dev/msm_audio_ion
+optional /sys/class/msm_audio_ion_cma/msm_audio_ion_cma /dev/msm_audio_ion_cma
 for src in /sys/class/sound/*; do
     name=${src##*/}
     case "$name" in

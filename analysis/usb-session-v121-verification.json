@@ -14,8 +14,8 @@
   "init_boot_unchanged": true,
   "preserved_v120_entries": true,
   "changed_entries": [
-    "sheng-compat-v118/MANIFEST.json",
-    "sheng-compat-v118/hmos-probe"
+    "dipper-compat-v118/MANIFEST.json",
+    "dipper-compat-v118/hmos-probe"
   ],
   "dtb_unchanged": true,
   "bootconfig_unchanged": true,

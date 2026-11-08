@@ -157,19 +157,19 @@ static int __init ace5_init(void)
 {
     unsigned int i;
     int ret;
-    pr_info("SHENG_IPC init-entry diagnostic_stage=%d\n", diagnostic_stage);
+    pr_info("DIPPER_IPC init-entry diagnostic_stage=%d\n", diagnostic_stage);
     msleep(150);
     if (diagnostic_stage == 0) return -ECANCELED;
-    pr_info("SHENG_IPC private-api-begin\n");
+    pr_info("DIPPER_IPC private-api-begin\n");
     msleep(150);
     ret = ace5_private_api_init();
-    pr_info("SHENG_IPC private-api-end ret=%d\n", ret);
+    pr_info("DIPPER_IPC private-api-end ret=%d\n", ret);
     if (ret) return ret;
     if (diagnostic_stage == 1) return -ECANCELED;
-    pr_info("SHENG_IPC enumerate-hooks-begin\n");
+    pr_info("DIPPER_IPC enumerate-hooks-begin\n");
     msleep(150);
     for_each_kernel_tracepoint(find_hook, NULL);
-    pr_info("SHENG_IPC enumerate-hooks-end\n");
+    pr_info("DIPPER_IPC enumerate-hooks-end\n");
     for (i = 0; i < ARRAY_SIZE(hooks); i++)
         if (!hooks[i].point) {
             pr_err("ACE5_TOKEN: required hook missing: %s\n", hooks[i].name);
@@ -177,7 +177,7 @@ static int __init ace5_init(void)
         }
     if (diagnostic_stage == 2) return -ECANCELED;
     for (i = 0; i < ARRAY_SIZE(hooks); i++) {
-        pr_info("SHENG_IPC register-hook index=%u name=%s\n", i, hooks[i].name);
+        pr_info("DIPPER_IPC register-hook index=%u name=%s\n", i, hooks[i].name);
         msleep(150);
         ret = tracepoint_probe_register(hooks[i].point, hooks[i].callback, NULL);
         if (ret) {
@@ -185,25 +185,25 @@ static int __init ace5_init(void)
             goto fail;
         }
     }
-    pr_info("SHENG_IPC register-hooks-complete\n");
+    pr_info("DIPPER_IPC register-hooks-complete\n");
     msleep(150);
     if (diagnostic_stage == 3) {
         unregister_hooks(ARRAY_SIZE(hooks));
-        pr_info("SHENG_IPC diagnostic hooks removed\n");
+        pr_info("DIPPER_IPC diagnostic hooks removed\n");
         return -ECANCELED;
     }
-    pr_info("SHENG_IPC token-device-begin\n");
+    pr_info("DIPPER_IPC token-device-begin\n");
     msleep(150);
     ret = ace5_token_device_init();
-    pr_info("SHENG_IPC token-device-end ret=%d\n", ret);
+    pr_info("DIPPER_IPC token-device-end ret=%d\n", ret);
     if (ret) {
         unregister_hooks(ARRAY_SIZE(hooks));
         goto fail;
     }
-    pr_info("SHENG_IPC binder-begin\n");
+    pr_info("DIPPER_IPC binder-begin\n");
     msleep(150);
     ret = ace5_binder_init();
-    pr_info("SHENG_IPC binder-end ret=%d\n", ret);
+    pr_info("DIPPER_IPC binder-end ret=%d\n", ret);
     if (ret) {
         ace5_token_device_exit();
         unregister_hooks(ARRAY_SIZE(hooks));

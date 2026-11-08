@@ -1,9 +1,9 @@
-#ifndef SHENG_WIFI_CAPS_V134_H
-#define SHENG_WIFI_CAPS_V134_H
+#ifndef DIPPER_WIFI_CAPS_V134_H
+#define DIPPER_WIFI_CAPS_V134_H
 #include <stdint.h>
-struct ShengWifiCaps {
+struct DipperWifiCaps {
     uint32_t ifindex, wiphy;
     unsigned he, eht, records, mask;
 };
-int ShengReadWifiCaps(const char *ifname, struct ShengWifiCaps *caps);
+int DipperReadWifiCaps(const char *ifname, struct DipperWifiCaps *caps);
 #endif

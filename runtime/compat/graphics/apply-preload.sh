@@ -11,7 +11,7 @@ $B test -d "$R/preload/app"
 $B mkdir -p "$R/compat/etc/cust"
 $B cp "$CFG" "$R/compat/etc/cust/baselayer.cfg"
 # Actual mounted donor directory, independent of absent Huawei OEM parameters.
-printf '\n# sheng compatibility: mounted preload application policy\n%s\n' "$ROOT" >> "$R/compat/etc/cust/baselayer.cfg"
+printf '\n# dipper compatibility: mounted preload application policy\n%s\n' "$ROOT" >> "$R/compat/etc/cust/baselayer.cfg"
 $B chmod 0644 "$R/compat/etc/cust/baselayer.cfg"
 $B mount --bind "$R/compat/etc/cust/baselayer.cfg" "$CFG"
 echo HMOS_PRELOAD_POLICY_ROOT_ADDED_$ROOT

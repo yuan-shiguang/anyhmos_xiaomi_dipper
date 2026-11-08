@@ -24,4 +24,4 @@ for ($attempt=0; $attempt -lt 25; $attempt++) {
     }
     Start-Sleep -Seconds 2
 }
-throw 'Recovery ADB has not appeared. Check the tablet and USB connection; no further images were flashed.'
+throw 'Recovery ADB has not appeared. Check the phone and USB connection; no further images were flashed.'

@@ -1,5 +1,5 @@
 {
-  "name": "sheng-anyharmony-fsverity-development-v1",
+  "name": "dipper-anyharmony-fsverity-development-v1",
   "description": "Development bring-up only: reports enabled when FS_VERITY_FL is absent. Does not establish kernel integrity protection.",
   "input_sha256": "bbd86eec0b55323d61f6f27a7e3c132f7e7fbcdf3820f723d2db7dee40b0b4a9",
   "changes": [

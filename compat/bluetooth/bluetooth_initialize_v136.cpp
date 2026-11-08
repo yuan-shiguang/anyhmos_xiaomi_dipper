@@ -17,7 +17,7 @@ namespace android { namespace hardware { template<class T> class hidl_vec; } }
 using Packet=android::hardware::hidl_vec<unsigned char>;
 static std::atomic<int> initialized{-1};
 static std::atomic<unsigned> replies{0};
-#ifdef SHENG_BT_BRIDGE
+#ifdef DIPPER_BT_BRIDGE
 static void bridge_deliver(HciPacketType,const unsigned char *,size_t);
 #endif
 static void packet_received(HciPacketType type,const Packet *packet)
@@ -29,7 +29,7 @@ static void packet_received(HciPacketType type,const Packet *packet)
     if(!packet)return;
     memcpy(&view,packet,sizeof(view));
     if(!view.data || view.size>65540){puts("BT_RX_INVALID_VECTOR");return;}
-#ifdef SHENG_BT_BRIDGE
+#ifdef DIPPER_BT_BRIDGE
     bridge_deliver(type,view.data,view.size);
 #else
     flockfile(stdout);printf("BT_RX_PACKET type=%d size=%u bytes=",type,view.size);
@@ -74,7 +74,7 @@ extern "C" int __android_log_print(int priority,const char *tag,const char *fmt,
     va_list args;va_start(args,fmt);int n=vprintf(fmt,args);va_end(args);
     putchar('\n');funlockfile(stdout);return n;
 }
-#ifndef SHENG_BT_BRIDGE
+#ifndef DIPPER_BT_BRIDGE
 static int run(int,char **,char **)
 {
     setvbuf(stdout,nullptr,_IOLBF,0);

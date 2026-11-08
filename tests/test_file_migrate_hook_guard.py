@@ -13,7 +13,7 @@ import unittest
 
 
 ROOT = Path(__file__).resolve().parents[1]
-SOURCE = ROOT / 'tools/build_promax_ramdisk.py'
+SOURCE = ROOT / 'tools/build_dipper_ramdisk.py'
 TREE = ast.parse(SOURCE.read_text(encoding='utf-8'))
 NAMES = {'sha', 'validate_file_migrate_hook', 'add_file_migrate_hook_guard'}
 HELPERS = ast.Module(
@@ -123,7 +123,7 @@ class FileMigrateInputTests(unittest.TestCase):
                 root = base / 'root'
                 source = root / EXPECTED['path'].lstrip('/')
                 target = root / 'compat/lib64/libfile_migrate_init.z.so'
-                asset = base / 'graphics/promax/libfile_migrate_init.z.so'
+                asset = base / 'graphics/dipper/libfile_migrate_init.z.so'
                 source.parent.mkdir(parents=True)
                 target.parent.mkdir(parents=True)
                 asset.parent.mkdir(parents=True)
@@ -162,12 +162,12 @@ esac
                 generated = stage(HEAD).replace(
                     'B=/busybox\nR=/hmos-root\n',
                     'B="$MOCK_BUSYBOX"\nR="$MOCK_ROOT"\n', 1,
-                ).replace('/graphics/promax/libfile_migrate_init.z.so', '"$MOCK_ASSET"')
+                ).replace('/graphics/dipper/libfile_migrate_init.z.so', '"$MOCK_ASSET"')
                 script.write_text(generated, encoding='utf-8', newline='\n')
                 env = os.environ.copy()
                 env.update({
                     'MOCK_BUSYBOX': unix + '/busybox', 'MOCK_ROOT': unix + '/root',
-                    'MOCK_ASSET': unix + '/graphics/promax/libfile_migrate_init.z.so',
+                    'MOCK_ASSET': unix + '/graphics/dipper/libfile_migrate_init.z.so',
                     'MOCK_SOURCE': unix + '/root' + EXPECTED['path'],
                     'MOCK_CALLS': unix + '/calls', 'MOCK_FAILURE': failure,
                 })

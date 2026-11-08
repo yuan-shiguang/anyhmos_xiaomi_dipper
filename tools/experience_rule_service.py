@@ -56,11 +56,11 @@ def add_experience_rule_startup(startup, profile_sha256, core_sha256):
     library_path, library_sha256 = next(iter(EXPERIENCE_RULE_INPUTS.items()))
     block = (
         f' if echo "{library_sha256}  $R{library_path}" | $B sha256sum -c - &&\n'
-        f'    echo "{profile_sha256}  /graphics/promax/foundation-experience-rule.json" '
+        f'    echo "{profile_sha256}  /graphics/dipper/foundation-experience-rule.json" '
         '| $B sha256sum -c -; then\n'
         '  if $B test ! -e "$R/system/profile/.foundation-erms.tmp" &&\n'
         '     $B test ! -L "$R/system/profile/.foundation-erms.tmp" &&\n'
-        '     $B cp /graphics/promax/foundation-experience-rule.json '
+        '     $B cp /graphics/dipper/foundation-experience-rule.json '
         '"$R/system/profile/.foundation-erms.tmp" &&\n'
         '     $B chown 0:0 "$R/system/profile/.foundation-erms.tmp" &&\n'
         '     $B chmod 0644 "$R/system/profile/.foundation-erms.tmp" &&\n'

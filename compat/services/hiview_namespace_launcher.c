@@ -42,8 +42,8 @@
 
 #define HIVIEW_UID 1201
 #define HIVIEW_GID 1000
-#define RUN_PREFIX "/data/local/tmp/sheng-hiview-events-v1/run-"
-#define REQUEST_PATH "/data/local/tmp/sheng-hiview-events-v1/request"
+#define RUN_PREFIX "/data/local/tmp/dipper-hiview-events-v1/run-"
+#define REQUEST_PATH "/data/local/tmp/dipper-hiview-events-v1/request"
 // 原生 HiView 服务的七项能力
 #define BASE_CAPS ((UINT64_C(1) << CAP_CHOWN) | (UINT64_C(1) << CAP_DAC_OVERRIDE) | \
     (UINT64_C(1) << CAP_DAC_READ_SEARCH) | (UINT64_C(1) << CAP_KILL) | \
@@ -144,7 +144,7 @@ static void check_empty(const char *path)
 static const char *read_request(void)
 {
     static char root[PATH_MAX];
-    check_path("/data/local/tmp/sheng-hiview-events-v1", 1, 0);
+    check_path("/data/local/tmp/dipper-hiview-events-v1", 1, 0);
     check_path(REQUEST_PATH, 0, 0);
     int fd = open(REQUEST_PATH, O_RDONLY | O_NOFOLLOW | O_CLOEXEC);
     require(fd >= 0, "request-open");

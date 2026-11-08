@@ -23,7 +23,7 @@ int main(int argc,char **argv)
     signal(SIGTERM,end); signal(SIGINT,end); signal(SIGALRM,end);
     if (!persistent) alarm(24);
     void *driver=dlopen("/vendor/lib64/libaudio_primary_driver.z.so",RTLD_NOW|RTLD_GLOBAL);
-    void *factory=dlopen("/compat/lib64/libsheng_audio_manager_service.so",RTLD_NOW|RTLD_LOCAL);
+    void *factory=dlopen("/compat/lib64/libdipper_audio_manager_service.so",RTLD_NOW|RTLD_LOCAL);
     if (!driver || !factory) { printf("AUDIO_HDI_LOAD=%s\n",dlerror()); return 2; }
     void *(*create)(void); void (*release)(void *);
     struct HdfRemoteService **(*stub)(const char *,void *);

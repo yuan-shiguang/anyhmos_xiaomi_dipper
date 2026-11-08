@@ -34,7 +34,7 @@ static void *as_object(void *self)
             if (release) release(registry);
         }
         if (hdi) dlclose(hdi);
-        fprintf(stderr,"SHENG_AUDIO_AS_OBJECT=%p\n",remote);
+        fprintf(stderr,"DIPPER_AUDIO_AS_OBJECT=%p\n",remote);
     }
     void *result=self==manager?remote:0;
     pthread_mutex_unlock(&lock); return result;
@@ -50,7 +50,7 @@ void *AudioManagerImplGetInstance(void)
             ((void **)manager)[4]=(void *)version;
             ((void **)manager)[5]=(void *)as_object;
         }
-        else fprintf(stderr,"SHENG_AUDIO_FACTORY_ERROR=%s\n",dlerror());
+        else fprintf(stderr,"DIPPER_AUDIO_FACTORY_ERROR=%s\n",dlerror());
     }
     if (manager) references++;
     void *result=manager;
@@ -63,7 +63,7 @@ void AudioManagerImplRelease(void *self)
         int (*destroy)(void *)=dlsym(library,"AudioManagerDestroyIfInstance");
         if (destroy) {
             int rc=destroy(manager);
-            fprintf(stderr,"SHENG_AUDIO_FACTORY_RELEASE_RC=%d\n",rc);
+            fprintf(stderr,"DIPPER_AUDIO_FACTORY_RELEASE_RC=%d\n",rc);
         }
         if (remote) {
             void *ipc=dlopen("libhdf_ipc_adapter.z.so",RTLD_NOW|RTLD_LOCAL);

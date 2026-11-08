@@ -9,9 +9,9 @@
   },
   "preserved_v143_entries": true,
   "changed_entries": [
-    "sheng-compat-v118/MANIFEST.json",
-    "sheng-compat-v118/graphics/libdisplay_composer_vdi_impl.z.so",
-    "sheng-compat-v118/graphics/native_display_wake"
+    "dipper-compat-v118/MANIFEST.json",
+    "dipper-compat-v118/graphics/libdisplay_composer_vdi_impl.z.so",
+    "dipper-compat-v118/graphics/native_display_wake"
   ],
   "compat_manifest_verified": true,
   "init_boot_unchanged": true,

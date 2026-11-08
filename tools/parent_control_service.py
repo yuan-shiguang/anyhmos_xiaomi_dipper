@@ -11,8 +11,8 @@ PARENT_CONTROL_INPUTS = {
     '/system/etc/passwd': '4e70786ac3c6ace840da60e0608ef4424c9963298241c827a425c69705abc9b9',
     '/system/etc/group': '7c078f47d90b41127e6be365318e072c7639dc99a4073d5ab7a8d0f4aa68cb55',
 }
-PARENT_CONTROL_RUNTIME_SHA256 = 'fbc5d533a6848f1b0c323180f5ae73399bb0b973b401b3319753ae1582406201'
-PARENT_CONTROL_JOBS = ('param:sheng-parentcontrol-start', 'param:sheng-parentcontrol-stop')
+PARENT_CONTROL_RUNTIME_SHA256 = '8793cf27b962d23aab2dc7497bfe0ad6341c0bc05a30b0c29a5b4f8c91e06ac4'
+PARENT_CONTROL_JOBS = ('param:dipper-parentcontrol-start', 'param:dipper-parentcontrol-stop')
 PARENT_CONTROL_RUNTIME_INPUTS = (
     '/system/profile/parent_control_service.json',
     '/system/lib64/libparentcontrol_service.z.so',
@@ -90,9 +90,9 @@ def select_parent_control_service(desktop, init_config, inputs):
     result = copy.deepcopy(desktop)
     result['services'].append(service)
     result['jobs'].extend([
-        {'name': PARENT_CONTROL_JOBS[0], 'condition': 'sheng.debug.start.parentcontrol=true',
+        {'name': PARENT_CONTROL_JOBS[0], 'condition': 'dipper.debug.start.parentcontrol=true',
          'cmds': ['start parent_control_service']},
-        {'name': PARENT_CONTROL_JOBS[1], 'condition': 'sheng.debug.start.parentcontrol=false',
+        {'name': PARENT_CONTROL_JOBS[1], 'condition': 'dipper.debug.start.parentcontrol=false',
          'cmds': ['stop parent_control_service']},
     ])
     return result
@@ -146,13 +146,13 @@ def add_parent_control_startup(runtime, baseline_cfg_sha, candidate_cfg_sha,
         f'   echo "{baseline_cfg_sha}  $parent_control_cfg" | $B sha256sum -c - &&\n'
         f'   echo "{private_cfg_sha}  /hmos-init-debug.cfg" | $B sha256sum -c - &&\n'
         + checks +
-        f'    echo "{helper_sha}  /graphics/promax/prepare-parentcontrol-el1.sh" '
+        f'    echo "{helper_sha}  /graphics/dipper/prepare-parentcontrol-el1.sh" '
         '| $B sha256sum -c - &&\n'
-        f'    echo "{candidate_cfg_sha}  /graphics/promax/init-desktop-parentcontrol.cfg" '
+        f'    echo "{candidate_cfg_sha}  /graphics/dipper/init-desktop-parentcontrol.cfg" '
         '| $B sha256sum -c - &&\n'
-        '    $B sh /graphics/promax/prepare-parentcontrol-el1.sh &&\n'
+        '    $B sh /graphics/dipper/prepare-parentcontrol-el1.sh &&\n'
         '    $B test ! -e "$parent_control_tmp" && $B test ! -L "$parent_control_tmp" &&\n'
-        '    $B cp /graphics/promax/init-desktop-parentcontrol.cfg "$parent_control_tmp" &&\n'
+        '    $B cp /graphics/dipper/init-desktop-parentcontrol.cfg "$parent_control_tmp" &&\n'
         '    $B chown 0:0 "$parent_control_tmp" && $B chmod 0644 "$parent_control_tmp" &&\n'
         '    $B test -f "$parent_control_tmp" && $B test ! -L "$parent_control_tmp" &&\n'
         '    [ "$($B stat -c \'%u:%g:%a:%h\' "$parent_control_tmp")" = 0:0:644:1 ] &&\n'

@@ -1,4 +1,4 @@
-/* Bounded read-only sheng diagnostics: never become DRM master or grab input. */
+/* Bounded read-only dipper diagnostics: never become DRM master or grab input. */
 #define _GNU_SOURCE
 #include <drm/drm.h>
 #include <drm/drm_mode.h>
@@ -22,7 +22,7 @@ int main(int argc,char **argv) {
  if(ioctl(fd,DRM_IOCTL_MODE_GETRESOURCES,&res)||res.count_crtcs>32)return 5;
  uint32_t id=0;for(unsigned i=0;i<res.count_crtcs;i++){
   struct drm_mode_crtc c={.crtc_id=crtcs[i]};
-  if(!ioctl(fd,DRM_IOCTL_MODE_GETCRTC,&c)&&c.mode_valid&&c.mode.hdisplay==3048&&c.mode.vdisplay==2032){
+  if(!ioctl(fd,DRM_IOCTL_MODE_GETCRTC,&c)&&c.mode_valid&&(c.mode.hdisplay==1080&&c.mode.vdisplay==2248)||(c.mode.hdisplay==2248&&c.mode.vdisplay==1080)){
    id=c.crtc_id;printf("ACTIVE_MODE crtc=%u name=%s hz=%u clock=%u size=%ux%u\n",id,c.mode.name,c.mode.vrefresh,c.mode.clock,c.mode.hdisplay,c.mode.vdisplay);break;
   }
  }

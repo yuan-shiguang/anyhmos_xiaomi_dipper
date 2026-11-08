@@ -6,7 +6,7 @@
 /* 诊断日志不可用时沿用原标准输出 */
 static void redirect_log(void)
 {
-    int fd = open("/data/local/tmp/sheng-brightness-stderr.txt",
+    int fd = open("/data/local/tmp/dipper-brightness-stderr.txt",
         O_WRONLY | O_APPEND | O_CLOEXEC | O_NOFOLLOW);
     if (fd < 0) return;
     /* 避免日志描述符占用标准流编号 */

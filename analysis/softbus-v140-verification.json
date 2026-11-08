@@ -9,11 +9,11 @@
   },
   "preserved_v139_entries": true,
   "changed_entries": [
-    "sheng-compat-v118/MANIFEST.json",
-    "sheng-compat-v118/bluetooth-v136/SHA256SUMS",
-    "sheng-compat-v118/bluetooth-v136/init-bluetooth-v136.cfg",
-    "sheng-compat-v118/bluetooth-v136/softbus_server.json",
-    "sheng-compat-v118/graphics/apply-hardware-v116.sh"
+    "dipper-compat-v118/MANIFEST.json",
+    "dipper-compat-v118/bluetooth-v136/SHA256SUMS",
+    "dipper-compat-v118/bluetooth-v136/init-bluetooth-v136.cfg",
+    "dipper-compat-v118/bluetooth-v136/softbus_server.json",
+    "dipper-compat-v118/graphics/apply-hardware-v116.sh"
   ],
   "init_boot_unchanged": true,
   "dtb_unchanged": true,

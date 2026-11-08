@@ -9,11 +9,11 @@
   "cpio_verified": true,
   "preserved_v130_entries": true,
   "changed_entries": [
-    "sheng-compat-v118/MANIFEST.json",
-    "sheng-compat-v118/graphics/apply-hardware-v116.sh",
-    "sheng-compat-v118/graphics/init-hardware-v116.cfg",
-    "sheng-compat-v118/graphics/native_battery_hdi_publisher_v131",
-    "sheng-compat-v118/graphics/powermgr.json"
+    "dipper-compat-v118/MANIFEST.json",
+    "dipper-compat-v118/graphics/apply-hardware-v116.sh",
+    "dipper-compat-v118/graphics/init-hardware-v116.cfg",
+    "dipper-compat-v118/graphics/native_battery_hdi_publisher_v131",
+    "dipper-compat-v118/graphics/powermgr.json"
   ],
   "init_boot_unchanged": true,
   "dtb_unchanged": true,

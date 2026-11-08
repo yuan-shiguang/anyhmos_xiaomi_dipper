@@ -25,7 +25,7 @@ int main(int argc,char **argv)
     bool serve=argc==2 && !strcmp(argv[1],"--serve");
     if(argc>1&&!serve) return 1;
     if(serve) {
-        int fd=open("/data/local/tmp/sheng-battery-hdi.txt",O_WRONLY|O_APPEND|O_CLOEXEC|O_NOFOLLOW);
+        int fd=open("/data/local/tmp/dipper-battery-hdi.txt",O_WRONLY|O_APPEND|O_CLOEXEC|O_NOFOLLOW);
         if(fd<0||dup2(fd,1)<0||dup2(fd,2)<0) return 2;
         if(fd>2) close(fd);
     }
@@ -44,7 +44,7 @@ int main(int argc,char **argv)
     OHOS::sptr<B::IBatteryInterface> implementation=create();
     if(!implementation) return 4;
     // 适配充电类型和功率查询，沿用原厂电池回调
-    implementation=Sheng::Charging::MakeBatteryChargeAdapter(implementation);
+    implementation=Dipper::Charging::MakeBatteryChargeAdapter(implementation);
     auto stub=OHOS::HDI::ObjectCollector::GetInstance().GetOrNewObject(implementation,B::IBatteryInterface::GetDescriptor());
     if(!stub) { puts("BATTERY_HDI_ORIGINAL_STUB_NULL"); return 5; }
     HdfRemoteService *(*getRemote)(int32_t);

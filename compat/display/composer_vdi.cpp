@@ -1,4 +1,4 @@
-// Sheng 显示后端：保留客户端合成，按原生同步协议直扫不透明单层
+// Dipper 显示后端：保留客户端合成，按原生同步协议直扫不透明单层
 #include "composer_exports.h"
 #include "log.h"
 #include <cerrno>
@@ -23,10 +23,10 @@
 #include <xf86drmMode.h>
 #include <drm_fourcc.h>
 
-#ifndef SHENG_DEFAULT_DISPLAY_ROUTE
-#define SHENG_DEFAULT_DISPLAY_ROUTE 0
+#ifndef DIPPER_DEFAULT_DISPLAY_ROUTE
+#define DIPPER_DEFAULT_DISPLAY_ROUTE 0
 #endif
-static_assert(SHENG_DEFAULT_DISPLAY_ROUTE == 0 || SHENG_DEFAULT_DISPLAY_ROUTE == 2,
+static_assert(DIPPER_DEFAULT_DISPLAY_ROUTE == 0 || DIPPER_DEFAULT_DISPLAY_ROUTE == 2,
     "Default display route must be 0 or 2");
 
 namespace OHOS::HDI::Display::Composer {
@@ -90,12 +90,17 @@ int scanoutPolicyOverride = -1;
 #endif
 std::mutex mutex;
 int drm = -1;
-// SHENG_SPLIT_SCANOUT_V1: each DSI half needs its own SSPP plane.
+// A single-DSI panel drives the whole width through one primary plane; a
+// dual-DSI panel needs one SSPP plane per half. Follow the planes the
+// connector actually exposes instead of assuming either layout.
 uint32_t connector = 0, crtc = 0, plane = 0, secondPlane = 0, modeBlob = 0, currentFb = 0;
 uint32_t mmWidth = 0, mmHeight = 0, nextLayer = 1;
 drmModeModeInfo mode{};
 std::vector<drmModeModeInfo> displayModes;
 uint32_t selectedMode = 0, hardwareCrtcIndex = 0;
+// 1 for a single-DSI panel, 2 when a second usable plane exists.
+unsigned ScanoutPlaneCount() { return secondPlane && secondPlane != plane ? 2 : 1; }
+uint32_t ScanoutPlane(unsigned half) { return half ? secondPlane : plane; }
 std::map<std::pair<uint32_t, std::string>, uint32_t> propertyIds;
 std::map<uint32_t, Layer> layers;
 Buffer client;
@@ -231,7 +236,7 @@ int Initialize()
         }
         drmModeFreePlaneResources(planes);
     }
-    if (!connector || !crtc || !plane || !secondPlane || mode.hdisplay != 3048 || mode.vdisplay != 2032 || drmModeCreatePropertyBlob(drm, &mode, sizeof(mode), &modeBlob)) {
+    if (!connector || !crtc || !plane || mode.hdisplay != 1080 || mode.vdisplay != 2248 || drmModeCreatePropertyBlob(drm, &mode, sizeof(mode), &modeBlob)) {
         Log("no usable display"); CleanupDrm(); return FAIL;
     }
     for (auto item : {std::make_pair(crtc,uint32_t(DRM_MODE_OBJECT_CRTC)), std::make_pair(connector,uint32_t(DRM_MODE_OBJECT_CONNECTOR))}) {
@@ -252,7 +257,7 @@ int Initialize()
         Log("hardware vsync requires monotonic kernel timestamps"); CleanupDrm(); return FAIL;
     }
     clientCrop = {0, 0, mode.hdisplay, mode.vdisplay};
-    Ace5Log("discovered Sheng dual DSI=%u CRTC=%u planes=%u,%u %ux%u@%u mm=%ux%u",
+    Ace5Log("discovered Dipper DSI=%u CRTC=%u planes=%u,%u %ux%u@%u mm=%ux%u",
         connector, crtc, plane, secondPlane, mode.hdisplay, mode.vdisplay, mode.vrefresh, mmWidth, mmHeight);
     return OK;
 }
@@ -372,7 +377,7 @@ bool Linear(const BufferHandle &b)
 void Metric(const char *format, ...)
 {
     int saved = errno;
-    FILE *file = fopen("/data/local/tmp/sheng-composer-metrics.txt", "ae");
+    FILE *file = fopen("/data/local/tmp/dipper-composer-metrics.txt", "ae");
     if (file) {
         fprintf(file, "t_ns=%llu ", (unsigned long long)MonotonicNs());
         va_list args; va_start(args, format); vfprintf(file, format, args); va_end(args);
@@ -383,7 +388,7 @@ void Metric(const char *format, ...)
 // 保存原有混合属性，直扫与客户端回退分别使用不透明和原值
 bool PlaneBlendProperties(drmModeAtomicReqPtr request, unsigned half, bool opaque)
 {
-    uint32_t target = half ? secondPlane : plane;
+    uint32_t target = ScanoutPlane(half);
     auto &rules = planeBlend[half];
     if (rules.id != target) { rules = {}; rules.id = target; }
     if (!rules.queried) {
@@ -413,7 +418,7 @@ bool PlaneBlendProperties(drmModeAtomicReqPtr request, unsigned half, bool opaqu
         opaque ? rules.opaqueAlpha : rules.oldAlpha) >= 0;
     return blend && alpha;
 }
-// 为当前模式构造双半屏属性，测试请求不申请呈现 fence
+// 为当前模式构造扫描属性，单 DSI 用一个平面，双 DSI 用两个半屏平面
 bool ScanoutProperties(drmModeAtomicReqPtr request, uint32_t fb,
     const IRect &crop, uint64_t *retireFence, uint64_t *releaseFence = nullptr, bool opaque = false)
 {
@@ -428,12 +433,13 @@ bool ScanoutProperties(drmModeAtomicReqPtr request, uint32_t fb,
     if (releaseFence) PROP(crtc, DRM_MODE_OBJECT_CRTC, "output_fence",
         reinterpret_cast<uintptr_t>(releaseFence));
     // Partition the source exactly; no gap or duplicated column at the seam.
-    const int leftSourceWidth = crop.w / 2;
-    for (unsigned half = 0; half < 2; ++half) {
-        const uint32_t target = half ? secondPlane : plane;
+    const unsigned planeCount = ScanoutPlaneCount();
+    const int leftSourceWidth = crop.w / int(planeCount);
+    for (unsigned half = 0; half < planeCount; ++half) {
+        const uint32_t target = ScanoutPlane(half);
         const int sourceX = crop.x + (half ? leftSourceWidth : 0);
         const int sourceWidth = half ? crop.w - leftSourceWidth : leftSourceWidth;
-        const uint32_t outputWidth = mode.hdisplay / 2;
+        const uint32_t outputWidth = mode.hdisplay / planeCount;
         PROP(target, DRM_MODE_OBJECT_PLANE, "FB_ID", fb);
         PROP(target, DRM_MODE_OBJECT_PLANE, "CRTC_ID", crtc);
         PROP(target, DRM_MODE_OBJECT_PLANE, "SRC_X", uint64_t(sourceX) << 16);
@@ -465,7 +471,7 @@ const char *SingleLayerReason(const Layer &layer)
     const auto &b = layer.buffer.value;
     if (!requestedPowerOn) return "power_off";
     if (layer.composition != V::COMPOSITION_DEVICE) return "composition";
-    if (!plane || !secondPlane || plane == secondPlane || (mode.hdisplay & 1)) return "planes";
+    if (!plane || (ScanoutPlaneCount() > 1 && (mode.hdisplay & 1))) return "planes";
     if (!Linear(b)) return "layout";
     if (b.width != mode.hdisplay || b.height != mode.vdisplay) return "buffer_size";
     if (!FullScreen(layer.region) || !FullScreen(layer.crop)) return "rect";
@@ -516,11 +522,11 @@ int ReadScanoutPolicy()
 #ifdef ACE5_DIRECT_TEST
     if (scanoutPolicyOverride >= 0) return scanoutPolicyOverride;
 #endif
-    int fd = open("/dev/sheng-display-route-mode",
+    int fd = open("/dev/dipper-display-route-mode",
         O_RDONLY | O_CLOEXEC | O_NOFOLLOW);
     // 控制文件缺失时使用构建默认，其他打开失败保持原路径
     if (fd < 0) {
-#if SHENG_DEFAULT_DISPLAY_ROUTE == 2
+#if DIPPER_DEFAULT_DISPLAY_ROUTE == 2
         return errno == ENOENT ? 2 : 0;
 #else
         return 0;
@@ -982,7 +988,7 @@ extern "C" int32_t RegHotPlugCallback(HotPlugCallback cb, void *data)
 }
 extern "C" int32_t GetDisplayCapability(uint32_t id, DisplayCapability &info)
 {
-    DEVICE_LOCK(id); info = {}; info.name = "Sheng DSI"; // The donor directly casts the HDI value to GraphicInterfaceType, which
+    DEVICE_LOCK(id); info = {}; info.name = "Dipper DSI"; // The donor directly casts the HDI value to GraphicInterfaceType, which
     // includes UNKNOWN=0. Its live dump identified 9 as VGA; MIPI is 10.
     info.type = static_cast<decltype(info.type)>(10);
     info.phyWidth = mmWidth; info.phyHeight = mmHeight; info.supportLayers = 64;
@@ -1054,10 +1060,11 @@ extern "C" int32_t SetDisplayPowerStatus(uint32_t id, V::DispPowerStatus status)
     else {
         auto *request = drmModeAtomicAlloc();
         if (!request) return FAIL;
-        // SHENG_FULL_POWER_OFF_V1: detach all objects, so reactivation
+        // DIPPER_FULL_POWER_OFF_V1: detach all objects, so reactivation
         // rebuilds the complete routing state instead of retaining a mode.
         bool valid = true;
-        for (uint32_t target : {plane, secondPlane}) {
+        for (unsigned half = 0; half < ScanoutPlaneCount(); ++half) {
+            const uint32_t target = ScanoutPlane(half);
             valid &= Property(request, target, DRM_MODE_OBJECT_PLANE, "FB_ID", 0) >= 0;
             valid &= Property(request, target, DRM_MODE_OBJECT_PLANE, "CRTC_ID", 0) >= 0;
         }
@@ -1221,10 +1228,10 @@ extern "C" void Ace5InitializeSubmitForTest()
             "CRTC_X", "CRTC_Y", "CRTC_W", "CRTC_H", "color_fill"})
             propertyIds[{target, name}] = property++;
     client.value.fd = open("/dev/null", O_RDWR);
-    client.value.width = 3048; client.value.height = 2032;
-    client.value.stride = 12288; client.value.size = 12288 * 2032;
+    client.value.width = 1080; client.value.height = 2248;
+    client.value.stride = 4352; client.value.size = 4352 * 2248;
     client.value.format = V::PIXEL_FMT_RGBA_8888;
-    clientCrop = {0, 0, 3048, 2032};
+    clientCrop = {0, 0, 1080, 2248};
 }
 extern "C" int32_t Ace5SubmitInternalForTest() { return Submit(false); }
 }
@@ -1236,8 +1243,9 @@ extern "C" void Ace5InitializeModesForTest()
 {
     std::lock_guard<std::mutex> lock(mutex);
     drm = open("/dev/null", O_RDWR); connector = 88; crtc = 176; modeBlob = 1;
-    mode = {}; mode.hdisplay = 3048; mode.vdisplay = 2032; mode.vrefresh = 120;
-    displayModes = {mode}; mode.vrefresh = 144; displayModes.push_back(mode);
+    mode = {}; mode.hdisplay = 1080; mode.vdisplay = 2248; mode.vrefresh = 60;
+    // 面板只上报 60Hz；第二个合成模式仅用于覆盖切换与回退路径
+    displayModes = {mode}; mode.vrefresh = 30; displayModes.push_back(mode);
     mode = displayModes[0]; selectedMode = 0;
     propertyIds[{crtc, "MODE_ID"}] = 101;
 }

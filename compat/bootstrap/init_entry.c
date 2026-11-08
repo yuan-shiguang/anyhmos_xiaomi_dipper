@@ -1,6 +1,6 @@
 /* Minimal AArch64 PID1 entry: all substantive code/assets live in vendor_boot.
  * No libc, mounts, services or userdata changes in this bootstrap. */
-#define P "/sheng-compat-v118/"
+#define P "/dipper-compat-v118/"
 static long call3(long number, long a, long b, long c)
 {
     register long x8 __asm__("x8") = number;
@@ -44,7 +44,7 @@ __attribute__((noreturn)) void entry(void)
     char *const args[] = {P "hmos-probe", 0};
     char *const env[] = {0};
     if (!failed) call3(221, (long)args[0], (long)args, (long)env);
-    const char error[] = "SHENG_VENDOR_ENTRY_V118_FAILED: retain PID1 for recovery\n";
+    const char error[] = "DIPPER_VENDOR_ENTRY_V118_FAILED: retain PID1 for recovery\n";
     call3(64, 2, (long)error, sizeof(error)-1);
     const long delay[] = {1, 0};
     for (;;) call3(101, (long)delay, 0, 0);

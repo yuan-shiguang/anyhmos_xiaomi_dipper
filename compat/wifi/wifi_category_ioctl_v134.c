@@ -25,11 +25,11 @@ static ssize_t safe_copy(void *local, const void *remote, size_t size, int write
     return syscall(write_remote?SYS_process_vm_writev:SYS_process_vm_readv,
         getpid(),&here,1,&there,1,0);
 }
-static void log_caps(const char *ifname, const struct ShengWifiCaps *caps)
+static void log_caps(const char *ifname, const struct DipperWifiCaps *caps)
 {
     static atomic_uint count=0;
     if (atomic_fetch_add(&count,1)>=24) return;
-    int fd=open("/data/local/tmp/sheng-wifi-category-v134.txt",O_WRONLY|O_APPEND|O_CLOEXEC|O_NOFOLLOW);
+    int fd=open("/data/local/tmp/dipper-wifi-category-v134.txt",O_WRONLY|O_APPEND|O_CLOEXEC|O_NOFOLLOW);
     if (fd<0) return;
     char line[192]; int n=snprintf(line,sizeof(line),
         "WIFI_CATEGORY_NL if=%s ifindex=%u wiphy=%u he=%u eht=%u records=%u mask=%u uid=%u\n",
@@ -49,8 +49,8 @@ __attribute__((visibility("default"))) int ioctl(int fd, int request, ...)
             safe_copy(&priv,ifr.ifr_data,sizeof(priv),0)==sizeof(priv) &&
             priv.buf && priv.size>=64 && priv.size<=4096 && priv.len>=sizeof(command) && priv.len<=priv.size &&
             safe_copy(actual,priv.buf,sizeof(actual),0)==sizeof(actual) && !memcmp(actual,command,sizeof(command))) {
-            struct ShengWifiCaps caps;
-            if (!ShengReadWifiCaps(ifr.ifr_name,&caps)) {
+            struct DipperWifiCaps caps;
+            if (!DipperReadWifiCaps(ifr.ifr_name,&caps)) {
                 unsigned char value=(unsigned char)caps.mask;
                 if (safe_copy(&value,priv.buf,1,1)==1) {
                     log_caps(ifr.ifr_name,&caps); errno=saved_errno; return 0;

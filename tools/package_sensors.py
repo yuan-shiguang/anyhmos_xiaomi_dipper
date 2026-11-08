@@ -13,11 +13,11 @@ import vendor_ramdisk_edit as editor
 
 
 REPO = Path(__file__).resolve().parents[1]
-COMPAT = 'sheng-compat-v118/'
+COMPAT = 'dipper-compat-v118/'
 GRAPHICS = COMPAT + 'graphics/'
-PACKAGE = 'sheng-sensors'
-READY = 'bootevent.sheng_sensor_hdi.ready'
-PROFILE = GRAPHICS + 'promax/sensors-vibrator-only.json'
+PACKAGE = 'dipper-sensors'
+READY = 'bootevent.dipper_sensor_hdi.ready'
+PROFILE = GRAPHICS + 'dipper/sensors-vibrator-only.json'
 SCRIPTS = ('start-sensors.sh', 'prepare-private-persist.sh', 'stage-fastrpc-nodes.sh')
 BINARIES = ('sensor_hdi_publisher', 'libsensor_interface_service_3.1.z.so',
             'native_sensorspd_launcher')
@@ -70,40 +70,41 @@ def configure_services(config, donor_host, donor_sensors):
                    disabled=1, once=1, saspawn=False, **{'start-mode': 'condition'})
 
     start = next((j for j in config['jobs']
-                  if j.get('condition') == 'sheng.debug.start.vibrator=true'), None)
+                  if j.get('condition') == 'dipper.debug.start.vibrator=true'), None)
     if start is None:
-        start = {'name': 'param:sheng-vibrator-service',
-                 'condition': 'sheng.debug.start.vibrator=true',
+        start = {'name': 'param:dipper-vibrator-service',
+                 'condition': 'dipper.debug.start.vibrator=true',
                  'cmds': ['mkdir /data/service/el1/public/sensor',
                           'chown sensor sensor /data/service/el1/public/sensor']}
         config['jobs'].append(start)
     start['cmds'] = [c for c in start['cmds'] if c not in ('start sensors', 'start sensor_host')]
     start['cmds'].append('start sensor_host')
     stop = next((j for j in config['jobs']
-                 if j.get('condition') == 'sheng.debug.start.vibrator=false'), None)
+                 if j.get('condition') == 'dipper.debug.start.vibrator=false'), None)
     if stop is None:
-        stop = {'name': 'param:sheng-vibrator-service-stop',
-                'condition': 'sheng.debug.start.vibrator=false', 'cmds': []}
+        stop = {'name': 'param:dipper-vibrator-service-stop',
+                'condition': 'dipper.debug.start.vibrator=false', 'cmds': []}
         config['jobs'].append(stop)
     stop['cmds'] = [c for c in stop['cmds'] if c not in ('stop sensors', 'stop sensor_host')]
     stop['cmds'].extend(['stop sensors', 'stop sensor_host'])
     config['jobs'] = [j for j in config['jobs'] if j.get('name') not in
-                      ('param:sheng-sensor-hdi-ready', 'param:sheng-sensor-hdi-stopped')]
+                      ('param:dipper-sensor-hdi-ready', 'param:dipper-sensor-hdi-stopped')]
     # 原系统服务只在真实枚举及HDI发布完成后启动
     config['jobs'].extend([
-        {'name': 'param:sheng-sensor-hdi-ready',
-         'condition': READY + '=true && sheng.debug.start.vibrator=true',
+        {'name': 'param:dipper-sensor-hdi-ready',
+         'condition': READY + '=true && dipper.debug.start.vibrator=true',
          'cmds': ['start sensors']},
-        {'name': 'param:sheng-sensor-hdi-stopped', 'condition': READY + '=false',
+        {'name': 'param:dipper-sensor-hdi-stopped', 'condition': READY + '=false',
          'cmds': ['stop sensors']},
     ])
     return config
 
 
 def audio_startup(source):
-    anchor = '[ "$($B cat /sys/class/remoteproc/remoteproc0/state)" = running ]\n'
+    # 米 8 的音频脚本不再依赖 ADSP remoteproc 编号，改为在音频卡检测结束后挂传感器
+    anchor = 'AUDIO_CARD_CHECKED=1\n'
     if source.count(anchor) != 1:
-        raise ValueError('ADSP running startup point is missing or ambiguous')
+        raise ValueError('Audio card startup point is missing or ambiguous')
     # 替换旧隔离入口，保留原音频顺序与其余启动命令
     lines = source.splitlines(keepends=True)
     lines = [line for line in lines if not (
@@ -111,7 +112,7 @@ def audio_startup(source):
         or line.startswith('# ADSP首次就绪后异步采集传感器冷启动')
         or line.startswith('# ADSP就绪后启动常驻传感器后端'))]
     source = ''.join(lines)
-    block = ('# ADSP就绪后异步启动传感器，不阻塞原音频\n'
+    block = ('# 音频卡检测后异步启动传感器，不阻塞原音频\n'
              f'SENSOR_STARTUP_PACKAGE=/{PACKAGE} $B setsid $B sh /{PACKAGE}/start-sensors.sh '
              '>> "$D/sensor-startup-bootstrap.log" 2>&1 </dev/null &\n')
     return source.replace(anchor, anchor + block, 1)
@@ -132,8 +133,8 @@ $B mount --bind "$R/compat/lib64/libsensor_utils.z.so" "$R/system/lib64/platform
 # 保留原参数权限，只增加传感器进程的精确就绪键
 $B mkdir -p "$R/compat/sensor-param"
 $B cp -a "$R/system/etc/param/." "$R/compat/sensor-param/"
-echo '{READY} = sensor_host:sensor_host:0775:bool' > "$R/compat/sensor-param/sheng_sensor.para.dac"
-$B chmod 0644 "$R/compat/sensor-param/sheng_sensor.para.dac"
+echo '{READY} = sensor_host:sensor_host:0775:bool' > "$R/compat/sensor-param/dipper_sensor.para.dac"
+$B chmod 0644 "$R/compat/sensor-param/dipper_sensor.para.dac"
 $B mount --bind "$R/compat/sensor-param" "$R/system/etc/param"
 '''
 
@@ -186,7 +187,7 @@ def make_mutator(donor_root, build_dir, stock_assets):
         apply_name = GRAPHICS + 'apply-runtime-v116.sh'
         apply = entries[apply_name][1].decode()
         for name in [GRAPHICS + 'init-desktop-services.cfg',
-                     GRAPHICS + 'promax/init-desktop-cert-manager.cfg']:
+                     GRAPHICS + 'dipper/init-desktop-cert-manager.cfg']:
             if name not in entries:
                 continue
             config = configure_services(json.loads(entries[name][1]), host, sensors)
@@ -200,12 +201,12 @@ def make_mutator(donor_root, build_dir, stock_assets):
         if PROFILE in original:
             desktop = desktop.replace(sha(original[PROFILE]), sha(profile))
         # 未选择旧振动入口的基础包也从原参数任务启动
-        if 'param set sheng.debug.start.vibrator true' not in desktop:
+        if 'param set dipper.debug.start.vibrator true' not in desktop:
             anchor = 'stage=scene\ntrace_stage\n'
             if desktop.count(anchor) != 1:
                 raise ValueError('Desktop service startup point is missing or ambiguous')
             desktop = desktop.replace(anchor, '$B chroot "$R" /system/bin/param set '
-                                      'sheng.debug.start.vibrator true\n' + anchor, 1)
+                                      'dipper.debug.start.vibrator true\n' + anchor, 1)
         put(desktop_name, desktop)
         manifest_name = COMPAT + 'MANIFEST.json'
         manifest = json.loads(entries[manifest_name][1])
@@ -222,7 +223,7 @@ def make_mutator(donor_root, build_dir, stock_assets):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--vendor-boot', type=Path, required=True,
-                        help='Base vendor_boot with the sheng graphics/audio compatibility layer')
+                        help='Base vendor_boot with the dipper graphics/audio compatibility layer')
     parser.add_argument('--donor-root', type=Path, required=True)
     parser.add_argument('--build-dir', type=Path, required=True)
     parser.add_argument('--stock-assets', type=Path, required=True, help='External private SSC root tar.gz')
@@ -236,7 +237,7 @@ def main():
     # 先读原归档确定新增成员，继续沿既有编辑器保留其他镜像区段
     allowed = {PROFILE, GRAPHICS + 'apply-runtime-v116.sh', GRAPHICS + 'start-audio-v116.sh',
                GRAPHICS + 'start-native-desktop-v116.sh', GRAPHICS + 'init-desktop-services.cfg',
-               GRAPHICS + 'promax/init-desktop-cert-manager.cfg', COMPAT + 'MANIFEST.json',
+               GRAPHICS + 'dipper/init-desktop-cert-manager.cfg', COMPAT + 'MANIFEST.json',
                PACKAGE, *[PACKAGE + '/' + name for name in payloads]}
     base = args.vendor_boot.read_bytes()
     # 编辑器的新增清单需在解压后按实际原成员计算

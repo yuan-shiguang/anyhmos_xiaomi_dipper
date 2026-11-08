@@ -17,7 +17,7 @@ def dependency(parser, name, description):
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Build the sheng SSC and sensor HDI services")
+    parser = argparse.ArgumentParser(description="Build the dipper SSC and sensor HDI services")
     dependency(parser, "sdk", "OHOS native SDK directory")
     dependency(parser, "generated", "Official generated sensor HDI headers")
     dependency(parser, "hdf", "drivers_hdf_core/interfaces/inner_api directory")

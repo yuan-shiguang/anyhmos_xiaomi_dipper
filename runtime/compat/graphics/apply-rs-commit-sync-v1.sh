@@ -8,4 +8,4 @@ echo AQCAUg== | $B base64 -d | $B dd of="$p.rs-sync-new" bs=1 seek=8957364 conv=
 echo "528f0700081e17e4cd9a278bd98f426fae7925817d765ec9fbec2a32c37b123f  $p.rs-sync-new" | $B sha256sum -c -
 $B chmod 0644 "$p.rs-sync-new"
 $B mv "$p.rs-sync-new" "$p"
-echo SHENG_RS_COMMIT_SYNC_INSTALLED
+echo DIPPER_RS_COMMIT_SYNC_INSTALLED

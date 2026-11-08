@@ -9,10 +9,10 @@
   },
   "preserved_v142_entries": true,
   "changed_entries": [
-    "sheng-compat-v118/MANIFEST.json",
-    "sheng-compat-v118/graphics/appdata-sandbox.json.gz",
-    "sheng-compat-v118/graphics/apply-app-sandbox.sh",
-    "sheng-compat-v118/graphics/start-native-desktop-v116.sh"
+    "dipper-compat-v118/MANIFEST.json",
+    "dipper-compat-v118/graphics/appdata-sandbox.json.gz",
+    "dipper-compat-v118/graphics/apply-app-sandbox.sh",
+    "dipper-compat-v118/graphics/start-native-desktop-v116.sh"
   ],
   "compat_manifest_verified": true,
   "sandbox_json_sha256": "efaa00c5e6cda288f33b698920b3e988247e66fcec6b5abad539cc4e51945e5a",

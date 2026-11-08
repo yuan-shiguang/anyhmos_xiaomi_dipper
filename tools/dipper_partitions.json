@@ -1,0 +1,501 @@
+{
+  "device": "dipper",
+  "model": "Xiaomi Mi 8",
+  "source": "MIUI V12.5.2.0.QEACNXM (Android 10) images/partition.xml",
+  "slot_model": "single",
+  "note": "Android partitions are single-slot: boot/system/vendor/cust/modem/dsp/dtbo/vbmeta carry no _a/_b suffix. Only the bootloader chain is slotted. There is no super, vendor_boot, init_boot, system_ext, product, odm, vendor_dlkm or metadata partition.",
+  "bootloader_slotted": [
+    "abl",
+    "aop",
+    "cmnlib",
+    "cmnlib64",
+    "devcfg",
+    "hyp",
+    "keymaster",
+    "qupfw",
+    "storsec",
+    "tz",
+    "xbl",
+    "xbl_config"
+  ],
+  "absent": [
+    "super",
+    "vendor_boot",
+    "init_boot",
+    "system_ext",
+    "product",
+    "odm",
+    "vendor_dlkm",
+    "metadata",
+    "vbmeta_system"
+  ],
+  "partitions": [
+    {
+      "label": "switch",
+      "size_kb": 16,
+      "size_bytes": 16384,
+      "image": "dummy.img",
+      "sparse": false
+    },
+    {
+      "label": "ssd",
+      "size_kb": 32,
+      "size_bytes": 32768,
+      "image": "",
+      "sparse": false
+    },
+    {
+      "label": "keystore",
+      "size_kb": 512,
+      "size_bytes": 524288,
+      "image": "",
+      "sparse": false
+    },
+    {
+      "label": "frp",
+      "size_kb": 512,
+      "size_bytes": 524288,
+      "image": "",
+      "sparse": false
+    },
+    {
+      "label": "misc",
+      "size_kb": 4096,
+      "size_bytes": 4194304,
+      "image": "misc.img",
+      "sparse": false,
+      "role": "bootloader-state"
+    },
+    {
+      "label": "logfs",
+      "size_kb": 8192,
+      "size_bytes": 8388608,
+      "image": "logfs_ufs_8mb.bin",
+      "sparse": false
+    },
+    {
+      "label": "oops",
+      "size_kb": 16384,
+      "size_bytes": 16777216,
+      "image": "",
+      "sparse": false
+    },
+    {
+      "label": "devinfo",
+      "size_kb": 16384,
+      "size_bytes": 16777216,
+      "image": "",
+      "sparse": false
+    },
+    {
+      "label": "persist",
+      "size_kb": 65536,
+      "size_bytes": 67108864,
+      "image": "",
+      "sparse": true,
+      "role": "firmware"
+    },
+    {
+      "label": "persistbak",
+      "size_kb": 65536,
+      "size_bytes": 67108864,
+      "image": "",
+      "sparse": true
+    },
+    {
+      "label": "logdump",
+      "size_kb": 65536,
+      "size_bytes": 67108864,
+      "image": "",
+      "sparse": false
+    },
+    {
+      "label": "minidump",
+      "size_kb": 131072,
+      "size_bytes": 134217728,
+      "image": "",
+      "sparse": false
+    },
+    {
+      "label": "cust",
+      "size_kb": 851968,
+      "size_bytes": 872415232,
+      "image": "cust.img",
+      "sparse": true,
+      "role": "compat-payload"
+    },
+    {
+      "label": "recovery",
+      "size_kb": 65536,
+      "size_bytes": 67108864,
+      "image": "recovery.img",
+      "sparse": false,
+      "role": "vendor-recovery"
+    },
+    {
+      "label": "cache",
+      "size_kb": 262144,
+      "size_bytes": 268435456,
+      "image": "cache.img",
+      "sparse": true,
+      "role": "scratch"
+    },
+    {
+      "label": "userdata",
+      "size_kb": 4194304,
+      "size_bytes": 4294967296,
+      "image": "userdata.img",
+      "sparse": true,
+      "role": "user-data"
+    },
+    {
+      "label": "xbl_config_a",
+      "size_kb": 512,
+      "size_bytes": 524288,
+      "image": "xbl_config.img",
+      "sparse": false
+    },
+    {
+      "label": "xbl_a",
+      "size_kb": 7168,
+      "size_bytes": 7340032,
+      "image": "xbl.img",
+      "sparse": false
+    },
+    {
+      "label": "xbl_config_b",
+      "size_kb": 512,
+      "size_bytes": 524288,
+      "image": "xbl_config.img",
+      "sparse": false
+    },
+    {
+      "label": "xbl_b",
+      "size_kb": 7168,
+      "size_bytes": 7340032,
+      "image": "xbl.img",
+      "sparse": false
+    },
+    {
+      "label": "cdt",
+      "size_kb": 128,
+      "size_bytes": 131072,
+      "image": "",
+      "sparse": false
+    },
+    {
+      "label": "ddr",
+      "size_kb": 1024,
+      "size_bytes": 1048576,
+      "image": null,
+      "sparse": false
+    },
+    {
+      "label": "sec",
+      "size_kb": 32,
+      "size_bytes": 32768,
+      "image": "",
+      "sparse": false
+    },
+    {
+      "label": "limits",
+      "size_kb": 32,
+      "size_bytes": 32768,
+      "image": "dummy.img",
+      "sparse": false
+    },
+    {
+      "label": "qupfw_a",
+      "size_kb": 128,
+      "size_bytes": 131072,
+      "image": "qupfw.img",
+      "sparse": false
+    },
+    {
+      "label": "qupfw_b",
+      "size_kb": 128,
+      "size_bytes": 131072,
+      "image": "qupfw.img",
+      "sparse": false
+    },
+    {
+      "label": "apdp",
+      "size_kb": 256,
+      "size_bytes": 262144,
+      "image": "",
+      "sparse": false
+    },
+    {
+      "label": "msadp",
+      "size_kb": 256,
+      "size_bytes": 262144,
+      "image": "",
+      "sparse": false
+    },
+    {
+      "label": "vbmeta",
+      "size_kb": 128,
+      "size_bytes": 131072,
+      "image": "",
+      "sparse": false
+    },
+    {
+      "label": "storsec_a",
+      "size_kb": 128,
+      "size_bytes": 131072,
+      "image": "storsec.img",
+      "sparse": false
+    },
+    {
+      "label": "storsec_b",
+      "size_kb": 128,
+      "size_bytes": 131072,
+      "image": "storsec.img",
+      "sparse": false
+    },
+    {
+      "label": "devcfg_a",
+      "size_kb": 256,
+      "size_bytes": 262144,
+      "image": "devcfg.img",
+      "sparse": false
+    },
+    {
+      "label": "devcfg_b",
+      "size_kb": 256,
+      "size_bytes": 262144,
+      "image": "devcfg.img",
+      "sparse": false
+    },
+    {
+      "label": "aop_a",
+      "size_kb": 512,
+      "size_bytes": 524288,
+      "image": "aop.img",
+      "sparse": false
+    },
+    {
+      "label": "aop_b",
+      "size_kb": 512,
+      "size_bytes": 524288,
+      "image": "aop.img",
+      "sparse": false
+    },
+    {
+      "label": "cmnlib_a",
+      "size_kb": 1024,
+      "size_bytes": 1048576,
+      "image": "cmnlib.img",
+      "sparse": false
+    },
+    {
+      "label": "cmnlib_b",
+      "size_kb": 1024,
+      "size_bytes": 1048576,
+      "image": "cmnlib.img",
+      "sparse": false
+    },
+    {
+      "label": "cmnlib64_a",
+      "size_kb": 1024,
+      "size_bytes": 1048576,
+      "image": "cmnlib64.img",
+      "sparse": false
+    },
+    {
+      "label": "cmnlib64_b",
+      "size_kb": 1024,
+      "size_bytes": 1048576,
+      "image": "cmnlib64.img",
+      "sparse": false
+    },
+    {
+      "label": "keymaster_a",
+      "size_kb": 1024,
+      "size_bytes": 1048576,
+      "image": "keymaster.img",
+      "sparse": false
+    },
+    {
+      "label": "keymaster_b",
+      "size_kb": 1024,
+      "size_bytes": 1048576,
+      "image": "keymaster.img",
+      "sparse": false
+    },
+    {
+      "label": "bluetooth",
+      "size_kb": 1024,
+      "size_bytes": 1048576,
+      "image": "bluetooth.img",
+      "sparse": false,
+      "role": "firmware-vfat"
+    },
+    {
+      "label": "hyp_a",
+      "size_kb": 1024,
+      "size_bytes": 1048576,
+      "image": "hyp.img",
+      "sparse": false
+    },
+    {
+      "label": "hyp_b",
+      "size_kb": 1024,
+      "size_bytes": 1048576,
+      "image": "hyp.img",
+      "sparse": false
+    },
+    {
+      "label": "dip",
+      "size_kb": 1024,
+      "size_bytes": 1048576,
+      "image": "",
+      "sparse": false
+    },
+    {
+      "label": "sti",
+      "size_kb": 2048,
+      "size_bytes": 2097152,
+      "image": "",
+      "sparse": false
+    },
+    {
+      "label": "toolsfv",
+      "size_kb": 2048,
+      "size_bytes": 2097152,
+      "image": "",
+      "sparse": false
+    },
+    {
+      "label": "abl_a",
+      "size_kb": 2048,
+      "size_bytes": 2097152,
+      "image": "abl.img",
+      "sparse": false
+    },
+    {
+      "label": "abl_b",
+      "size_kb": 2048,
+      "size_bytes": 2097152,
+      "image": "abl.img",
+      "sparse": false
+    },
+    {
+      "label": "tz_a",
+      "size_kb": 4096,
+      "size_bytes": 4194304,
+      "image": "tz.img",
+      "sparse": false
+    },
+    {
+      "label": "tz_b",
+      "size_kb": 4096,
+      "size_bytes": 4194304,
+      "image": "tz.img",
+      "sparse": false
+    },
+    {
+      "label": "fsg",
+      "size_kb": 8192,
+      "size_bytes": 8388608,
+      "image": "",
+      "sparse": false
+    },
+    {
+      "label": "dtbo",
+      "size_kb": 8192,
+      "size_bytes": 8388608,
+      "image": "",
+      "sparse": false
+    },
+    {
+      "label": "spunvm",
+      "size_kb": 8192,
+      "size_bytes": 8388608,
+      "image": "",
+      "sparse": false
+    },
+    {
+      "label": "splash",
+      "size_kb": 32768,
+      "size_bytes": 33554432,
+      "image": "",
+      "sparse": false
+    },
+    {
+      "label": "logo",
+      "size_kb": 32768,
+      "size_bytes": 33554432,
+      "image": "logo.img",
+      "sparse": false
+    },
+    {
+      "label": "dsp",
+      "size_kb": 32768,
+      "size_bytes": 33554432,
+      "image": "dsp.img",
+      "sparse": false,
+      "role": "firmware"
+    },
+    {
+      "label": "boot",
+      "size_kb": 65536,
+      "size_bytes": 67108864,
+      "image": "boot.img",
+      "sparse": false,
+      "role": "kernel-and-ramdisk"
+    },
+    {
+      "label": "modem",
+      "size_kb": 196608,
+      "size_bytes": 201326592,
+      "image": "modem.img",
+      "sparse": false,
+      "role": "firmware"
+    },
+    {
+      "label": "vendor",
+      "size_kb": 1048576,
+      "size_bytes": 1073741824,
+      "image": "vendor.img",
+      "sparse": true,
+      "role": "harmonyos-vendor"
+    },
+    {
+      "label": "system",
+      "size_kb": 3145728,
+      "size_bytes": 3221225472,
+      "image": "system.img",
+      "sparse": true,
+      "role": "harmonyos-system"
+    },
+    {
+      "label": "fsc",
+      "size_kb": 256,
+      "size_bytes": 262144,
+      "image": "",
+      "sparse": false
+    },
+    {
+      "label": "ImageFv",
+      "size_kb": 2048,
+      "size_bytes": 2097152,
+      "image": "imagefv.elf",
+      "sparse": false
+    },
+    {
+      "label": "modemst1",
+      "size_kb": 8192,
+      "size_bytes": 8388608,
+      "image": "",
+      "sparse": false
+    },
+    {
+      "label": "modemst2",
+      "size_kb": 8192,
+      "size_bytes": 8388608,
+      "image": "",
+      "sparse": false
+    }
+  ]
+}

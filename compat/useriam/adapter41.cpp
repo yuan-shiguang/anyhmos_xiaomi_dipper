@@ -1,14 +1,14 @@
-// Private sheng adaptation; generated signatures from pinned OpenHarmony IDL.
+// Private dipper adaptation; generated signatures from pinned OpenHarmony IDL.
 // AnyHarmonyOS software backend retains its upstream Apache-2.0 license.
 #include "user_auth/v4_1/iuser_auth_interface.h"
 #include <dlfcn.h>
 #include <new>
 using namespace OHOS;
 using Base=HDI::UserAuth::V4_0::IUserAuthInterface;
-class ShengUserAuth41 final : public HDI::UserAuth::V4_1::IUserAuthInterface {
+class DipperUserAuth41 final : public HDI::UserAuth::V4_1::IUserAuthInterface {
  sptr<Base> base_;
 public:
- explicit ShengUserAuth41(Base *base):base_(base){}
+ explicit DipperUserAuth41(Base *base):base_(base){}
  int32_t BeginAuthenticationExt(uint64_t contextId, const OHOS::HDI::UserAuth::V4_1::AuthParamExt& param, std::vector<OHOS::HDI::UserAuth::V4_0::ScheduleInfo>& scheduleInfos) override {(void)contextId;(void)param;(void)scheduleInfos;return -8;}
  int32_t BeginEnrollmentExt(const std::vector<uint8_t>& authToken, const OHOS::HDI::UserAuth::V4_1::EnrollParamExt& param, OHOS::HDI::UserAuth::V4_0::ScheduleInfo& info) override {(void)authToken;(void)param;(void)info;return -8;}
  int32_t Init(const std::string& deviceUdid) override {return base_->Init(deviceUdid);}
@@ -49,10 +49,10 @@ public:
  int32_t ClearUnavailableCredential(const std::vector<int32_t>& userIds, std::vector<OHOS::HDI::UserAuth::V4_0::CredentialInfo>& infos) override {return base_->ClearUnavailableCredential(userIds,infos);}
 };
 extern "C" HDI::UserAuth::V4_1::IUserAuthInterface *UserAuthInterfaceImplGetInstance(){
- static void *lib=dlopen("/compat/lib64/libsheng_userauth_4_0.so",RTLD_NOW|RTLD_LOCAL);
+ static void *lib=dlopen("/compat/lib64/libdipper_userauth_4_0.so",RTLD_NOW|RTLD_LOCAL);
  if(!lib)return nullptr;
  auto factory=reinterpret_cast<Base*(*)()>(dlsym(lib,"UserAuthInterfaceImplGetInstance"));
  if(!factory)return nullptr;
  Base *base=factory();if(!base)return nullptr;
- return new(std::nothrow) ShengUserAuth41(base);
+ return new(std::nothrow) DipperUserAuth41(base);
 }

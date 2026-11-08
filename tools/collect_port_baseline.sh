@@ -2,7 +2,7 @@
 # 只读采集显示、GPU 和容器依赖状态
 B=/busybox
 R=/hmos-root
-echo SHENG_PORT_BASELINE_BEGIN
+echo DIPPER_PORT_BASELINE_BEGIN
 $B uname -r
 $B chroot "$R" /system/bin/param get bootevent.boot.completed
 for p in /sys/class/drm/card*-DSI-*/modes /sys/class/drm/card*-DSI-*/status \
@@ -22,5 +22,5 @@ for p in "$R/dev/kvm" "$R/dev/binder" "$R/dev/hwbinder" "$R/dev/vndbinder" \
  if [ -e "$p" ]; then $B ls -l "$p"; else echo "MISSING=$p"; fi
 done
 $B ls -l /proc/self/ns
-$B tail -12 "$R/data/local/tmp/sheng-composer-metrics.txt"
-echo SHENG_PORT_BASELINE_END
+$B tail -12 "$R/data/local/tmp/dipper-composer-metrics.txt"
+echo DIPPER_PORT_BASELINE_END

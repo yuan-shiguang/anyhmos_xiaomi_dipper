@@ -2,8 +2,8 @@
 # ADSP就绪后在独立根目录启动原传感器进程
 set -eu
 B=/busybox
-PACKAGE=${SENSOR_STARTUP_PACKAGE:-/sheng-sensors}
-STATE=${SENSOR_DATA_DIR:-/hmos-root/data/service/el1/public/sheng_sensors}
+PACKAGE=${SENSOR_STARTUP_PACKAGE:-/dipper-sensors}
+STATE=${SENSOR_DATA_DIR:-/hmos-root/data/service/el1/public/dipper_sensors}
 L=/hmos-root/system/lib/ld-musl-aarch64.so.1
 
 if [ "${1-}" != private ]; then

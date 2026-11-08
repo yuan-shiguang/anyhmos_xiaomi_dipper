@@ -75,7 +75,7 @@ index 7b18dcf24f..e8132ae8c7 100644
  
  VKAPI_ATTR VkResult VKAPI_CALL
 -tu_AllocateMemory(VkDevice _device,
-+sheng_observed_tu_AllocateMemory(VkDevice _device,
++dipper_observed_tu_AllocateMemory(VkDevice _device,
                    const VkMemoryAllocateInfo *pAllocateInfo,
                    const VkAllocationCallbacks *pAllocator,
                    VkDeviceMemory *pMem)
@@ -108,7 +108,7 @@ index 7b18dcf24f..e8132ae8c7 100644
 +         if (blob) {
 +            static unsigned blobs = 0;
 +            unsigned n = __atomic_add_fetch(&blobs, 1, __ATOMIC_RELAXED);
-+            if(n<=12 || n%256==0)fprintf(stderr,"SHENG_BLOB_IMPORT n=%u bytes=%d requested=%llu backing=%llu\n",n,h->width,(unsigned long long)pAllocateInfo->allocationSize,(unsigned long long)mem->bo->size);
++            if(n<=12 || n%256==0)fprintf(stderr,"DIPPER_BLOB_IMPORT n=%u bytes=%d requested=%llu backing=%llu\n",n,h->width,(unsigned long long)pAllocateInfo->allocationSize,(unsigned long long)mem->bo->size);
 +         }
 +         mem->ohos_handle = *h;
 +         mem->ohos_import = true;
@@ -153,19 +153,19 @@ index 7b18dcf24f..e8132ae8c7 100644
 +                  const VkAllocationCallbacks *alloc, VkDeviceMemory *memory)
 +{
 +   VK_FROM_HANDLE(tu_device, device, handle);
-+   VkResult result = sheng_observed_tu_AllocateMemory(handle, info, alloc, memory);
++   VkResult result = dipper_observed_tu_AllocateMemory(handle, info, alloc, memory);
 +   static unsigned calls = 0, failures = 0;
 +   unsigned n = __atomic_add_fetch(&calls, 1, __ATOMIC_RELAXED);
 +   if (n <= 12 || n % 64 == 0 || (result != VK_SUCCESS && __atomic_add_fetch(&failures, 1, __ATOMIC_RELAXED) <= 32)) {
 +      const auto *native = vk_find_struct_const(info->pNext, IMPORT_NATIVE_BUFFER_INFO_OHOS);
 +      const auto *h = native ? OH_NativeBuffer_GetBufferHandle(native->buffer) : nullptr;
-+      fprintf(stderr, "SHENG_ALLOC n=%u result=%d requested=%llu type=%u heap_used=%llu heap_size=%llu native=%p fd=%d native_size=%d\n",
++      fprintf(stderr, "DIPPER_ALLOC n=%u result=%d requested=%llu type=%u heap_used=%llu heap_size=%llu native=%p fd=%d native_size=%d\n",
 +              n, result, (unsigned long long)info->allocationSize, info->memoryTypeIndex,
 +              (unsigned long long)p_atomic_read(&device->physical_device->heap.used),
 +              (unsigned long long)device->physical_device->heap.size,
 +              native ? (const void*)native->buffer : nullptr, h ? h->fd : -1, h ? h->size : -1);
 +      if (h && result != VK_SUCCESS)
-+         fprintf(stderr, "SHENG_ALLOC_NATIVE n=%u valid=%d width=%d height=%d stride=%d format=%d usage=%llx reserve=%u/%u\n",
++         fprintf(stderr, "DIPPER_ALLOC_NATIVE n=%u valid=%d width=%d height=%d stride=%d format=%d usage=%llx reserve=%u/%u\n",
 +                 n, tu_ohos_valid_handle(h), h->width, h->height, h->stride, h->format,
 +                 (unsigned long long)h->usage, h->reserveFds, h->reserveInts);
 +
@@ -228,7 +228,7 @@ index da5e1e520a..68881d12ed 100644
  
  VKAPI_ATTR VkResult VKAPI_CALL
 -tu_CreateImage(VkDevice _device,
-+sheng_observed_tu_CreateImage(VkDevice _device,
++dipper_observed_tu_CreateImage(VkDevice _device,
                 const VkImageCreateInfo *pCreateInfo,
                 const VkAllocationCallbacks *alloc,
                 VkImage *pImage)
@@ -311,11 +311,11 @@ index da5e1e520a..68881d12ed 100644
 +tu_CreateImage(VkDevice device, const VkImageCreateInfo *info,
 +               const VkAllocationCallbacks *alloc, VkImage *image)
 +{
-+   VkResult result = sheng_observed_tu_CreateImage(device, info, alloc, image);
++   VkResult result = dipper_observed_tu_CreateImage(device, info, alloc, image);
 +   static unsigned calls = 0, failures = 0;
 +   unsigned n = __atomic_add_fetch(&calls, 1, __ATOMIC_RELAXED);
 +   if (n <= 12 || (result != VK_SUCCESS && __atomic_add_fetch(&failures, 1, __ATOMIC_RELAXED) <= 32))
-+      fprintf(stderr, "SHENG_CREATE n=%u result=%d size=%ux%u format=%u usage=%x tiling=%u image=%p\n",
++      fprintf(stderr, "DIPPER_CREATE n=%u result=%d size=%ux%u format=%u usage=%x tiling=%u image=%p\n",
 +              n, result, info->extent.width, info->extent.height, info->format,
 +              info->usage, info->tiling, result == VK_SUCCESS ? (void*)*image : nullptr);
 +   return result;

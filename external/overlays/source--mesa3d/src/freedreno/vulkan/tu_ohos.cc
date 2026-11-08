@@ -49,7 +49,7 @@ bool tu_ohos_valid_handle(const Ace5OHBufferHandle *h) {
 }
 VkResult tu_ohos_bind_layout(tu_device *device,tu_image *image,const Ace5OHBufferHandle *h) {
  bool valid=tu_ohos_valid_handle(h);
- fprintf(stderr,"SHENG_BIND valid=%d vkformat=%u nativeformat=%d vkextent=%ux%u native=%dx%d stride=%d size=%d samples=%u flags=%x\n",valid,image->vk.format,h?h->format:-1,image->vk.extent.width,image->vk.extent.height,h?h->width:-1,h?h->height:-1,h?h->stride:-1,h?h->size:-1,image->vk.samples,image->vk.create_flags);
+ fprintf(stderr,"DIPPER_BIND valid=%d vkformat=%u nativeformat=%d vkextent=%ux%u native=%dx%d stride=%d size=%d samples=%u flags=%x\n",valid,image->vk.format,h?h->format:-1,image->vk.extent.width,image->vk.extent.height,h?h->width:-1,h?h->height:-1,h?h->stride:-1,h?h->size:-1,image->vk.samples,image->vk.create_flags);
  if(!valid || image->vk.format!=ohos_format(h->format) ||
     image->vk.extent.width!=unsigned(h->width) || image->vk.extent.height!=unsigned(h->height) ||
     image->vk.samples!=VK_SAMPLE_COUNT_1_BIT || image->vk.create_flags&VK_IMAGE_CREATE_PROTECTED_BIT)
@@ -64,7 +64,7 @@ VkResult tu_ohos_bind_layout(tu_device *device,tu_image *image,const Ace5OHBuffe
   planes[1].size=planes[2].size=chromaSize;
  }
  VkResult result=TU_CALLX(device,tu_image_update_layout)(device,image,DRM_FORMAT_MOD_LINEAR,planes);
- fprintf(stderr,"SHENG_BIND layout_result=%d total_size=%llu native_size=%d\n",result,(unsigned long long)image->total_size,h->size);
+ fprintf(stderr,"DIPPER_BIND layout_result=%d total_size=%llu native_size=%d\n",result,(unsigned long long)image->total_size,h->size);
  if(result!=VK_SUCCESS)return result;
  return image->total_size<=unsigned(h->size)?VK_SUCCESS:VK_ERROR_INVALID_EXTERNAL_HANDLE;
 }
@@ -88,12 +88,12 @@ VkResult tu_ohos_import_image(tu_device *device,tu_image *image,const VkNativeBu
  VkBindImageMemoryInfo bind={VK_STRUCTURE_TYPE_BIND_IMAGE_MEMORY_INFO};bind.image=tu_image_to_handle(image);bind.memory=image->vk.anb_memory;
  return tu_BindImageMemory2(tu_device_to_handle(device),1,&bind);
 }
-VKAPI_ATTR VkResult VKAPI_CALL sheng_observed_tu_GetNativeBufferPropertiesOHOS(VkDevice dev,const OH_NativeBuffer *buffer,VkNativeBufferPropertiesOHOS *out) {
+VKAPI_ATTR VkResult VKAPI_CALL dipper_observed_tu_GetNativeBufferPropertiesOHOS(VkDevice dev,const OH_NativeBuffer *buffer,VkNativeBufferPropertiesOHOS *out) {
  VK_FROM_HANDLE(tu_device,device,dev);
  auto *h=OH_NativeBuffer_GetBufferHandle(buffer);
  if(!out || (!tu_ohos_valid_handle(h) && !tu_ohos_valid_blob_handle(h))) {
   static unsigned invalid_count=0;
-  if(invalid_count++<48)fprintf(stderr,"SHENG_NATIVE_INVALID handle=%p fd=%d native=%dx%d format=%d stride=%d size=%d usage=%llx reserve=%u/%u out=%p\n",(const void*)h,h?h->fd:-1,h?h->width:-1,h?h->height:-1,h?h->format:-1,h?h->stride:-1,h?h->size:-1,(unsigned long long)(h?h->usage:0),h?h->reserveFds:0,h?h->reserveInts:0,(void*)out);
+  if(invalid_count++<48)fprintf(stderr,"DIPPER_NATIVE_INVALID handle=%p fd=%d native=%dx%d format=%d stride=%d size=%d usage=%llx reserve=%u/%u out=%p\n",(const void*)h,h?h->fd:-1,h?h->width:-1,h?h->height:-1,h?h->format:-1,h?h->stride:-1,h?h->size:-1,(unsigned long long)(h?h->usage:0),h?h->reserveFds:0,h?h->reserveInts:0,(void*)out);
   return VK_ERROR_INVALID_EXTERNAL_HANDLE;
  }
  out->allocationSize=h->size;out->memoryTypeBits=0;
@@ -288,11 +288,11 @@ VKAPI_ATTR VkResult VKAPI_CALL
 tu_GetNativeBufferPropertiesOHOS(VkDevice device, const OH_NativeBuffer *buffer,
                                  VkNativeBufferPropertiesOHOS *out)
 {
-   VkResult result = sheng_observed_tu_GetNativeBufferPropertiesOHOS(device, buffer, out);
+   VkResult result = dipper_observed_tu_GetNativeBufferPropertiesOHOS(device, buffer, out);
    static unsigned calls = 0, failures = 0;
    unsigned n = __atomic_add_fetch(&calls, 1, __ATOMIC_RELAXED);
    if (n <= 12 || (result != VK_SUCCESS && __atomic_add_fetch(&failures, 1, __ATOMIC_RELAXED) <= 32))
-      fprintf(stderr, "SHENG_PROPERTIES n=%u result=%d native=%p size=%llu types=%x\n",
+      fprintf(stderr, "DIPPER_PROPERTIES n=%u result=%d native=%p size=%llu types=%x\n",
               n, result, (const void*)buffer, out ? (unsigned long long)out->allocationSize : 0,
               out ? out->memoryTypeBits : 0);
    return result;

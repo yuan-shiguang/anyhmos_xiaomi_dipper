@@ -4,9 +4,9 @@
  */
 .text
 .p2align 2
-.global sheng_memavailable_kb
-.type sheng_memavailable_kb,%function
-sheng_memavailable_kb:
+.global dipper_memavailable_kb
+.type dipper_memavailable_kb,%function
+dipper_memavailable_kb:
     pacibsp
     sub sp, sp, #4096
     stp x29, x30, [sp, #-16]!
@@ -95,4 +95,4 @@ proc_path:
     .asciz "/proc/meminfo"
 mem_key:
     .ascii "MemAvailable:"
-.size sheng_memavailable_kb, .-sheng_memavailable_kb
+.size dipper_memavailable_kb, .-dipper_memavailable_kb

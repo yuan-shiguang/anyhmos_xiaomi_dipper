@@ -1,4 +1,4 @@
-/* SPDX-License-Identifier: MIT - optional, explicitly staged sheng HDF trial. */
+/* SPDX-License-Identifier: MIT - optional, explicitly staged dipper HDF trial. */
 static int copy_ram_asset(const char *source,const char *target,mode_t mode) {
     if(strncmp(target,"/hmos-root/",11)){errno=EINVAL;return -1;}
     if(!strncmp(target,"/hmos-root/vendor/",18)||!strncmp(target,"/hmos-root/vendor_dlkm/",23)){errno=EROFS;return -1;}
@@ -30,19 +30,19 @@ static int graphics_ram_root(void) {
     for(unsigned i=0;i<2;i++)if(copy_ram_asset("/hmos-hdf-graphics.hcb",configs[i],0644)<0)return -1;
     if(copy_ram_asset("/graphics/libdisplay_composer_vdi_impl.z.so","/hmos-root/compat/lib64/libdisplay_composer_vdi_impl.z.so",0644)<0||
        copy_ram_asset("/graphics/libdisplay_buffer_vdi_impl.z.so","/hmos-root/compat/lib64/libdisplay_buffer_vdi_impl.z.so",0644)<0)return -1;
-    const char *tests[]={"libdisplay_composer_vdi_impl.z.so","libdisplay_buffer_vdi_impl.z.so","sheng_display_scanout","sheng_kms_diagnostic","sheng_hdi_query","sheng_hdi_smq","sheng_hdi_scanout","libvulkan_freedreno.so.gz"};
-    for(unsigned i=0;i<sizeof(tests)/sizeof(tests[0]);i++){char source[256],target[256];snprintf(source,sizeof(source),"/graphics/%s",tests[i]);snprintf(target,sizeof(target),"/hmos-root/data/local/tmp/sheng-graphics/%s",tests[i]);if(copy_ram_asset(source,target,0755)<0)return -1;}
-    if(copy_ram_asset("/graphics/sheng-turnip.json","/hmos-root/compat/etc/vulkan/icd.d/sheng-turnip.json",0644)<0||
-       copy_ram_asset("/graphics/sheng-turnip.json","/hmos-root/data/local/tmp/sheng-turnip.json",0644)<0)return -1;
+    const char *tests[]={"libdisplay_composer_vdi_impl.z.so","libdisplay_buffer_vdi_impl.z.so","dipper_display_scanout","dipper_kms_diagnostic","dipper_hdi_query","dipper_hdi_smq","dipper_hdi_scanout","libvulkan_freedreno.so.gz"};
+    for(unsigned i=0;i<sizeof(tests)/sizeof(tests[0]);i++){char source[256],target[256];snprintf(source,sizeof(source),"/graphics/%s",tests[i]);snprintf(target,sizeof(target),"/hmos-root/data/local/tmp/dipper-graphics/%s",tests[i]);if(copy_ram_asset(source,target,0755)<0)return -1;}
+    if(copy_ram_asset("/graphics/dipper-turnip.json","/hmos-root/compat/etc/vulkan/icd.d/dipper-turnip.json",0644)<0||
+       copy_ram_asset("/graphics/dipper-turnip.json","/hmos-root/data/local/tmp/dipper-turnip.json",0644)<0)return -1;
     if(copy_ram_asset("/graphics/foundation-screen-only.json","/hmos-root/system/profile/foundation.json",0644)<0)return -1;
     if(copy_ram_asset("/graphics/locationhub-state.json","/hmos-root/system/profile/locationhub.json",0644)<0)return -1;
-    const char *boot_assets[]={"bootanimation-real","bootanimation-launcher","libsheng_boot_vulkan.so"};
+    const char *boot_assets[]={"bootanimation-real","bootanimation-launcher","libdipper_boot_vulkan.so"};
     for(unsigned i=0;i<sizeof(boot_assets)/sizeof(boot_assets[0]);i++){
         char source[256],target[256];snprintf(source,sizeof(source),"/graphics/%s",boot_assets[i]);
         snprintf(target,sizeof(target),"/hmos-root/compat/%s/%s",strstr(boot_assets[i],".so")?"lib64":"bin",boot_assets[i]);
         if(copy_ram_asset(source,target,0755)<0)return -1;
     }
-    const char *boot_log="/hmos-root/data/local/tmp/sheng-graphics/bootanimation-adapter.log";
+    const char *boot_log="/hmos-root/data/local/tmp/dipper-graphics/bootanimation-adapter.log";
     if(textfile(boot_log,"")<0||chown(boot_log,1003,1003)<0||chmod(boot_log,0600)<0)return -1;
     const char *loader_configs[]={"ld-musl-aarch64.path","ld-musl-namespace-aarch64.ini","ld-musl-namespace-aarch64-New.ini","ld-musl-namespace-aarch64-flex.ini","ld-musl-namespace-aarch64-test.ini"};
     for(unsigned i=0;i<sizeof(loader_configs)/sizeof(loader_configs[0]);i++){
@@ -54,7 +54,7 @@ static int graphics_ram_root(void) {
     if(graphics_run_script("/graphics/apply-render-usage.sh")<0)return -1;
     if(graphics_run_script("/graphics/apply-framework-dev.sh")<0)return -1;
     if(graphics_run_script("/graphics/apply-account-hmac.sh")<0)return -1;
-    if(copy_ram_asset("/graphics/libsheng_el5_unavailable.so","/hmos-root/compat/lib64/libsheng_el5_unavailable.so",0644)<0)return -1;
+    if(copy_ram_asset("/graphics/libdipper_el5_unavailable.so","/hmos-root/compat/lib64/libdipper_el5_unavailable.so",0644)<0)return -1;
     if(copy_ram_asset("/graphics/libwifi_sdk.z.so","/hmos-root/compat/lib64/libwifi_sdk.z.so",0644)<0)return -1;
     if(mount("/hmos-root/compat/lib64/libwifi_sdk.z.so","/hmos-root/system/lib64/platformsdk/libwifi_sdk.z.so",NULL,MS_BIND,NULL)<0)return -1;
     note("SYSTEM_WIFI_SDK_COMPAT_BIND: real WiFi proxy with nonblocking missing-SA lookup; vendor untouched");
@@ -74,18 +74,18 @@ static int graphics_ram_root(void) {
     if(copy_ram_asset("/graphics/native_display_wake","/hmos-root/compat/bin/native_display_wake",0755)<0)return -1;
     if(graphics_run_script("/graphics/apply-useriam.sh")<0||copy_ram_asset("/graphics/useriam-core.json","/hmos-root/compat/etc/useriam-core.json",0644)<0)return -1;
     note("SYSTEM_PRIVACY_SDK_COMPAT_BIND: original nonblocking SA66090 query; vendor untouched");
-    if(copy_ram_asset("/graphics/libsheng_ram_no_tee.so","/hmos-root/compat/lib64/libsheng_ram_no_tee.so",0644)<0)return -1;
+    if(copy_ram_asset("/graphics/libdipper_ram_no_tee.so","/hmos-root/compat/lib64/libdipper_ram_no_tee.so",0644)<0)return -1;
     if(copy_ram_asset("/graphics/init-desktop-services.cfg","/hmos-root/compat/etc/init-desktop-services.cfg",0644)<0||copy_ram_asset("/graphics/storage-ram-launcher","/hmos-root/compat/bin/storage-ram-launcher",0755)<0)return -1;
     if(copy_ram_asset("/graphics/installs-debug-start.json","/hmos-root/system/profile/installs.json",0644)<0||
        copy_ram_asset("/graphics/foundation-app-core.json","/hmos-root/data/local/tmp/foundation-app-core.json",0644)<0||
-       copy_ram_asset("/graphics/capture_scanout","/hmos-root/data/local/tmp/sheng-graphics/capture_scanout",0755)<0)return -1;
+       copy_ram_asset("/graphics/capture_scanout","/hmos-root/data/local/tmp/dipper-graphics/capture_scanout",0755)<0)return -1;
     DIR *firmware=opendir("/stock-gpu-firmware");if(!firmware)return -1;struct dirent *entry;int result=0;
     while((entry=readdir(firmware))){if(entry->d_name[0]=='.')continue;char source[512],target[512];snprintf(source,sizeof(source),"/stock-gpu-firmware/%s",entry->d_name);snprintf(target,sizeof(target),"/hmos-root/compat/firmware/%s",entry->d_name);if(copy_ram_asset(source,target,0644)<0){result=-1;break;}}closedir(firmware);if(result<0)return -1;
     if(put("/sys/module/firmware_class/parameters/path","/compat/firmware")<0)return -1;
     if(copy_ram_asset("/graphics/native_input_dispatch","/hmos-root/compat/bin/native_input_dispatch",0755)<0||
        copy_ram_asset("/graphics/native_render_launcher","/hmos-root/compat/bin/native_render_launcher",0755)<0||
        copy_ram_asset("/hmos-root/system/bin/uinput","/hmos-root/compat/bin/uinput-original",0755)<0)return -1;
-    if(copy_ram_asset("/graphics/libsheng_surface_diagnostic.so","/hmos-root/compat/lib64/libsheng_surface_diagnostic.so",0644)<0)return -1;
+    if(copy_ram_asset("/graphics/libdipper_surface_diagnostic.so","/hmos-root/compat/lib64/libdipper_surface_diagnostic.so",0644)<0)return -1;
     if(copy_ram_asset("/graphics/wifi-manager-eager.json","/hmos-root/system/profile/wifi_manager_service.json",0644)<0)return -1;
     if(copy_ram_asset("/graphics/pasteboard-service-eager.json","/hmos-root/system/profile/pasteboard_service.json",0644)<0||
        copy_ram_asset("/graphics/msdp-input-only.json","/hmos-root/system/profile/msdp.json",0644)<0)return -1;
@@ -95,16 +95,17 @@ static int graphics_ram_root(void) {
         snprintf(target,sizeof(target),"/hmos-root/system/profile/%s",framework_profiles[i]);
         if(copy_ram_asset(source,target,0644)<0)return -1;
     }
-    const char *wifi_assets[]={"init-platform-v116.cfg","init-wifi-v116.cfg","stage-wifi-ram.sh","load-official303-cnss2.sh","load-official303-qrtr-mhi.sh","load-official303-qca_cld3_kiwi_v2.sh","official303-wlan-configs.tar.gz","start-wifi-v116.sh","nl80211_probe","native_wifi_hal_probe"};
+    const char *wifi_assets[]={"init-platform-v116.cfg","init-wifi-v116.cfg","stage-wifi-ram.sh","start-wifi-v116.sh"};
     for(unsigned i=0;i<sizeof(wifi_assets)/sizeof(wifi_assets[0]);i++){
         char source[256],target[256];snprintf(source,sizeof(source),"/graphics/%s",wifi_assets[i]);
         snprintf(target,sizeof(target),"/hmos-root/compat/%s/%s",strstr(wifi_assets[i],".cfg")?"etc":"bin",wifi_assets[i]);
         if(copy_ram_asset(source,target,0755)<0)return -1;
     }
-    const char *render_logs[]={"/hmos-root/data/local/tmp/sheng-render-stderr.txt","/hmos-root/data/local/tmp/sheng-mesa.txt"};
+    const char *render_logs[]={"/hmos-root/data/local/tmp/dipper-render-stderr.txt","/hmos-root/data/local/tmp/dipper-mesa.txt"};
     for(unsigned i=0;i<2;i++)if(textfile(render_logs[i],"")<0||chown(render_logs[i],1003,1003)<0||chmod(render_logs[i],0600)<0)return -1;
-    const char *input_log="/hmos-root/data/local/tmp/sheng-input-last.log";
+    const char *input_log="/hmos-root/data/local/tmp/dipper-input-last.log";
     if(textfile(input_log,"")<0||chown(input_log,2000,2000)<0||chmod(input_log,0600)<0)return -1;
+    if(graphics_run_script("/graphics/stage-device-firmware.sh")<0)return -1;
     if(graphics_run_script("/graphics/apply-touch.sh")<0)return -1;
     if(graphics_run_script("/graphics/apply-runtime-v116.sh")<0)return -1;
     if(graphics_run_script("/graphics/apply-msdp-local-v1.sh")<0)return -1;

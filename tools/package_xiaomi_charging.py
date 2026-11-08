@@ -8,7 +8,7 @@ from pathlib import Path
 import vendor_ramdisk_edit as editor
 
 ROOT = Path(__file__).resolve().parent.parent
-PREFIX = 'sheng-compat-v118/'
+PREFIX = 'dipper-compat-v118/'
 DIRECTORY = PREFIX + 'graphics/xiaomi-charging'
 AUDIO = PREFIX + 'graphics/start-audio-v116.sh'
 MANIFEST = PREFIX + 'MANIFEST.json'
@@ -48,7 +48,7 @@ def package(args):
         'android.hardware.health@1.0.so': (
             args.payload / 'android.hardware.health@1.0.so', 0o100644,
         ),
-        'libsheng_batterysecret_process.so': (args.shim, 0o100644),
+        'libdipper_batterysecret_process.so': (args.shim, 0o100644),
         'start-xiaomi-charging.sh': (
             ROOT / 'runtime/compat/graphics/start-xiaomi-charging.sh', 0o100755,
         ),

@@ -1,9 +1,9 @@
-#ifndef SHENG_BATTERY_CHARGE_ADAPTER_H
-#define SHENG_BATTERY_CHARGE_ADAPTER_H
+#ifndef DIPPER_BATTERY_CHARGE_ADAPTER_H
+#define DIPPER_BATTERY_CHARGE_ADAPTER_H
 
 #include "battery/v2_0/ibattery_interface.h"
 
-namespace Sheng::Charging {
+namespace Dipper::Charging {
 namespace Battery = OHOS::HDI::Battery::V2_0;
 
 struct ChargeSnapshot {
@@ -22,6 +22,6 @@ ChargeSnapshot ReadRealChargeSnapshot();
 OHOS::sptr<Battery::IBatteryInterface> MakeBatteryChargeAdapter(
     const OHOS::sptr<Battery::IBatteryInterface>& original,
     SnapshotReader reader = ReadRealChargeSnapshot);
-} // namespace Sheng::Charging
+} // namespace Dipper::Charging
 
 #endif

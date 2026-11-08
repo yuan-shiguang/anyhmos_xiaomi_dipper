@@ -42,7 +42,7 @@ static bool OpenLog(const char *boot_id)
 {
     char path[160];
     const int length = std::snprintf(path, sizeof(path),
-        "/data/local/tmp/sheng-capture/powermgr-wake-%s-%d.txt", boot_id, getpid());
+        "/data/local/tmp/dipper-capture/powermgr-wake-%s-%d.txt", boot_id, getpid());
     if (length <= 0 || static_cast<size_t>(length) >= sizeof(path)) {
         return false;
     }

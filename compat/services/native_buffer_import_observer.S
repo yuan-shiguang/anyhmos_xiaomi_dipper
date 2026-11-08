@@ -13,7 +13,7 @@ _ZN4OHOS5Rosen17NativeBufferUtils34MakeBackendTextureFromNativeBufferEP18NativeW
     stp x4, x5, [sp, #32]
     stp x6, x7, [sp, #48]
     str x8, [sp, #64]
-    bl ShengResolveBufferImport
+    bl DipperResolveBufferImport
     mov x16, x0
     ldp x0, x1, [sp]
     ldp x2, x3, [sp, #16]
@@ -27,7 +27,7 @@ _ZN4OHOS5Rosen17NativeBufferUtils34MakeBackendTextureFromNativeBufferEP18NativeW
     ldr w2, [sp, #8]
     ldr w3, [sp, #16]
     ldr w4, [sp, #24]
-    bl ShengObserveBufferImport
+    bl DipperObserveBufferImport
     ldp x0, x1, [sp, #112]
     ldp x29, x30, [sp, #96]
     add sp, sp, #128

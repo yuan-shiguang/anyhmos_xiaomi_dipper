@@ -24,7 +24,7 @@ namespace Sensor = OHOS::HDI::Sensor::V3_1;
 namespace {
 constexpr char SERVICE_NAME[] = "sensor_interface_service";
 constexpr char SERVICE_DESCRIPTOR[] = "ohos.hdi.sensor.v3_1.ISensorInterface";
-constexpr char READY_PARAMETER[] = "bootevent.sheng_sensor_hdi.ready";
+constexpr char READY_PARAMETER[] = "bootevent.dipper_sensor_hdi.ready";
 volatile sig_atomic_t stopping = 0;
 sem_t stopWake;
 

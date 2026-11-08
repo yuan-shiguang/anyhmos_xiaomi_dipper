@@ -8,7 +8,7 @@ import unittest
 
 
 ROOT = Path(__file__).resolve().parents[1]
-SOURCE = ROOT / 'tools/build_promax_ramdisk.py'
+SOURCE = ROOT / 'tools/build_dipper_ramdisk.py'
 TREE = ast.parse(SOURCE.read_text(encoding='utf-8'))
 HELPERS = ast.Module(
     body=[n for n in TREE.body if isinstance(n, ast.FunctionDef) and n.name == 'add_privacy_service'],
@@ -30,8 +30,8 @@ class PrivacyServiceTests(unittest.TestCase):
             'import': ['/compat/etc/init-platform-v116.cfg'],
             'services': [{'name': 'accesstoken_service', 'permission': ['keep']}],
             'jobs': [{
-                'name': 'param:sheng-debug-coredeps',
-                'condition': 'sheng.debug.start.coredeps=true',
+                'name': 'param:dipper-debug-coredeps',
+                'condition': 'dipper.debug.start.coredeps=true',
                 'cmds': [
                     'mkdir /data/service/el1/public/access_token 0770 access_token access_token',
                     'start accesstoken_service',
@@ -47,7 +47,7 @@ class PrivacyServiceTests(unittest.TestCase):
         self.assertEqual(self.native['services'], before['services'])
         self.assertEqual(self.native['import'], before['import'])
         job = self.native['jobs'][0]
-        self.assertEqual(job['condition'], 'sheng.debug.start.coredeps=true')
+        self.assertEqual(job['condition'], 'dipper.debug.start.coredeps=true')
         self.assertEqual(job['cmds'], before['jobs'][0]['cmds'] + ['start privacy_service'])
 
     def test_repacking_does_not_duplicate_service_or_start(self):
@@ -80,7 +80,7 @@ class PrivacyServiceTests(unittest.TestCase):
 
     def test_tracked_init_starts_privacy_after_access_token(self):
         native = json.loads((ROOT / 'runtime/compat/hmos-init-debug.cfg').read_text(encoding='utf-8'))
-        job = next(j for j in native['jobs'] if j['name'] == 'param:sheng-debug-coredeps')
+        job = next(j for j in native['jobs'] if j['name'] == 'param:dipper-debug-coredeps')
         pos = job['cmds'].index('start accesstoken_service')
         self.assertEqual(job['cmds'][pos + 1], 'start privacy_service')
 

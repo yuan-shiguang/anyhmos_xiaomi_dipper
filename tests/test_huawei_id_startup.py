@@ -11,7 +11,7 @@ import unittest
 
 
 ROOT = Path(__file__).resolve().parents[1]
-SOURCE = ROOT / 'tools/build_promax_ramdisk.py'
+SOURCE = ROOT / 'tools/build_dipper_ramdisk.py'
 NAMES = {'add_huawei_id_service', 'add_huawei_id_startup'}
 TREE = ast.parse(SOURCE.read_text(encoding='utf-8'))
 HELPERS = ast.Module(
@@ -71,7 +71,7 @@ class HuaweiIdStartupTests(unittest.TestCase):
         for kind, item in (
             ('services', {'name': 'huawei_id_svc'}),
             ('jobs', {'name': 'services:huawei_id_svc'}),
-            ('jobs', {'name': 'param:sheng-huaweiid-service'}),
+            ('jobs', {'name': 'param:dipper-huaweiid-service'}),
         ):
             with self.subTest(kind=kind, name=item['name']):
                 desktop = copy.deepcopy(self.desktop)

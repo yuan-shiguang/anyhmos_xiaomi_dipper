@@ -118,42 +118,42 @@ static int open_stream(struct client *c, unsigned rate, unsigned channels)
 #include "pal_capture_backend.inc"
 #include "pal_capture_worker.inc"
 
-static int dispatch(struct client *c, const struct sheng_pal_request *h,
+static int dispatch(struct client *c, const struct dipper_pal_request *h,
                     unsigned char *data, uint32_t *written)
 {
-    if (h->op==SHENG_PAL_OPEN) return open_stream(c,h->arg0,h->arg1);
-    if (h->op==SHENG_PAL_CLOSE) return close_stream(c);
-    if (h->op==SHENG_PAL_STATUS) return 0;
+    if (h->op==DIPPER_PAL_OPEN) return open_stream(c,h->arg0,h->arg1);
+    if (h->op==DIPPER_PAL_CLOSE) return close_stream(c);
+    if (h->op==DIPPER_PAL_STATUS) return 0;
     if (!c->stream) return -19;
     int rc;
     switch (h->op) {
-    case SHENG_PAL_START:
+    case DIPPER_PAL_START:
         if (c->state==2) return 0;
         if (c->state!=1) return -22;
         rc=stream_start(c->stream);
         if (!rc) c->state=2;
         return rc;
-    case SHENG_PAL_STOP:
+    case DIPPER_PAL_STOP:
         if (c->state==1) return 0;
         rc=stream_stop(c->stream);
         if (!rc) c->state=1;
         return rc;
-    case SHENG_PAL_PAUSE:
+    case DIPPER_PAL_PAUSE:
         if (c->state!=2) return -22;
         rc=stream_pause(c->stream);
         if (!rc) c->state=3;
         return rc;
-    case SHENG_PAL_RESUME:
+    case DIPPER_PAL_RESUME:
         if (c->state!=3) return -22;
         rc=stream_resume(c->stream);
         if (!rc) c->state=2;
         return rc;
-    case SHENG_PAL_VOLUME: {
+    case DIPPER_PAL_VOLUME: {
         if (h->arg0>1000000) return -22;
         struct { unsigned count; struct pal_channel_vol_kv pair; } v={1,{3,h->arg0/1000000.0f}};
         return stream_volume(c->stream,(struct pal_volume_data *)&v);
     }
-    case SHENG_PAL_WRITE:
+    case DIPPER_PAL_WRITE:
         if (c->state!=2 || !h->bytes || (h->bytes&3)) return -22;
         while (*written<h->bytes) {
             unsigned n=h->bytes-*written;
@@ -187,15 +187,15 @@ static int serve(void)
     int fd=socket(AF_UNIX,SOCK_SEQPACKET|SOCK_CLOEXEC,0);
     if (fd<0) return -(*__errno());
     struct sockaddr_un a={.sun_family=AF_UNIX};
-    memcpy(a.sun_path+1,SHENG_PAL_SOCKET,sizeof(SHENG_PAL_SOCKET)-1);
-    socklen_t len=offsetof(struct sockaddr_un,sun_path)+sizeof(SHENG_PAL_SOCKET);
+    memcpy(a.sun_path+1,DIPPER_PAL_SOCKET,sizeof(DIPPER_PAL_SOCKET)-1);
+    socklen_t len=offsetof(struct sockaddr_un,sun_path)+sizeof(DIPPER_PAL_SOCKET);
     if (bind(fd,(void *)&a,len) || listen(fd,MAX_CLIENTS)) {
         int rc=-(*__errno()); close(fd); return rc;
     }
     struct client cs[MAX_CLIENTS];
     for (int i=0;i<MAX_CLIENTS;i++) cs[i]=(struct client){.fd=-1};
-    struct { struct sheng_pal_request h; unsigned char data[SHENG_PAL_MAX_DATA]; } packet;
-    printf("PAL_SERVER_READY=1 pid=%d socket=@%s\n",getpid(),SHENG_PAL_SOCKET);
+    struct { struct dipper_pal_request h; unsigned char data[DIPPER_PAL_MAX_DATA]; } packet;
+    printf("PAL_SERVER_READY=1 pid=%d socket=@%s\n",getpid(),DIPPER_PAL_SOCKET);
     fflush(stdout);
     while (!__atomic_load_n(&stopping,__ATOMIC_ACQUIRE)) {
         if (capture_watchdog_expired()) {
@@ -228,13 +228,13 @@ static int serve(void)
             if (c->fd<0 || !fds[i+1].revents) continue;
             ssize_t n=recv(c->fd,&packet,sizeof(packet),MSG_DONTWAIT|MSG_TRUNC);
             if (n<=0) { (void)close_client_stream(c); close(c->fd); c->fd=-1; continue; }
-            if ((size_t)n<sizeof(packet.h) || packet.h.magic!=SHENG_PAL_MAGIC ||
-                packet.h.bytes>SHENG_PAL_MAX_DATA || (size_t)n!=sizeof(packet.h)+packet.h.bytes ||
-                (packet.h.op!=SHENG_PAL_WRITE && packet.h.bytes)) {
+            if ((size_t)n<sizeof(packet.h) || packet.h.magic!=DIPPER_PAL_MAGIC ||
+                packet.h.bytes>DIPPER_PAL_MAX_DATA || (size_t)n!=sizeof(packet.h)+packet.h.bytes ||
+                (packet.h.op!=DIPPER_PAL_WRITE && packet.h.bytes)) {
                 (void)close_client_stream(c); close(c->fd); c->fd=-1; continue;
             }
-            struct sheng_pal_reply reply={.magic=SHENG_PAL_MAGIC,.sequence=packet.h.sequence};
-            if (packet.h.op>=SHENG_PAL_CAPTURE_OPEN) {
+            struct dipper_pal_reply reply={.magic=DIPPER_PAL_MAGIC,.sequence=packet.h.sequence};
+            if (packet.h.op>=DIPPER_PAL_CAPTURE_OPEN) {
                 reply.rc=route_capture_request(c,&packet.h);
                 if (!reply.rc) { c->fd=-1; continue; }
             } else {
@@ -242,13 +242,13 @@ static int serve(void)
                 reply.written_frames=c->frames;
             }
             struct iovec response[2]={{&reply,sizeof(reply)},{packet.data,reply.bytes}};
-            int capture_data=packet.h.op==SHENG_PAL_CAPTURE_READ && !reply.rc && reply.bytes;
+            int capture_data=packet.h.op==DIPPER_PAL_CAPTURE_READ && !reply.rc && reply.bytes;
             struct msghdr message={.msg_iov=response,.msg_iovlen=capture_data?2:1};
             size_t response_size=sizeof(reply)+(capture_data?reply.bytes:0);
             if (sendmsg(c->fd,&message,MSG_NOSIGNAL)!=(ssize_t)response_size) {
                 (void)close_client_stream(c); close(c->fd); c->fd=-1;
             }
-            if (packet.h.op!=SHENG_PAL_WRITE || reply.rc)
+            if (packet.h.op!=DIPPER_PAL_WRITE || reply.rc)
                 printf("PAL_SERVER_REQUEST op=%u rc=%d bytes=%u frames=%llu\n",packet.h.op,
                     reply.rc,reply.bytes,(unsigned long long)reply.written_frames);
         }

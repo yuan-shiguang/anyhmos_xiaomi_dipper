@@ -12,18 +12,18 @@ import unittest
 
 
 ROOT = Path(__file__).resolve().parents[1]
-SOURCE = ROOT / 'tools/build_promax_ramdisk.py'
+SOURCE = ROOT / 'tools/build_dipper_ramdisk.py'
 TRACKED = ROOT / 'runtime/compat/graphics/apply-hardware-v116.sh'
 TREE = ast.parse(SOURCE.read_text(encoding='utf-8'))
-BEGIN = '# SHENG_DISPLAY_LOG_RETENTION_BEGIN\n'
-END = '# SHENG_DISPLAY_LOG_RETENTION_END\n'
+BEGIN = '# DIPPER_DISPLAY_LOG_RETENTION_BEGIN\n'
+END = '# DIPPER_DISPLAY_LOG_RETENTION_END\n'
 TARGETS = (
-    ('sheng-brightness-stderr.txt', '5528:5528', '0600'),
-    ('sheng-composer-metrics.txt', '3036:3036', '0640'),
-    ('sheng-battery-hdi.txt', '3025:3025', '0600'),
-    ('sheng-wifi-category-v134.txt', '3026:3026', '0600'),
-    ('sheng-bluetooth-hdi.txt', '3021:3021', '0600'),
-    ('sheng-bluetooth-check.txt', '2000:2000', '0600'),
+    ('dipper-brightness-stderr.txt', '5528:5528', '0600'),
+    ('dipper-composer-metrics.txt', '3036:3036', '0640'),
+    ('dipper-battery-hdi.txt', '3025:3025', '0600'),
+    ('dipper-wifi-category-v134.txt', '3026:3026', '0600'),
+    ('dipper-bluetooth-hdi.txt', '3021:3021', '0600'),
+    ('dipper-bluetooth-check.txt', '2000:2000', '0600'),
 )
 
 
@@ -181,7 +181,7 @@ class DisplayLogRetentionTests(unittest.TestCase):
         for name, owner, mode in TARGETS:
             content = (self.logdir / name).read_bytes()
             self.assertTrue(
-                content.startswith(previous + b'\nSHENG_DISPLAY_LOG_STAGE ')
+                content.startswith(previous + b'\nDIPPER_DISPLAY_LOG_STAGE ')
             )
             self.assertRegex(content, rb'boot_id=boot-one uptime=123\.45 pid=\d+\n$')
             actions = (self.work / 'actions').read_text(encoding='utf-8')
@@ -199,7 +199,7 @@ class DisplayLogRetentionTests(unittest.TestCase):
         for name, _, _ in TARGETS:
             content = (self.logdir / name).read_bytes()
             self.assertTrue(content.startswith(before[name]))
-            self.assertEqual(content.count(b'SHENG_DISPLAY_LOG_STAGE '), 3)
+            self.assertEqual(content.count(b'DIPPER_DISPLAY_LOG_STAGE '), 3)
             self.assertEqual(content.count(b'boot_id=boot-two '), 2)
 
     def test_permission_failures_are_nonfatal_and_do_not_truncate(self):
@@ -208,8 +208,8 @@ class DisplayLogRetentionTests(unittest.TestCase):
         result = self.run_stage(TEST_FAIL_PERMISSIONS='1')
         self.assertEqual(result.returncode, 0, result.stderr)
         self.assertTrue((self.logdir / name).read_bytes().startswith(b'keep\n'))
-        self.assertEqual(result.stderr.count('SHENG_DISPLAY_LOG_CHOWN_FAILED='), 6)
-        self.assertEqual(result.stderr.count('SHENG_DISPLAY_LOG_CHMOD_FAILED='), 6)
+        self.assertEqual(result.stderr.count('DIPPER_DISPLAY_LOG_CHOWN_FAILED='), 6)
+        self.assertEqual(result.stderr.count('DIPPER_DISPLAY_LOG_CHMOD_FAILED='), 6)
         self.assertIn('STAGING_CONTINUED', result.stdout)
 
     def test_bad_paths_are_nonfatal_and_do_not_receive_permissions(self):
@@ -217,14 +217,14 @@ class DisplayLogRetentionTests(unittest.TestCase):
         (self.logdir / name).mkdir()
         result = self.run_stage()
         self.assertEqual(result.returncode, 0, result.stderr)
-        self.assertIn('SHENG_DISPLAY_LOG_INVALID_PATH=', result.stderr)
+        self.assertIn('DIPPER_DISPLAY_LOG_INVALID_PATH=', result.stderr)
         self.assertNotIn(name, (self.work / 'actions').read_text(encoding='utf-8'))
 
     def test_append_and_clock_read_failures_do_not_abort_staging(self):
         shutil.rmtree(self.work / 'root')
         result = self.run_stage(TEST_FAIL_READS='1', TEST_FAIL_PERMISSIONS='1')
         self.assertEqual(result.returncode, 0, result.stderr)
-        self.assertEqual(result.stderr.count('SHENG_DISPLAY_LOG_APPEND_FAILED='), 6)
+        self.assertEqual(result.stderr.count('DIPPER_DISPLAY_LOG_APPEND_FAILED='), 6)
         self.assertIn('STAGING_CONTINUED', result.stdout)
 
     def test_missing_clock_fields_use_unknown(self):

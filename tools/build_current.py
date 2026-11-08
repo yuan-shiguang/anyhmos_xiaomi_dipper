@@ -12,11 +12,11 @@ import shutil
 import subprocess
 
 ROOT = Path(__file__).resolve().parent.parent
-DEPS = Path(os.environ.get('SHENG_DEPS', '/root/hmos-work/graphics-deps'))
-SDK = Path(os.environ.get('SHENG_SDK', '/root/hmos-work/sdk-6.0.0.47/installed/native'))
-UPSTREAM = Path(os.environ.get('SHENG_UPSTREAM', str(DEPS/'source')))
-LINK = Path(os.environ.get('SHENG_DONOR_LINK', str(ROOT/'work/donor-hdi-link')))
-STAGE = Path(os.environ.get('SHENG_STAGE', str(DEPS/'stage')))
+DEPS = Path(os.environ.get('DIPPER_DEPS', '/root/hmos-work/graphics-deps'))
+SDK = Path(os.environ.get('DIPPER_SDK', '/root/hmos-work/sdk-6.0.0.47/installed/native'))
+UPSTREAM = Path(os.environ.get('DIPPER_UPSTREAM', str(DEPS/'source')))
+LINK = Path(os.environ.get('DIPPER_DONOR_LINK', str(ROOT/'work/donor-hdi-link')))
+STAGE = Path(os.environ.get('DIPPER_STAGE', str(DEPS/'stage')))
 
 
 def includes(paths):
@@ -27,7 +27,7 @@ def commands(out, default_display_route=0):
     if default_display_route not in (0, 2):
         raise ValueError('Default display route must be 0 or 2')
     # 仅为显示实现及其契约测试传入显式启动默认
-    route_flags = ['-DSHENG_DEFAULT_DISPLAY_ROUTE=2'] if default_display_route == 2 else []
+    route_flags = ['-DDIPPER_DEFAULT_DISPLAY_ROUTE=2'] if default_display_route == 2 else []
     # 按宿主系统选择 SDK 工具名，保留目标平台参数
     suffix = '.exe' if os.name == 'nt' else ''
     clang = str(SDK/('llvm/bin/clang'+suffix))
@@ -126,61 +126,61 @@ def commands(out, default_display_route=0):
         '-o',str(out/'native_display_wake')]
     add('display-mode','native_refresh_rate',['compat/display/native_refresh_rate.cpp'],
         ['-Os'],cpp_runtime,[],True)
-    add('touch','sheng_thp_bridge',
-        ['compat/touch/bridge.cpp','compat/touch/nvt_touch_core.cpp','compat/touch/nvt_finger_filter.cpp'],
-        ['-std=c++20','-fexceptions'],cpp_runtime,[ROOT/'compat/touch'],True)
-    add('touch-launcher','native_thp_launcher',['compat/touch/launcher.c'])
 
     audio=ROOT/'compat/audio'
-    add('audio-vdi','libsheng_audio_vdi.so',['compat/audio/audio_vdi.c','compat/audio/pal_client.c'],
-        ['-D_GNU_SOURCE','-shared','-fPIC','-Wl,-z,defs','-Wl,-soname,libsheng_audio_vdi.so'],
+    add('audio-vdi','libdipper_audio_vdi.so',['compat/audio/audio_vdi.c','compat/audio/pal_client.c'],
+        ['-D_GNU_SOURCE','-shared','-fPIC','-Wl,-z,defs','-Wl,-soname,libdipper_audio_vdi.so'],
         ['-pthread'],[audio,audio/'include'])
     for key,source,libs in [
         ('audio-loader','audio_vdi_loader.c',['-ldl']),
         ('audio-manager','audio_manager_service.c',['-ldl','-pthread']),
     ]:
-        output='libsheng_audio_vdi_loader.so' if key=='audio-loader' else 'libsheng_audio_manager_service.so'
+        output='libdipper_audio_vdi_loader.so' if key=='audio-loader' else 'libdipper_audio_manager_service.so'
         add(key,output,['compat/audio/'+source],['-shared','-fPIC','-Wl,-z,defs'],libs)
     add('audio-hdi','native_audio_hdi_publisher',['compat/audio/native_audio_hdi_publisher.c'],
         [],['-ldl'],shared_inc)
     add('audio-launcher','native_audio_service_launcher',['compat/audio/native_audio_service_launcher.c'])
     add('audio-check','native_system_audio_check',['compat/audio/native_system_audio_check.c'],[],['-lohaudio','-lm'])
-    palinc=Path(os.environ.get('SHENG_PAL_INCLUDE','/root/hmos-reference/pal-sm8550-a13/inc'))
-    bionic=Path(os.environ.get('SHENG_BIONIC_LINK',str(ROOT/'work/audio-bionic-v1/lib64')))
+    # sdm845 没有 AGM：静态链接的 tinyalsa 后端直接对接内核 PCM，
+    # 复用 dipper.pal.pcm.v1 线协议，上层 libdipper_audio_vdi.so 不变。
+    add('audio-tinyalsa','dipper-tinyalsa-server',['compat/audio/tinyalsa_server.c'],
+        ['-static'],[],[audio])
+    palinc=Path(os.environ.get('DIPPER_PAL_INCLUDE','/root/hmos-reference/pal-sm8550-a13/inc'))
+    bionic=Path(os.environ.get('DIPPER_BIONIC_LINK',str(ROOT/'work/audio-bionic-v1/lib64')))
     bflags=['--target=aarch64-linux-android33','--sysroot='+str(SDK/'sysroot'),
         '-isystem',str(SDK/'sysroot/usr/include/aarch64-linux-ohos'),
         '-fuse-ld=lld','-fPIC','-shared','-nostdlib','-D_GNU_SOURCE','-mno-outline-atomics',
         '-O2','-Wall','-Wextra','-Werror','-Wl,-z,defs','-L'+str(bionic)]
     # 为原厂充电进程构建独立属性与日志适配库
     result['batterysecret-process']=[clang,*bflags,'-fno-builtin',
-        '-Wl,-soname,libsheng_batterysecret_process.so',
+        '-Wl,-soname,libdipper_batterysecret_process.so',
         str(ROOT/'compat/power/batterysecret_process_compat.c'),'-lc','-ldl',
-        '-o',str(out/'libsheng_batterysecret_process.so')]
+        '-o',str(out/'libdipper_batterysecret_process.so')]
     # 采集后端与鸿蒙输入接口配套构建
-    result['pal-server']=[clang,*bflags,'-DSHENG_CAPTURE_EXPERIMENTAL=1',
-        '-I'+str(palinc),'-Wl,-soname,libsheng_pal_server.so',
-        str(audio/'pal_server.c'),'-lc','-ldl','-o',str(out/'libsheng_pal_server.so')]
+    result['pal-server']=[clang,*bflags,'-DDIPPER_CAPTURE_EXPERIMENTAL=1',
+        '-I'+str(palinc),'-Wl,-soname,libdipper_pal_server.so',
+        str(audio/'pal_server.c'),'-lc','-ldl','-o',str(out/'libdipper_pal_server.so')]
     # The lifecycle shim is Bionic and must not silently pick the OHOS libc.
-    result['pal-lifecycle']=[clang,*bflags,'-Wl,-soname,libsheng_pal_lifecycle.so',str(audio/'pal_lifecycle.c'),'-lc','-ldl',
-        '-o',str(out/'libsheng_pal_lifecycle.so')]
+    result['pal-lifecycle']=[clang,*bflags,'-Wl,-soname,libdipper_pal_lifecycle.so',str(audio/'pal_lifecycle.c'),'-lc','-ldl',
+        '-o',str(out/'libdipper_pal_lifecycle.so')]
     pd=audio/'pd-mapper'
     result['pd-mapper']=['aarch64-linux-gnu-gcc','-static','-O2','-D_GNU_SOURCE',
         '-I'+str(pd),*[str(pd/n) for n in ('pd-mapper.c','assoc.c','json.c','servreg_loc.c',
-          'qrtr.c','qmi.c','logging.c')],'-o',str(out/'sheng-pd-mapper')]
+          'qrtr.c','qmi.c','logging.c')],'-o',str(out/'dipper-pd-mapper')]
 
-    add('wifi-category','libsheng_wifi_category_v134.so',
+    add('wifi-category','libdipper_wifi_category_v134.so',
         ['compat/wifi/wifi_caps_v134.c','compat/wifi/wifi_category_ioctl_v134.c'],
         ['-std=gnu11','-fPIC','-fvisibility=hidden','-shared',
-         '-Wl,-soname,libsheng_wifi_category_v134.so'],[],[ROOT/'compat/wifi/include',ROOT/'compat/wifi'])
+         '-Wl,-soname,libdipper_wifi_category_v134.so'],[],[ROOT/'compat/wifi/include',ROOT/'compat/wifi'])
     add('wifi-contract','native_wifi_category_probe_v134',
         ['compat/wifi/wifi_caps_v134.c','compat/wifi/native_wifi_category_probe_v134.c'],
         ['-std=gnu11'],['-ldl'],[ROOT/'compat/wifi/include',ROOT/'compat/wifi'])
     for key,source in [('storage-launcher','storage_ram_launcher.c'),('storage-no-tee','storage_ram_no_tee.c')]:
         shared=key=='storage-no-tee'
-        add(key,'libsheng_ram_no_tee.so' if shared else 'storage-ram-launcher',
+        add(key,'libdipper_ram_no_tee.so' if shared else 'storage-ram-launcher',
             ['compat/framework/account/'+source],['-shared','-fPIC','-Wl,-z,relro,-z,now'] if shared else [])
     huks=UPSTREAM/'security_huks/interfaces/inner_api/huks_standard/main/include'
-    add('account-hmac','libsheng_account_hmac.so',['compat/framework/account/account_hmac.c'],
+    add('account-hmac','libdipper_account_hmac.so',['compat/framework/account/account_hmac.c'],
         ['-std=gnu11','-Wno-misleading-indentation','-shared','-fPIC','-Wl,-z,relro,-z,now',
          '-Wl,--version-script='+str(ROOT/'compat/framework/account/exports.map')],
         [str(LINK/'libcrypto_openssl.z.so'),'-Wl,--allow-shlib-undefined'],[huks])
@@ -196,7 +196,7 @@ def commands(out, default_display_route=0):
         inc=[ROOT/'compat'/group/'include',ROOT/'compat'/group/'include'/('bluetooth/hci' if group=='bluetooth' else 'battery')]
         libs=hdi_libs.copy()
         if group=='bluetooth':
-            btlibs=Path(os.environ.get('SHENG_BT_VENDOR_LINK',str(ROOT/'work/donor-bluetooth-v136/vendor/lib64')))
+            btlibs=Path(os.environ.get('DIPPER_BT_VENDOR_LINK',str(ROOT/'work/donor-bluetooth-v136/vendor/lib64')))
             libs+=[str(btlibs/'libbluetooth_hci_stub_1.0.z.so')]
         sources=[source]
         if group=='battery':
@@ -205,15 +205,15 @@ def commands(out, default_display_route=0):
     result['bluetooth-vendor']=[clangpp,*cflags,
         '-I'+str(UPSTREAM/'drivers_peripheral/bluetooth/hci/hdi_service/implement'),
         '-shared','-fPIC',str(ROOT/'compat/bluetooth/bluetooth_vendor_v136.cpp'),
-        '-ldl','-o',str(out/'libbt_vendor_sheng_v136.so')]
-    headers=Path(os.environ.get('SHENG_ANDROID_CPP_HEADERS','/root/hmos-work/clang-prebuilt/clang-r450784e/include/c++/v1'))
+        '-ldl','-o',str(out/'libbt_vendor_dipper_v136.so')]
+    headers=Path(os.environ.get('DIPPER_ANDROID_CPP_HEADERS','/root/hmos-work/clang-prebuilt/clang-r450784e/include/c++/v1'))
     for name in ('bridge','identity','initialize'):
         result['bluetooth-'+name]=[str(SDK/'llvm/bin/clang++'),*bflags,
             '-nostdinc++','-isystem',str(headers),'-std=c++17','-fno-exceptions',
             str(ROOT/f'compat/bluetooth/bluetooth_{name}_v136.cpp'),'-lc++','-lc','-ldl',
-            '-o',str(out/f'libsheng_bt_{name}_v136.so')]
+            '-o',str(out/f'libdipper_bt_{name}_v136.so')]
     # v139 host check is a two-translation-unit helper, not the old v137 binary.
-    result['bluetooth-current-c']=[clang,*cflags,'-DSHENG_CURRENT_BT_API','-c',
+    result['bluetooth-current-c']=[clang,*cflags,'-DDIPPER_CURRENT_BT_API','-c',
         str(ROOT/'compat/bluetooth/native_bt_host_check_v137.c'),'-o',str(out/'bt-current.o')]
     add('bluetooth-current','native_bt_host_check_v139',
         ['compat/bluetooth/native_bt_current_v139.cpp'],[],
@@ -222,9 +222,9 @@ def commands(out, default_display_route=0):
     for source in ('native_render_launcher.c','native_brightness_launcher.c','native_bundle_cli.c'):
         add(source[:-2],source[:-2],['compat/services/'+source],[],['-ldl'])
     add('boot-launcher','bootanimation-launcher',['compat/services/bootanimation_launcher.c'])
-    add('boot-vulkan','libsheng_boot_vulkan.so',['compat/services/bootanimation_vulkan_adapter.cpp'],
+    add('boot-vulkan','libdipper_boot_vulkan.so',['compat/services/bootanimation_vulkan_adapter.cpp'],
         ['-shared','-fPIC','-Wl,-z,defs'],cpp_runtime,[],True)
-    add('surface-post','libsheng_surface_diagnostic.so',
+    add('surface-post','libdipper_surface_diagnostic.so',
         ['compat/services/surface_post.cpp','compat/services/native_buffer_import_observer.S'],
         ['-shared','-fPIC'],cpp_runtime,[],True)
     return result

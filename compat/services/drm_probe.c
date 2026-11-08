@@ -40,11 +40,11 @@ static int open_node(const char *sys,const char *node) {
     return open(node,O_RDWR|O_CLOEXEC|O_NOFOLLOW);
 }
 static int native(const struct drm_mode_modeinfo *m) {
-    return (m->hdisplay==3048&&m->vdisplay==2032)||(m->hdisplay==2032&&m->vdisplay==3048);
+    return (m->hdisplay==2248&&m->vdisplay==1080)||(m->hdisplay==1080&&m->vdisplay==2248);
 }
 static void print_mode(const struct drm_mode_modeinfo *m) {
     printf("mode %.32s %ux%u refresh=%u clock=%u flags=0x%x type=0x%x%s\n",
-        m->name,m->hdisplay,m->vdisplay,m->vrefresh,m->clock,m->flags,m->type,native(m)?" native-sheng":"");
+        m->name,m->hdisplay,m->vdisplay,m->vrefresh,m->clock,m->flags,m->type,native(m)?" native-dipper":"");
 }
 struct buffer { uint32_t handle,pitch,fb;uint64_t size;int dmafd,dumb;void *map; };
 static void release(int fd,struct buffer *b) {
@@ -160,6 +160,6 @@ int main(int argc,char **argv) {
             if(e.crtc_id){chosen_crtc=e.crtc_id;break;}for(unsigned k=0;k<res.count_crtcs&&k<32;k++)if(e.possible_crtcs&(1U<<k)){chosen_crtc=crtcs[k];break;}if(chosen_crtc)break;}
         for(unsigned j=0;j<c.count_modes;j++)if(native(&modes[j])&&chosen_crtc&&(!selected||(modes[j].type&DRM_MODE_TYPE_PREFERRED))){selected=c.connector_id;selected_crtc=chosen_crtc;selected_mode=modes[j];}
     }
-    int result=0;if(draw){if(!selected){fprintf(stderr,"REFUSE DRAW: connected DSI native 3048x2032/2032x3048 mode required\n");result=1;}else result=bars(fd,selected,selected_crtc,&selected_mode,hold);}
+    int result=0;if(draw){if(!selected){fprintf(stderr,"REFUSE DRAW: connected DSI native 2248x1080/1080x2248 mode required\n");result=1;}else result=bars(fd,selected,selected_crtc,&selected_mode,hold);}
     close(fd);return result;
 }

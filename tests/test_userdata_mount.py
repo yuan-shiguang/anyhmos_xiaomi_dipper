@@ -3,7 +3,7 @@
 Run as root on Linux/WSL: python3 tests/test_userdata_mount.py
 Only the sysfs partition identity is a fixture. Filesystem detection, UUIDs,
 mounts, permissions and data preservation use real kernel/filesystem operations.
-No physical tablet or host data partition is accessed.
+No physical phone or host data partition is accessed.
 """
 from pathlib import Path
 from contextlib import contextmanager
@@ -28,7 +28,7 @@ def run(*args, check=True):
 
 @contextmanager
 def temporary_userdata():
-    with tempfile.TemporaryDirectory(prefix='sheng-userdata-') as directory:
+    with tempfile.TemporaryDirectory(prefix='dipper-userdata-') as directory:
         work = Path(directory)
         image = work / 'userdata.ext4'
         with image.open('wb') as stream:
@@ -108,7 +108,7 @@ def inside():
                 identity = str(uuid.uuid4())
                 format_ext4(identity)
                 execute(0, f'fresh ext4 with random UUID {index + 1} accepted without marker')
-                assert not (target / '.sheng-userdata-layout').exists()
+                assert not (target / '.dipper-userdata-layout').exists()
                 assert os.stat(target).st_dev == os.stat(device).st_rdev
                 run(str(mount_check), device, str(target))
                 assert run(str(mount_check), '/dev/null', str(target), check=False).returncode == 1
@@ -117,13 +117,13 @@ def inside():
                 sentinel = target / 'existing-data'
                 sentinel.write_text('preserve this file\n')
                 # Legacy marker contents are deliberately irrelevant.
-                (target / '.sheng-userdata-layout').write_text('old or unrelated marker\n')
+                (target / '.dipper-userdata-layout').write_text('old or unrelated marker\n')
                 execute(60, 'already mounted userdata rejected')
                 unmount()
                 placeholder()
                 execute(0, 'existing files and legacy marker survive next mount')
                 assert sentinel.read_text() == 'preserve this file\n'
-                assert (target / '.sheng-userdata-layout').read_text() == 'old or unrelated marker\n'
+                assert (target / '.dipper-userdata-layout').read_text() == 'old or unrelated marker\n'
                 assert identity in run('blkid', str(device)).stdout
                 unmount()
                 placeholder()

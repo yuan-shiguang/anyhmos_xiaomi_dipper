@@ -28,6 +28,6 @@ int main(void)
     if(prctl(PR_SET_NO_NEW_PRIVS,1,0,0,0)||prctl(PR_SET_SECCOMP,SECCOMP_MODE_FILTER,&program)){
         perror("RAM storage isolation");return 126;
     }
-    if(setenv("LD_PRELOAD","/compat/lib64/libsheng_ram_no_tee.so",1)){perror("RAM storage preload");return 126;}
+    if(setenv("LD_PRELOAD","/compat/lib64/libdipper_ram_no_tee.so",1)){perror("RAM storage preload");return 126;}
     execl("/system/bin/storage_daemon","storage_daemon",(char*)0);perror("storage_daemon");return 127;
 }

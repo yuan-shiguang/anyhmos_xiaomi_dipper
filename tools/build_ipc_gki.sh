@@ -2,7 +2,7 @@
 set -euo pipefail
 
 repo=$(realpath "${1:?source checkout required}")
-work=$(mktemp -d "${RUNNER_TEMP:-/tmp}/sheng-ipc-build.XXXXXX")
+work=$(mktemp -d "${RUNNER_TEMP:-/tmp}/dipper-ipc-build.XXXXXX")
 kernel_commit=6f2f96be86b93de6ed58a2c46b456fb49734c382
 clang_commit=9f759dee5cdc5f85d076c642a192f6a9232f7058
 pahole_commit=c2b7b8c20877d267159ace36119f6340b9d12823
@@ -14,7 +14,7 @@ pahole_build=$work/pahole-build
 headers_dir=$work/official-headers
 output=$work/kernel-out
 module_dir=$work/module
-artifacts=${SHENG_IPC_ARTIFACT_DIR:-$work/artifacts}
+artifacts=${DIPPER_IPC_ARTIFACT_DIR:-$work/artifacts}
 mkdir -p "$kernel_dir" "$clang_dir" "$output" "$artifacts" \
     "$pahole_dir" "$pahole_build" "$headers_dir"
 artifacts=$(realpath "$artifacts")
@@ -146,7 +146,7 @@ manifest = {
 PY
 stage=module-build
 make -C "$kernel_dir" O="$output" "${options[@]}" M="$module_dir" -j2 modules
-module=$module_dir/sheng_hmos_ipc.ko
+module=$module_dir/dipper_hmos_ipc.ko
 test -s "$module"
 stage=module-audit
 llvm-readelf -h -S -s -r "$module" > "$artifacts/module-elf.txt"
@@ -171,8 +171,8 @@ for line in pathlib.Path(sys.argv[2]).read_text().splitlines():
     if expected.get(name) != int(crc, 16):
         raise SystemExit("Module symbol version mismatch: " + name)
 PY
-cp "$module" "$artifacts/sheng_hmos_ipc.ko"
-sha256sum "$artifacts/sheng_hmos_ipc.ko" > "$artifacts/module-sha256.txt"
+cp "$module" "$artifacts/dipper_hmos_ipc.ko"
+sha256sum "$artifacts/dipper_hmos_ipc.ko" > "$artifacts/module-sha256.txt"
 cat "$artifacts/module-sha256.txt"
 stage=complete
 printf 'ARTIFACT_DIRECTORY=%s\n' "$artifacts"

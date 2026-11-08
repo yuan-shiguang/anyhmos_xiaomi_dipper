@@ -7,7 +7,7 @@
 #include <string>
 #include <unistd.h>
 
-namespace Sheng::Charging {
+namespace Dipper::Charging {
 namespace {
 constexpr const char* ONLINE = "/sys/class/power_supply/usb/online";
 constexpr const char* ROOT = "/sys/class/qcom-battery/";
@@ -202,4 +202,4 @@ OHOS::sptr<Battery::IBatteryInterface> MakeBatteryChargeAdapter(
     }
     return new ChargeAdapter(original, reader);
 }
-} // namespace Sheng::Charging
+} // namespace Dipper::Charging

@@ -17,9 +17,9 @@ int property_get(const char *key, char *value, const char *fallback)
 {
     const char *source = 0;
     if (key && !strcmp(key, "ro.product.device")) {
-        source = "sheng";
+        source = "dipper";
     } else if (key && !strcmp(key, "ro.product.name")) {
-        source = "sheng_global";
+        source = "dipper_global";
     }
     if (source) {
         return copy_property(value, source);

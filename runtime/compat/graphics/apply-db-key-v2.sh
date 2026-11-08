@@ -6,13 +6,13 @@ $B mkdir -p "$R/compat/lib64"
 $B cp /graphics/libdbkeys.so "$R/compat/lib64/libdbkeys.so"
 echo "f692b1999f607abbc63bc8eac74835d2894416307316586368840f9ed94dd5dd  $R/compat/lib64/libdbkeys.so" | $B sha256sum -c -
 $B chmod 0644 "$R/compat/lib64/libdbkeys.so"
-$B mkdir -p "$R/data/service/el1/public/database/.sheng-dbkeys"
-$B chown 0:0 "$R/data/service/el1/public/database/.sheng-dbkeys"
-$B chmod 0711 "$R/data/service/el1/public/database/.sheng-dbkeys"
+$B mkdir -p "$R/data/service/el1/public/database/.dipper-dbkeys"
+$B chown 0:0 "$R/data/service/el1/public/database/.dipper-dbkeys"
+$B chmod 0711 "$R/data/service/el1/public/database/.dipper-dbkeys"
 while IFS=: read -r name pass uid gid rest; do
  case "$uid" in ""|*[!0-9]*) continue;; esac
  [ "$uid" -lt 10000 ] || continue
- P="$R/data/service/el1/public/database/.sheng-dbkeys/$uid"
+ P="$R/data/service/el1/public/database/.dipper-dbkeys/$uid"
  $B mkdir -p "$P"; $B chown "$uid:$gid" "$P"; $B chmod 0700 "$P"
 done < "$R/system/etc/passwd"
 S="$R/system/lib64/librelational_store_crypt.z.so"

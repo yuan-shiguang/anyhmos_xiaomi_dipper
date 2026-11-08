@@ -35,7 +35,7 @@
       "sha256": "7718ff8e4a978658114b577e260788202441188343b0c7a224fa9487edb717c6"
     },
     "touch": {
-      "file": "sheng_thp_bridge",
+      "file": "dipper_thp_bridge",
       "bytes": 184032,
       "sha256": "3289cf80a974d7379184c6459015d82488a8a284935ed9e4ff9f528eaa1c2c8e"
     },
@@ -45,17 +45,17 @@
       "sha256": "37407a8d55b510b7e72d29f5a4dc9dd1db6e39d1a825173ba9d65faa341c785e"
     },
     "audio-vdi": {
-      "file": "libsheng_audio_vdi.so",
+      "file": "libdipper_audio_vdi.so",
       "bytes": 22120,
       "sha256": "bdb31b5b56c379ca1141bc9bfa0d9067c45ebb2df47b4b664a83fed7964248ca"
     },
     "audio-loader": {
-      "file": "libsheng_audio_vdi_loader.so",
+      "file": "libdipper_audio_vdi_loader.so",
       "bytes": 15688,
       "sha256": "97b8707801c8e2d9b8e72a87c0c3f51c19276c855a67d1cbc43d08dc0b120cfd"
     },
     "audio-manager": {
-      "file": "libsheng_audio_manager_service.so",
+      "file": "libdipper_audio_manager_service.so",
       "bytes": 14288,
       "sha256": "33a1dbf88e915407efa4cdd6cc29036c68b553faf7e013bcb6df77ff7f6840b3"
     },
@@ -75,22 +75,22 @@
       "sha256": "4f2379f6185e6e3eadc36603d4ca792b70a55882f26169ea4158431930bdf49e"
     },
     "pal-server": {
-      "file": "libsheng_pal_server.so",
+      "file": "libdipper_pal_server.so",
       "bytes": 11752,
       "sha256": "084a83ea9a07237071ecdd2929853c73b5f19e96e3c406bf10c3ad198db434a2"
     },
     "pal-lifecycle": {
-      "file": "libsheng_pal_lifecycle.so",
+      "file": "libdipper_pal_lifecycle.so",
       "bytes": 4376,
       "sha256": "ff195a5aebb8eb6b40959fdeceae0750d0fae22601fbf1738467f99d924885a5"
     },
     "pd-mapper": {
-      "file": "sheng-pd-mapper",
+      "file": "dipper-pd-mapper",
       "bytes": 787536,
       "sha256": "70dcd0956fd3f41c6753bb02a32f41913139e82ba30fc920f0e84d328beed410"
     },
     "wifi-category": {
-      "file": "libsheng_wifi_category_v134.so",
+      "file": "libdipper_wifi_category_v134.so",
       "bytes": 18328,
       "sha256": "19b7d0c091436e826928337e947171e344df0adf1dc615909587a529090fcff1"
     },
@@ -105,12 +105,12 @@
       "sha256": "533587746d1e7259d2d9182b6c6f153580babce5725feaabf1ccffa646863af8"
     },
     "storage-no-tee": {
-      "file": "libsheng_ram_no_tee.so",
+      "file": "libdipper_ram_no_tee.so",
       "bytes": 12184,
       "sha256": "1bfd88691204dffd429c131fae66e40b24b907440c9038beeb56966a9c7dc0b6"
     },
     "account-hmac": {
-      "file": "libsheng_account_hmac.so",
+      "file": "libdipper_account_hmac.so",
       "bytes": 23192,
       "sha256": "7d77515cfa8238ba2ca5d208342112e3b756c6f2b62f210eb9b16b93453103b6"
     },
@@ -130,22 +130,22 @@
       "sha256": "6f219516c5c18fd29659d2bdca1653a7f49626be63bb186d1fc72db5caef9593"
     },
     "bluetooth-vendor": {
-      "file": "libbt_vendor_sheng_v136.so",
+      "file": "libbt_vendor_dipper_v136.so",
       "bytes": 6104,
       "sha256": "214104716484e6664217c85818c4ab9dd818ed31fba07a0223928c37a601656d"
     },
     "bluetooth-bridge": {
-      "file": "libsheng_bt_bridge_v136.so",
+      "file": "libdipper_bt_bridge_v136.so",
       "bytes": 24608,
       "sha256": "f3a5159fd42a34e50531e68ac1939956edf5fe07b111d93f28d7c3f70b0445ed"
     },
     "bluetooth-identity": {
-      "file": "libsheng_bt_identity_v136.so",
+      "file": "libdipper_bt_identity_v136.so",
       "bytes": 5744,
       "sha256": "72b6f38e676dadb522eccebe664d1e76bdd3868ce7332b616bb768f3babdded3"
     },
     "bluetooth-initialize": {
-      "file": "libsheng_bt_initialize_v136.so",
+      "file": "libdipper_bt_initialize_v136.so",
       "bytes": 20496,
       "sha256": "a1d67b856f26e9a59fe6da7225ab9365e34263183820a29b73f495fb9401a3fd"
     },
@@ -180,12 +180,12 @@
       "sha256": "6eab11fff03b967fba4411f09dc742495b54ade2dac61f4c355b45608f34c6b8"
     },
     "boot-vulkan": {
-      "file": "libsheng_boot_vulkan.so",
+      "file": "libdipper_boot_vulkan.so",
       "bytes": 14496,
       "sha256": "8ebc3b6851973032382d9912b66e9eb0b34fc07c01bd96d213be15d66c30f040"
     },
     "surface-post": {
-      "file": "libsheng_surface_diagnostic.so",
+      "file": "libdipper_surface_diagnostic.so",
       "bytes": 30920,
       "sha256": "0426198e465a39ecfa89ea785f2ac2168a8e0ee7c24cd076b66c0701adf2071c"
     }
@@ -199,7 +199,7 @@
       "bytes": 136776,
       "sha256": "c812ae45109af8d9e955234b5c4a3760c4f696d5fc1827a4ba31f8a4c22f6a84"
     },
-    "libsheng_user_auth_driver.so": {
+    "libdipper_user_auth_driver.so": {
       "bytes": 221656,
       "sha256": "01a752509e7a322f6740190b27b6b8a1d7dad1f350b55f76b1d3b82aea890d05"
     }
@@ -225,5 +225,6 @@
   },
   "full_kernel_or_mesa_rebuilt": false,
   "proprietary_inputs_included": false,
-  "device_acceptance_report": "analysis/rebuilt-source-v146-verification.json"
+  "device_acceptance_report": "analysis/rebuilt-source-v146-verification.json",
+  "post_check_changes": "2026-11-07：触控目标 touch / touch-launcher 及其 Novatek 桥源码已删除（米 8 触控由官方内核内置 FTS/mXT640U 驱动上报），本记录保留当日编译事实。"
 }

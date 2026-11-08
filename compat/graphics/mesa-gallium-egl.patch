@@ -373,7 +373,7 @@ diff --git a/src/egl/drivers/dri2/platform_ohos.c b/src/egl/drivers/dri2/platfor
 +      struct timespec now = {0};
 +      const int clock_result = clock_gettime(CLOCK_MONOTONIC, &now);
 +
-+      HiLogPrint(0, 4, 0xFF01, "ShengGeometry",
++      HiLogPrint(0, 4, 0xFF01, "DipperGeometry",
 +                 "OHOS_GEOMETRY_R1 seq=%{public}u event=%{public}s "
 +                 "pid=%{public}d clockrc=%{public}d sec=%{public}lld "
 +                 "nsec=%{public}ld window=%{public}p drawable=%{public}p "
@@ -714,7 +714,7 @@ diff --git a/src/freedreno/vulkan/tu_device.cc b/src/freedreno/vulkan/tu_device.
  
  VKAPI_ATTR VkResult VKAPI_CALL
 -tu_AllocateMemory(VkDevice _device,
-+sheng_observed_tu_AllocateMemory(VkDevice _device,
++dipper_observed_tu_AllocateMemory(VkDevice _device,
                    const VkMemoryAllocateInfo *pAllocateInfo,
                    const VkAllocationCallbacks *pAllocator,
                    VkDeviceMemory *pMem)
@@ -747,7 +747,7 @@ diff --git a/src/freedreno/vulkan/tu_device.cc b/src/freedreno/vulkan/tu_device.
 +         if (blob) {
 +            static unsigned blobs = 0;
 +            unsigned n = __atomic_add_fetch(&blobs, 1, __ATOMIC_RELAXED);
-+            if(n<=12 || n%256==0)fprintf(stderr,"SHENG_BLOB_IMPORT n=%u bytes=%d requested=%llu backing=%llu\n",n,h->width,(unsigned long long)pAllocateInfo->allocationSize,(unsigned long long)mem->bo->size);
++            if(n<=12 || n%256==0)fprintf(stderr,"DIPPER_BLOB_IMPORT n=%u bytes=%d requested=%llu backing=%llu\n",n,h->width,(unsigned long long)pAllocateInfo->allocationSize,(unsigned long long)mem->bo->size);
 +         }
 +         mem->ohos_handle = *h;
 +         mem->ohos_import = true;
@@ -792,19 +792,19 @@ diff --git a/src/freedreno/vulkan/tu_device.cc b/src/freedreno/vulkan/tu_device.
 +                  const VkAllocationCallbacks *alloc, VkDeviceMemory *memory)
 +{
 +   VK_FROM_HANDLE(tu_device, device, handle);
-+   VkResult result = sheng_observed_tu_AllocateMemory(handle, info, alloc, memory);
++   VkResult result = dipper_observed_tu_AllocateMemory(handle, info, alloc, memory);
 +   static unsigned calls = 0, failures = 0;
 +   unsigned n = __atomic_add_fetch(&calls, 1, __ATOMIC_RELAXED);
 +   if (n <= 12 || n % 64 == 0 || (result != VK_SUCCESS && __atomic_add_fetch(&failures, 1, __ATOMIC_RELAXED) <= 32)) {
 +      const auto *native = vk_find_struct_const(info->pNext, IMPORT_NATIVE_BUFFER_INFO_OHOS);
 +      const auto *h = native ? OH_NativeBuffer_GetBufferHandle(native->buffer) : nullptr;
-+      fprintf(stderr, "SHENG_ALLOC n=%u result=%d requested=%llu type=%u heap_used=%llu heap_size=%llu native=%p fd=%d native_size=%d\n",
++      fprintf(stderr, "DIPPER_ALLOC n=%u result=%d requested=%llu type=%u heap_used=%llu heap_size=%llu native=%p fd=%d native_size=%d\n",
 +              n, result, (unsigned long long)info->allocationSize, info->memoryTypeIndex,
 +              (unsigned long long)p_atomic_read(&device->physical_device->heap.used),
 +              (unsigned long long)device->physical_device->heap.size,
 +              native ? (const void*)native->buffer : nullptr, h ? h->fd : -1, h ? h->size : -1);
 +      if (h && result != VK_SUCCESS)
-+         fprintf(stderr, "SHENG_ALLOC_NATIVE n=%u valid=%d width=%d height=%d stride=%d format=%d usage=%llx reserve=%u/%u\n",
++         fprintf(stderr, "DIPPER_ALLOC_NATIVE n=%u valid=%d width=%d height=%d stride=%d format=%d usage=%llx reserve=%u/%u\n",
 +                 n, tu_ohos_valid_handle(h), h->width, h->height, h->stride, h->format,
 +                 (unsigned long long)h->usage, h->reserveFds, h->reserveInts);
 +
@@ -864,7 +864,7 @@ diff --git a/src/freedreno/vulkan/tu_image.cc b/src/freedreno/vulkan/tu_image.cc
  
  VKAPI_ATTR VkResult VKAPI_CALL
 -tu_CreateImage(VkDevice _device,
-+sheng_observed_tu_CreateImage(VkDevice _device,
++dipper_observed_tu_CreateImage(VkDevice _device,
                 const VkImageCreateInfo *pCreateInfo,
                 const VkAllocationCallbacks *alloc,
                 VkImage *pImage)
@@ -947,11 +947,11 @@ diff --git a/src/freedreno/vulkan/tu_image.cc b/src/freedreno/vulkan/tu_image.cc
 +tu_CreateImage(VkDevice device, const VkImageCreateInfo *info,
 +               const VkAllocationCallbacks *alloc, VkImage *image)
 +{
-+   VkResult result = sheng_observed_tu_CreateImage(device, info, alloc, image);
++   VkResult result = dipper_observed_tu_CreateImage(device, info, alloc, image);
 +   static unsigned calls = 0, failures = 0;
 +   unsigned n = __atomic_add_fetch(&calls, 1, __ATOMIC_RELAXED);
 +   if (n <= 12 || (result != VK_SUCCESS && __atomic_add_fetch(&failures, 1, __ATOMIC_RELAXED) <= 32))
-+      fprintf(stderr, "SHENG_CREATE n=%u result=%d size=%ux%u format=%u usage=%x tiling=%u image=%p\n",
++      fprintf(stderr, "DIPPER_CREATE n=%u result=%d size=%ux%u format=%u usage=%x tiling=%u image=%p\n",
 +              n, result, info->extent.width, info->extent.height, info->format,
 +              info->usage, info->tiling, result == VK_SUCCESS ? (void*)*image : nullptr);
 +   return result;
@@ -1023,7 +1023,7 @@ new file mode 100644
 +}
 +VkResult tu_ohos_bind_layout(tu_device *device,tu_image *image,const Ace5OHBufferHandle *h) {
 + bool valid=tu_ohos_valid_handle(h);
-+ fprintf(stderr,"SHENG_BIND valid=%d vkformat=%u nativeformat=%d vkextent=%ux%u native=%dx%d stride=%d size=%d samples=%u flags=%x\n",valid,image->vk.format,h?h->format:-1,image->vk.extent.width,image->vk.extent.height,h?h->width:-1,h?h->height:-1,h?h->stride:-1,h?h->size:-1,image->vk.samples,image->vk.create_flags);
++ fprintf(stderr,"DIPPER_BIND valid=%d vkformat=%u nativeformat=%d vkextent=%ux%u native=%dx%d stride=%d size=%d samples=%u flags=%x\n",valid,image->vk.format,h?h->format:-1,image->vk.extent.width,image->vk.extent.height,h?h->width:-1,h?h->height:-1,h?h->stride:-1,h?h->size:-1,image->vk.samples,image->vk.create_flags);
 + if(!valid || image->vk.format!=ohos_format(h->format) ||
 +    image->vk.extent.width!=unsigned(h->width) || image->vk.extent.height!=unsigned(h->height) ||
 +    image->vk.samples!=VK_SAMPLE_COUNT_1_BIT || image->vk.create_flags&VK_IMAGE_CREATE_PROTECTED_BIT)
@@ -1038,7 +1038,7 @@ new file mode 100644
 +  planes[1].size=planes[2].size=chromaSize;
 + }
 + VkResult result=TU_CALLX(device,tu_image_update_layout)(device,image,DRM_FORMAT_MOD_LINEAR,planes);
-+ fprintf(stderr,"SHENG_BIND layout_result=%d total_size=%llu native_size=%d\n",result,(unsigned long long)image->total_size,h->size);
++ fprintf(stderr,"DIPPER_BIND layout_result=%d total_size=%llu native_size=%d\n",result,(unsigned long long)image->total_size,h->size);
 + if(result!=VK_SUCCESS)return result;
 + return image->total_size<=unsigned(h->size)?VK_SUCCESS:VK_ERROR_INVALID_EXTERNAL_HANDLE;
 +}
@@ -1062,12 +1062,12 @@ new file mode 100644
 + VkBindImageMemoryInfo bind={VK_STRUCTURE_TYPE_BIND_IMAGE_MEMORY_INFO};bind.image=tu_image_to_handle(image);bind.memory=image->vk.anb_memory;
 + return tu_BindImageMemory2(tu_device_to_handle(device),1,&bind);
 +}
-+VKAPI_ATTR VkResult VKAPI_CALL sheng_observed_tu_GetNativeBufferPropertiesOHOS(VkDevice dev,const OH_NativeBuffer *buffer,VkNativeBufferPropertiesOHOS *out) {
++VKAPI_ATTR VkResult VKAPI_CALL dipper_observed_tu_GetNativeBufferPropertiesOHOS(VkDevice dev,const OH_NativeBuffer *buffer,VkNativeBufferPropertiesOHOS *out) {
 + VK_FROM_HANDLE(tu_device,device,dev);
 + auto *h=OH_NativeBuffer_GetBufferHandle(buffer);
 + if(!out || (!tu_ohos_valid_handle(h) && !tu_ohos_valid_blob_handle(h))) {
 +  static unsigned invalid_count=0;
-+  if(invalid_count++<48)fprintf(stderr,"SHENG_NATIVE_INVALID handle=%p fd=%d native=%dx%d format=%d stride=%d size=%d usage=%llx reserve=%u/%u out=%p\n",(const void*)h,h?h->fd:-1,h?h->width:-1,h?h->height:-1,h?h->format:-1,h?h->stride:-1,h?h->size:-1,(unsigned long long)(h?h->usage:0),h?h->reserveFds:0,h?h->reserveInts:0,(void*)out);
++  if(invalid_count++<48)fprintf(stderr,"DIPPER_NATIVE_INVALID handle=%p fd=%d native=%dx%d format=%d stride=%d size=%d usage=%llx reserve=%u/%u out=%p\n",(const void*)h,h?h->fd:-1,h?h->width:-1,h?h->height:-1,h?h->format:-1,h?h->stride:-1,h?h->size:-1,(unsigned long long)(h?h->usage:0),h?h->reserveFds:0,h?h->reserveInts:0,(void*)out);
 +  return VK_ERROR_INVALID_EXTERNAL_HANDLE;
 + }
 + out->allocationSize=h->size;out->memoryTypeBits=0;
@@ -1262,11 +1262,11 @@ new file mode 100644
 +tu_GetNativeBufferPropertiesOHOS(VkDevice device, const OH_NativeBuffer *buffer,
 +                                 VkNativeBufferPropertiesOHOS *out)
 +{
-+   VkResult result = sheng_observed_tu_GetNativeBufferPropertiesOHOS(device, buffer, out);
++   VkResult result = dipper_observed_tu_GetNativeBufferPropertiesOHOS(device, buffer, out);
 +   static unsigned calls = 0, failures = 0;
 +   unsigned n = __atomic_add_fetch(&calls, 1, __ATOMIC_RELAXED);
 +   if (n <= 12 || (result != VK_SUCCESS && __atomic_add_fetch(&failures, 1, __ATOMIC_RELAXED) <= 32))
-+      fprintf(stderr, "SHENG_PROPERTIES n=%u result=%d native=%p size=%llu types=%x\n",
++      fprintf(stderr, "DIPPER_PROPERTIES n=%u result=%d native=%p size=%llu types=%x\n",
 +              n, result, (const void*)buffer, out ? (unsigned long long)out->allocationSize : 0,
 +              out ? out->memoryTypeBits : 0);
 +   return result;
@@ -1873,7 +1873,7 @@ new file mode 100644
 +#define OHOS_DMABUF_SYNC_H
 +
 +#include "drm-uapi/dma-buf.h"
-+#include "sheng_dmabuf_sync.h"
++#include "dipper_dmabuf_sync.h"
 +#include <errno.h>
 +#include <fcntl.h>
 +#include <stdbool.h>
@@ -1883,14 +1883,14 @@ new file mode 100644
 +#include <unistd.h>
 +
 +#ifdef __cplusplus
-+static_assert(sizeof(struct sheng_dmabuf_sync_abi) == 16, "sync ABI size");
-+static_assert(sizeof(struct sheng_dmabuf_sync_file) == 16, "sync file size");
-+static_assert(offsetof(struct sheng_dmabuf_sync_file, fence_fd) == 8,
++static_assert(sizeof(struct dipper_dmabuf_sync_abi) == 16, "sync ABI size");
++static_assert(sizeof(struct dipper_dmabuf_sync_file) == 16, "sync file size");
++static_assert(offsetof(struct dipper_dmabuf_sync_file, fence_fd) == 8,
 +              "sync fence offset");
 +#else
-+_Static_assert(sizeof(struct sheng_dmabuf_sync_abi) == 16, "sync ABI size");
-+_Static_assert(sizeof(struct sheng_dmabuf_sync_file) == 16, "sync file size");
-+_Static_assert(offsetof(struct sheng_dmabuf_sync_file, fence_fd) == 8,
++_Static_assert(sizeof(struct dipper_dmabuf_sync_abi) == 16, "sync ABI size");
++_Static_assert(sizeof(struct dipper_dmabuf_sync_file) == 16, "sync file size");
++_Static_assert(offsetof(struct dipper_dmabuf_sync_file, fence_fd) == 8,
 +               "sync fence offset");
 +#endif
 +
@@ -1910,14 +1910,14 @@ new file mode 100644
 +static inline int
 +ohos_dmabuf_sync_open(void)
 +{
-+   struct sheng_dmabuf_sync_abi abi = {0};
-+   int fd = open(SHENG_DMABUF_SYNC_DEVICE, O_RDWR | O_CLOEXEC);
++   struct dipper_dmabuf_sync_abi abi = {0};
++   int fd = open(DIPPER_DMABUF_SYNC_DEVICE, O_RDWR | O_CLOEXEC);
 +   if (fd < 0)
 +      return -1;
-+   int result = ohos_dmabuf_sync_ioctl(fd, SHENG_DMABUF_SYNC_QUERY, &abi);
-+   if (result || abi.version != SHENG_DMABUF_SYNC_VERSION || abi.reserved ||
-+       (abi.features & SHENG_DMABUF_SYNC_FEATURES_REQUIRED) !=
-+           SHENG_DMABUF_SYNC_FEATURES_REQUIRED) {
++   int result = ohos_dmabuf_sync_ioctl(fd, DIPPER_DMABUF_SYNC_QUERY, &abi);
++   if (result || abi.version != DIPPER_DMABUF_SYNC_VERSION || abi.reserved ||
++       (abi.features & DIPPER_DMABUF_SYNC_FEATURES_REQUIRED) !=
++           DIPPER_DMABUF_SYNC_FEATURES_REQUIRED) {
 +      int error = result ? errno : EPROTO;
 +      close(fd);
 +      errno = error;
@@ -1959,7 +1959,7 @@ new file mode 100644
 +   if (fence_fd)
 +      *fence_fd = -1;
 +   if (!fence_fd || dma_buf_fd < 0 || !flags ||
-+       (flags & ~SHENG_DMABUF_SYNC_VALID_FLAGS)) {
++       (flags & ~DIPPER_DMABUF_SYNC_VALID_FLAGS)) {
 +      errno = EINVAL;
 +      return -1;
 +   }
@@ -1976,12 +1976,12 @@ new file mode 100644
 +   int helper = ohos_dmabuf_sync_open();
 +   if (helper < 0)
 +      return -1;
-+   struct sheng_dmabuf_sync_file transfer = {
++   struct dipper_dmabuf_sync_file transfer = {
 +       .dma_buf_fd = dma_buf_fd,
 +       .flags = flags,
 +       .fence_fd = -1,
 +   };
-+   int result = ohos_dmabuf_sync_ioctl(helper, SHENG_DMABUF_SYNC_EXPORT, &transfer);
++   int result = ohos_dmabuf_sync_ioctl(helper, DIPPER_DMABUF_SYNC_EXPORT, &transfer);
 +   error = errno;
 +   if (!result) {
 +      result =
@@ -2004,7 +2004,7 @@ new file mode 100644
 +ohos_dmabuf_sync_import(int dma_buf_fd, uint32_t flags, int fence_fd)
 +{
 +   if (dma_buf_fd < 0 || fence_fd < 0 || !flags ||
-+       (flags & ~SHENG_DMABUF_SYNC_VALID_FLAGS)) {
++       (flags & ~DIPPER_DMABUF_SYNC_VALID_FLAGS)) {
 +      errno = EINVAL;
 +      return -1;
 +   }
@@ -2017,12 +2017,12 @@ new file mode 100644
 +   int helper = ohos_dmabuf_sync_open();
 +   if (helper < 0)
 +      return -1;
-+   struct sheng_dmabuf_sync_file transfer = {
++   struct dipper_dmabuf_sync_file transfer = {
 +       .dma_buf_fd = dma_buf_fd,
 +       .flags = flags,
 +       .fence_fd = fence_fd,
 +   };
-+   int result = ohos_dmabuf_sync_ioctl(helper, SHENG_DMABUF_SYNC_IMPORT, &transfer);
++   int result = ohos_dmabuf_sync_ioctl(helper, DIPPER_DMABUF_SYNC_IMPORT, &transfer);
 +   int error = errno;
 +   if (close(helper) && !result) {
 +      error = errno;

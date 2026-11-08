@@ -27,7 +27,7 @@ extern const EVP_MD *EVP_sha256(void);
 _Static_assert(sizeof(struct HksBlob)==16,"donor aarch64 blob ABI");
 _Static_assert(sizeof(struct HksParam)==24,"donor aarch64 param ABI");
 static const char alias[]="os_account_info_encryption_key";
-static const char keypath[]="/data/service/el1/public/account/sheng-dev-hmac.key";
+static const char keypath[]="/data/service/el1/public/account/dipper-dev-hmac.key";
 static pthread_mutex_t lock=PTHREAD_MUTEX_INITIALIZER;
 static void wipe(void *p,size_t n){volatile unsigned char *v=p;while(n--)*v++=0;}
 static uint64_t counter=1;
@@ -75,7 +75,7 @@ static int generate(void)
     int good=write(fd,key,32)==32&&fsync(fd)==0;
     close(fd);wipe(key,sizeof(key));
     if(!good||rename(temporary,keypath)<0){unlink(temporary);return FAIL;}
-    fprintf(stderr,"SHENG_DEV_ACCOUNT_HMAC: software key created in RAM data; no TEE\n");return 0;
+    fprintf(stderr,"DIPPER_DEV_ACCOUNT_HMAC: software key created in RAM data; no TEE\n");return 0;
 }
 static uint64_t idof(const struct HksBlob *h)
 {uint64_t n=0;if(h&&h->data&&h->size==8)memcpy(&n,h->data,8);return n;}

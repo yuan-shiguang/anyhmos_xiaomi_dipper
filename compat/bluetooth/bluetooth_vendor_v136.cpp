@@ -28,7 +28,7 @@ static int connect_backend()
     if(ready)return 0;
     release_channel();
     int fd=socket(AF_UNIX,SOCK_STREAM|SOCK_CLOEXEC,0);if(fd<0)return -errno;
-    sockaddr_un a{};a.sun_family=AF_UNIX;strcpy(a.sun_path,"/dev/unix/socket/sheng.bt.h4");
+    sockaddr_un a{};a.sun_family=AF_UNIX;strcpy(a.sun_path,"/dev/unix/socket/dipper.bt.h4");
     if(connect(fd,reinterpret_cast<sockaddr *>(&a),sizeof(a))){int e=errno;close(fd);return -e;}
     char reply[4]{};size_t n=0;
     while(n<sizeof(reply)){

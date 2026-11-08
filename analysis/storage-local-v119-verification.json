@@ -7,18 +7,18 @@
     "sha256": "80792c91465843faa2086734bd55ac3d44426d32668d27634c22ad303e66b125"
   },
   "init_boot_unchanged": true,
-  "payload_prefix": "sheng-compat-v118/",
+  "payload_prefix": "dipper-compat-v118/",
   "preserved_v118_entries": true,
   "changed_entries": [
-    "sheng-compat-v118/MANIFEST.json",
-    "sheng-compat-v118/graphics/apply-msdp-local-v1.sh",
-    "sheng-compat-v118/graphics/apply-storage-local-v1.sh"
+    "dipper-compat-v118/MANIFEST.json",
+    "dipper-compat-v118/graphics/apply-msdp-local-v1.sh",
+    "dipper-compat-v118/graphics/apply-storage-local-v1.sh"
   ],
   "dtb_unchanged": true,
   "bootconfig_unchanged": true,
   "stock_vendor_modules_and_audio_unchanged": true,
   "cpio_verified": true,
-  "basis": "AnyHarmonyOS devices/oneplus-ace5/boot/tools/build.py native LocalMount selection; sheng boot error13600721 errno19",
+  "basis": "AnyHarmonyOS devices/oneplus-ace5/boot/tools/build.py native LocalMount selection; dipper boot error13600721 errno19",
   "cold_boot_verified": false,
   "account_unlock_verified": false,
   "thirdparty_launch_verified": false,

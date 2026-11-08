@@ -323,7 +323,7 @@ struct json_value *json_parse_file(const char *file)
 	int ret;
 	int fd;
 
-	/* Original Sheng descriptors are plain .jsn; never pretend to decode XZ. */
+	/* Original Dipper descriptors are plain .jsn; never pretend to decode XZ. */
 	if ((strlen(file) > 3) && !strcmp(&file[strlen(file)-3], ".xz")) {
 		errno = ENOTSUP;
 		return NULL;

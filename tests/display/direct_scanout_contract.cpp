@@ -162,23 +162,23 @@ void Prepare(bool expected)
 void ClientBuffer()
 {
     BufferHandle b{}; b.fd=open("/dev/null",O_RDONLY);
-    b.width=3048; b.height=2032; b.stride=12288;
-    b.size=12288*2032+4096; b.format=V1_0::PIXEL_FMT_RGBA_8888;
+    b.width=1080; b.height=2248; b.stride=4352;
+    b.size=4352*2248+4096; b.format=V1_0::PIXEL_FMT_RGBA_8888;
     Check(SetDisplayClientBuffer(0,b,-1)==0,"fresh client buffer"); close(b.fd);
 }
 void LayerBuffer(uint32_t layer)
 {
     BufferHandle b{}; b.fd=open("/dev/null",O_RDONLY);
-    b.width=3048; b.height=2032; b.stride=12288;
-    b.size=12288*2032+4096; b.format=V1_0::PIXEL_FMT_RGBA_8888;
+    b.width=1080; b.height=2248; b.stride=4352;
+    b.size=4352*2248+4096; b.format=V1_0::PIXEL_FMT_RGBA_8888;
     Check(SetLayerBuffer(0,layer,b,-1)==0,"layer buffer"); close(b.fd);
 }
 uint32_t Layer()
 {
-    LayerInfo info{}; info.width=3048; info.height=2032; info.bpp=32;
+    LayerInfo info{}; info.width=1080; info.height=2248; info.bpp=32;
     info.pixFormat=V1_0::PIXEL_FMT_RGBA_8888;
     uint32_t layer=0; Check(CreateLayer(0,info,layer)==0,"create layer");
-    IRect r{0,0,3048,2032}; LayerAlpha a{true,false,0,0,255};
+    IRect r{0,0,1080,2248}; LayerAlpha a{true,false,0,0,255};
     std::vector<IRect> visible{r};
     Check(SetLayerRegion(0,layer,r)==0 && SetLayerCrop(0,layer,r)==0,"layer geometry");
     Check(SetLayerVisibleRegion(0,layer,visible)==0 && SetLayerAlpha(0,layer,a)==0,"opaque visible");

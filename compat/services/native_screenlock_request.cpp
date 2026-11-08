@@ -76,7 +76,7 @@ static void crash(int sig, siginfo_t* info, void* raw)
 int main()
 {
     alarm(35);
-    if (!freopen("/data/local/tmp/sheng-capture/unlock-request.txt", "w", stdout)) return 2;
+    if (!freopen("/data/local/tmp/dipper-capture/unlock-request.txt", "w", stdout)) return 2;
     setbuf(stdout, nullptr);
     struct sigaction action{};
     action.sa_sigaction=crash;action.sa_flags=SA_SIGINFO;
@@ -88,7 +88,7 @@ int main()
     bool secure = manager->GetSecure();
     std::printf("SCREENLOCK_CHECK result=%d deviceLocked=%d secure=%d\n", check, deviceLocked, secure);
     if (check != E_SCREENLOCK_OK || deviceLocked || secure) return 5;
-    bool forceCallback=access("/data/local/tmp/sheng-capture/screenlock-callback-test",F_OK)==0;
+    bool forceCallback=access("/data/local/tmp/dipper-capture/screenlock-callback-test",F_OK)==0;
     bool locked = manager->IsScreenLocked();
     std::printf("SCREENLOCK_REQUEST uid=%d before=%d\n", getuid(), locked);
     if (!locked && !forceCallback) {

@@ -38,7 +38,7 @@ Surface ObserveFactory(void* gpu, const void* texture, uint32_t origin, int samp
 {
     static auto original = reinterpret_cast<Factory>(dlsym(RTLD_NEXT,
         "_ZN4OHOS5Rosen7Drawing7Surface22MakeFromBackendTextureEPNS1_10GPUContextERKNS1_11TextureInfoENS1_13TextureOriginEiNS1_9ColorTypeENSt3__h10shared_ptrINS1_10ColorSpaceEEEPFvPvESE_"));
-    if (!original) { std::fprintf(stderr, "SHENG_SURFACE_FACTORY_MISSING %s\n", dlerror()); return {}; }
+    if (!original) { std::fprintf(stderr, "DIPPER_SURFACE_FACTORY_MISSING %s\n", dlerror()); return {}; }
     auto result = original(gpu, texture, origin, samples, color, space, cleanup, helper);
     static unsigned calls = 0, failures = 0;
     unsigned call = __atomic_add_fetch(&calls, 1, __ATOMIC_RELAXED);
@@ -49,7 +49,7 @@ Surface ObserveFactory(void* gpu, const void* texture, uint32_t origin, int samp
             "_ZN4OHOS5Rosen18RSSystemProperties17systemGpuApiType_E"));
         Dl_info location{}; dladdr(reinterpret_cast<void*>(original), &location);
         std::fprintf(stderr,
-            "SHENG_SURFACE_FACTORY tid=%ld gpu=%p texture=%p origin=%u samples=%d color=%u result=%p drawing=%d rosen=%d original=%s\n",
+            "DIPPER_SURFACE_FACTORY tid=%ld gpu=%p texture=%p origin=%u samples=%d color=%u result=%p drawing=%d rosen=%d original=%s\n",
             syscall(SYS_gettid), gpu, texture, origin, samples, color, result.get(),
             drawing ? *drawing : -1, rosen ? *rosen : -1,
             location.dli_fname ? location.dli_fname : "?");
@@ -57,11 +57,11 @@ Surface ObserveFactory(void* gpu, const void* texture, uint32_t origin, int samp
         // implementation (0x195d0c), rather than inferred from another ABI.
         if (texture) {
             auto vk = Field<const void*>(texture, 24);
-            std::fprintf(stderr, "SHENG_TEXTURE_V2 size=%dx%d vk=%p\n",
+            std::fprintf(stderr, "DIPPER_TEXTURE_V2 size=%dx%d vk=%p\n",
                 Field<int>(texture, 0), Field<int>(texture, 4), vk);
             if (vk) {
                 std::fprintf(stderr,
-                    "SHENG_TEXTURE_V2 image=%llx memory=%llx offset=%llu bytes=%llu allocflags=%x tiling=%u layout=%u format=%u usage=%x samples=%u levels=%u queue=%x protected=%u sharing=%u\n",
+                    "DIPPER_TEXTURE_V2 image=%llx memory=%llx offset=%llu bytes=%llu allocflags=%x tiling=%u layout=%u format=%u usage=%x samples=%u levels=%u queue=%x protected=%u sharing=%u\n",
                     (unsigned long long)Field<uint64_t>(vk, 0),
                     (unsigned long long)Field<uint64_t>(vk, 8),
                     (unsigned long long)Field<uint64_t>(vk, 16),
@@ -81,7 +81,7 @@ Surface ObserveFactory(void* gpu, const void* texture, uint32_t origin, int samp
             if (target) {
                 ImageInfo info{8, 8, 4, 2, {}};
                 auto test = target(gpu, false, info);
-                std::fprintf(stderr, "SHENG_SURFACE_CONTEXT_TEST tid=%ld target=%p\n", syscall(SYS_gettid), test.get());
+                std::fprintf(stderr, "DIPPER_SURFACE_CONTEXT_TEST tid=%ld target=%p\n", syscall(SYS_gettid), test.get());
             }
         }
     }
@@ -94,7 +94,7 @@ Surface ObserveFactory(void* gpu, const void* texture, uint32_t origin, int samp
 #include <sys/stat.h>
 #include <cerrno>
 
-extern "C" void* ShengResolveBufferImport()
+extern "C" void* DipperResolveBufferImport()
 {
     static void* original = dlsym(RTLD_NEXT,
         "_ZN4OHOS5Rosen17NativeBufferUtils34MakeBackendTextureFromNativeBufferEP18NativeWindowBufferiib");
@@ -102,7 +102,7 @@ extern "C" void* ShengResolveBufferImport()
     return original;
 }
 
-extern "C" void ShengObserveBufferImport(const void* backend, void* window,
+extern "C" void DipperObserveBufferImport(const void* backend, void* window,
                                          int width, int height, bool protectedBuffer)
 {
     static auto valid = reinterpret_cast<bool (*)(const void*)>(dlsym(RTLD_NEXT,
@@ -122,7 +122,7 @@ extern "C" void ShengObserveBufferImport(const void* backend, void* window,
     const void* h = handle ? handle(window) : nullptr;
     void* n = native ? native(window) : nullptr;
     std::fprintf(stderr,
-        "SHENG_IMPORT_V4 tid=%ld call=%u window=%p native=%p size=%dx%d protected=%d valid=%d vk=%p handle=%p\n",
+        "DIPPER_IMPORT_V4 tid=%ld call=%u window=%p native=%p size=%dx%d protected=%d valid=%d vk=%p handle=%p\n",
         syscall(SYS_gettid), call, window, n, width, height, protectedBuffer, good, vk, h);
     if (h) {
         // Donor's 56-byte HDF BufferHandle, not the SDK's 64-byte variant
@@ -132,7 +132,7 @@ extern "C" void ShengObserveBufferImport(const void* backend, void* window,
         const int statResult = fstat(fd, &st);
         const int statError = errno;
         std::fprintf(stderr,
-            "SHENG_HANDLE_V4 fd=%d flags=%d fstat=%d errno=%d fdsize=%llu width=%d height=%d stride=%d size=%d format=%d usage=%llx reserveFds=%u reserveInts=%u\n",
+            "DIPPER_HANDLE_V4 fd=%d flags=%d fstat=%d errno=%d fdsize=%llu width=%d height=%d stride=%d size=%d format=%d usage=%llx reserveFds=%u reserveInts=%u\n",
             fd, fcntl(fd, F_GETFD), statResult, statError,
             static_cast<unsigned long long>(st.st_size), Field<int>(h, 4),
             Field<int>(h, 12), Field<int>(h, 8), Field<int>(h, 16), Field<int>(h, 20),
@@ -141,9 +141,9 @@ extern "C" void ShengObserveBufferImport(const void* backend, void* window,
 }
 
 // End required component: native_surface_diagnostic_v4.cpp
-extern "C" void ShengObserveDelete(void*)
+extern "C" void DipperObserveDelete(void*)
     asm("_ZN4OHOS5Rosen17NativeBufferUtils13DeleteVkImageEPv");
-extern "C" void ShengObserveDelete(void* helper)
+extern "C" void DipperObserveDelete(void* helper)
 {
     static auto original = reinterpret_cast<void (*)(void*)>(dlsym(RTLD_NEXT,
         "_ZN4OHOS5Rosen17NativeBufferUtils13DeleteVkImageEPv"));
@@ -152,7 +152,7 @@ extern "C" void ShengObserveDelete(void* helper)
     const auto n = __atomic_add_fetch(&calls, 1, __ATOMIC_RELAXED);
     if (n <= 16 || n % 64 == 0) {
         std::fprintf(stderr,
-            "SHENG_DELETE_V5 n=%u helper=%p refs=%u device=%p image=%p memory=%p\n",
+            "DIPPER_DELETE_V5 n=%u helper=%p refs=%u device=%p image=%p memory=%p\n",
             n, helper, helper ? Field<uint32_t>(helper, 56) : 0,
             helper ? Field<void*>(helper, 0) : nullptr,
             helper ? Field<void*>(helper, 8) : nullptr,
@@ -164,10 +164,10 @@ extern "C" void ShengObserveDelete(void* helper)
 // End required component: native_surface_diagnostic_v5.cpp
 struct BitmapFormatV6 { uint32_t color, alpha; };
 
-extern "C" bool ShengObserveImage(void*, void*, const void*, uint32_t,
+extern "C" bool DipperObserveImage(void*, void*, const void*, uint32_t,
     BitmapFormatV6, const Surface&, void (*)(void*), void*, bool)
     asm("_ZN4OHOS5Rosen7Drawing5Image16BuildFromTextureERNS1_10GPUContextERKNS1_11TextureInfoENS1_13TextureOriginENS1_12BitmapFormatERKNSt3__h10shared_ptrINS1_10ColorSpaceEEEPFvPvESG_b");
-extern "C" bool ShengObserveImage(void* self, void* gpu, const void* texture,
+extern "C" bool DipperObserveImage(void* self, void* gpu, const void* texture,
     uint32_t origin, BitmapFormatV6 format, const Surface& color,
     void (*cleanup)(void*), void* helper, bool ignoreAlpha)
 {
@@ -176,23 +176,23 @@ extern "C" bool ShengObserveImage(void* self, void* gpu, const void* texture,
     static auto original = reinterpret_cast<Fn>(dlsym(RTLD_NEXT,
         "_ZN4OHOS5Rosen7Drawing5Image16BuildFromTextureERNS1_10GPUContextERKNS1_11TextureInfoENS1_13TextureOriginENS1_12BitmapFormatERKNSt3__h10shared_ptrINS1_10ColorSpaceEEEPFvPvESG_b"));
     if (!original) std::abort();
-#ifdef SHENG_BEFORE_IMAGE
-    SHENG_BEFORE_IMAGE(gpu);
+#ifdef DIPPER_BEFORE_IMAGE
+    DIPPER_BEFORE_IMAGE(gpu);
 #endif
     const bool result = original(self, gpu, texture, origin, format, color,
         cleanup, helper, ignoreAlpha);
     static unsigned calls = 0, failed = 0;
     const auto n = __atomic_add_fetch(&calls, 1, __ATOMIC_RELAXED);
     if (n <= 12 || n % 64 == 0 || (!result && __atomic_add_fetch(&failed, 1, __ATOMIC_RELAXED) <= 16))
-        std::fprintf(stderr, "SHENG_IMAGE_V6 n=%u result=%d self=%p gpu=%p texture=%p color=%u alpha=%u cleanup=%p helper=%p\n",
+        std::fprintf(stderr, "DIPPER_IMAGE_V6 n=%u result=%d self=%p gpu=%p texture=%p color=%u alpha=%u cleanup=%p helper=%p\n",
             n, result, self, gpu, texture, format.color, format.alpha,
             reinterpret_cast<void*>(cleanup), helper);
     return result;
 }
 
-extern "C" bool ShengObserveCompare(void*, uint32_t, uint32_t)
+extern "C" bool DipperObserveCompare(void*, uint32_t, uint32_t)
     asm("_ZN4OHOS5Rosen17NativeBufferUtils27IsYcbcrModelOrRangeNotEqualEP15OH_NativeBuffer29VkSamplerYcbcrModelConversion19VkSamplerYcbcrRange");
-extern "C" bool ShengObserveCompare(void* native, uint32_t model, uint32_t range)
+extern "C" bool DipperObserveCompare(void* native, uint32_t model, uint32_t range)
 {
     using Fn = bool (*)(void*, uint32_t, uint32_t);
     static auto original = reinterpret_cast<Fn>(dlsym(RTLD_NEXT,
@@ -202,15 +202,15 @@ extern "C" bool ShengObserveCompare(void* native, uint32_t model, uint32_t range
     static unsigned calls = 0, different = 0;
     const auto n = __atomic_add_fetch(&calls, 1, __ATOMIC_RELAXED);
     if (n <= 12 || (result && __atomic_add_fetch(&different, 1, __ATOMIC_RELAXED) <= 16))
-        std::fprintf(stderr, "SHENG_COMPARE_V6 n=%u different=%d native=%p cached_model=%u cached_range=%u\n",
+        std::fprintf(stderr, "DIPPER_COMPARE_V6 n=%u different=%d native=%p cached_model=%u cached_range=%u\n",
             n, result, native, model, range);
     return result;
 }
 
 // End required component: native_surface_diagnostic_v6.cpp
-extern "C" void ShengImageD0(void*)
+extern "C" void DipperImageD0(void*)
     asm("_ZN4OHOS5Rosen7Drawing5ImageD0Ev");
-extern "C" void ShengImageD0(void* self)
+extern "C" void DipperImageD0(void* self)
 {
     static auto fn = reinterpret_cast<void (*)(void*)>(dlsym(RTLD_NEXT,
         "_ZN4OHOS5Rosen7Drawing5ImageD0Ev"));
@@ -218,13 +218,13 @@ extern "C" void ShengImageD0(void* self)
     static unsigned calls = 0;
     const auto n = __atomic_add_fetch(&calls, 1, __ATOMIC_RELAXED);
     if (n <= 12 || n % 64 == 0)
-        std::fprintf(stderr, "SHENG_IMAGE_D0 n=%u self=%p tid=%ld\n", n, self, syscall(SYS_gettid));
+        std::fprintf(stderr, "DIPPER_IMAGE_D0 n=%u self=%p tid=%ld\n", n, self, syscall(SYS_gettid));
     fn(self);
 }
 
-extern "C" void ShengImageD1(void*)
+extern "C" void DipperImageD1(void*)
     asm("_ZN4OHOS5Rosen7Drawing5ImageD1Ev");
-extern "C" void ShengImageD1(void* self)
+extern "C" void DipperImageD1(void* self)
 {
     static auto fn = reinterpret_cast<void (*)(void*)>(dlsym(RTLD_NEXT,
         "_ZN4OHOS5Rosen7Drawing5ImageD1Ev"));
@@ -232,7 +232,7 @@ extern "C" void ShengImageD1(void* self)
     static unsigned calls = 0;
     const auto n = __atomic_add_fetch(&calls, 1, __ATOMIC_RELAXED);
     if (n <= 12 || n % 64 == 0)
-        std::fprintf(stderr, "SHENG_IMAGE_D1 n=%u self=%p tid=%ld\n", n, self, syscall(SYS_gettid));
+        std::fprintf(stderr, "DIPPER_IMAGE_D1 n=%u self=%p tid=%ld\n", n, self, syscall(SYS_gettid));
     fn(self);
 }
 
@@ -241,34 +241,34 @@ extern "C" void ShengImageD1(void* self)
 using TaskV2 = std::function<void()>;
 using PostV2 = std::function<void(const TaskV2&)>;
 
-extern "C" void ShengRegisterPostV2(void*, const PostV2&)
+extern "C" void DipperRegisterPostV2(void*, const PostV2&)
     asm("_ZN4OHOS5Rosen7Drawing10GPUContext16RegisterPostFuncERKNSt3__h8functionIFvRKNS4_IFvvEEEEEE");
-extern "C" void ShengRegisterPostV2(void* gpu, const PostV2& post)
+extern "C" void DipperRegisterPostV2(void* gpu, const PostV2& post)
 {
     static auto original = reinterpret_cast<void (*)(void*, const PostV2&)>(dlsym(RTLD_NEXT,
         "_ZN4OHOS5Rosen7Drawing10GPUContext16RegisterPostFuncERKNSt3__h8functionIFvRKNS4_IFvvEEEEEE"));
     if (!original) std::abort();
     const long owner = syscall(SYS_gettid);
-    std::fprintf(stderr, "SHENG_POST_V2_REGISTER gpu=%p owner=%ld enabled=%d\n", gpu, owner, bool(post));
+    std::fprintf(stderr, "DIPPER_POST_V2_REGISTER gpu=%p owner=%ld enabled=%d\n", gpu, owner, bool(post));
     if (!post) { original(gpu, post); return; }
     original(gpu, [post, owner](const TaskV2& task) {
         static unsigned queued = 0, inlineCalls = 0;
         const auto n = __atomic_add_fetch(&queued, 1, __ATOMIC_RELAXED);
         const long caller = syscall(SYS_gettid);
-        if (caller == owner && access("/data/local/tmp/sheng-gpu-owner-cleanup", F_OK) == 0) {
+        if (caller == owner && access("/data/local/tmp/dipper-gpu-owner-cleanup", F_OK) == 0) {
             const auto done = __atomic_add_fetch(&inlineCalls, 1, __ATOMIC_RELAXED);
             if (done <= 12 || done % 64 == 0)
-                std::fprintf(stderr, "SHENG_POST_V2_INLINE done=%u owner=%ld caller=%ld\n", done, owner, caller);
+                std::fprintf(stderr, "DIPPER_POST_V2_INLINE done=%u owner=%ld caller=%ld\n", done, owner, caller);
             task();
             return;
         }
         if (n <= 12 || n % 64 == 0)
-            std::fprintf(stderr, "SHENG_POST_V2_QUEUE n=%u owner=%ld caller=%ld\n", n, owner, caller);
+            std::fprintf(stderr, "DIPPER_POST_V2_QUEUE n=%u owner=%ld caller=%ld\n", n, owner, caller);
         post([task, owner, n]() {
             static unsigned executed = 0;
             const auto done = __atomic_add_fetch(&executed, 1, __ATOMIC_RELAXED);
             if (done <= 12 || done % 64 == 0)
-                std::fprintf(stderr, "SHENG_POST_V2_RUN done=%u queued_id=%u owner=%ld actual=%ld\n", done, n, owner, syscall(SYS_gettid));
+                std::fprintf(stderr, "DIPPER_POST_V2_RUN done=%u queued_id=%u owner=%ld actual=%ld\n", done, n, owner, syscall(SYS_gettid));
             task();
         });
     });

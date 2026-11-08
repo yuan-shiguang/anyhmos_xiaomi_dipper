@@ -1,5 +1,5 @@
 /* Original303 backend -> bounded H4 transport -> original OHOS HCI service. */
-#define SHENG_BT_BRIDGE 1
+#define DIPPER_BT_BRIDGE 1
 #include "bluetooth_initialize_v136.cpp"
 #include <sys/socket.h>
 #include <sys/un.h>
@@ -52,7 +52,7 @@ static bool read_all(int fd,void *data,size_t n)
 static int run(int,char **,char **)
 {
     setvbuf(stdout,nullptr,_IOLBF,0);
-    const char *library=getenv("SHENG_BT_ORIGINAL_LIBRARY");
+    const char *library=getenv("DIPPER_BT_ORIGINAL_LIBRARY");
     if(!library)return 10;
     void *lib=dlopen(library,RTLD_NOW|RTLD_LOCAL);
     if(!lib){printf("BT_BRIDGE_DLOPEN_ERROR=%s\n",dlerror());return 11;}
@@ -69,12 +69,12 @@ static int run(int,char **,char **)
     if(lock<0 || flock(lock,LOCK_EX|LOCK_NB))return 13;
     int listener=socket(AF_UNIX,SOCK_STREAM|SOCK_CLOEXEC,0);if(listener<0)return 14;
     sockaddr_un address{};address.sun_family=AF_UNIX;
-    strcpy(address.sun_path,"/hmos-root/dev/unix/socket/sheng.bt.h4");
+    strcpy(address.sun_path,"/hmos-root/dev/unix/socket/dipper.bt.h4");
     unlink(address.sun_path);
     if(bind(listener,reinterpret_cast<sockaddr *>(&address),sizeof(address)))return 15;
     if(chown(address.sun_path,0,3021) || chmod(address.sun_path,0660) || listen(listener,1))return 16;
     puts("BT_BRIDGE_LISTENING=1 hardware_off_until_client=1");
-    unsigned sessions=0,max_sessions=0;const char *max=getenv("SHENG_BT_MAX_SESSIONS");
+    unsigned sessions=0,max_sessions=0;const char *max=getenv("DIPPER_BT_MAX_SESSIONS");
     if(max)max_sessions=strtoul(max,nullptr,10);
     for(;;){
         int fd=accept4(listener,nullptr,nullptr,SOCK_CLOEXEC);

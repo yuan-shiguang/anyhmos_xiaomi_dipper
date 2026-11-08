@@ -9,10 +9,10 @@
   "cpio_verified": true,
   "preserved_v132_entries": true,
   "changed_entries": [
-    "sheng-compat-v118/MANIFEST.json",
-    "sheng-compat-v118/graphics/apply-hardware-v116.sh",
-    "sheng-compat-v118/graphics/init-wifi-v116.cfg",
-    "sheng-compat-v118/graphics/libsheng_wifi_category_v134.so"
+    "dipper-compat-v118/MANIFEST.json",
+    "dipper-compat-v118/graphics/apply-hardware-v116.sh",
+    "dipper-compat-v118/graphics/init-wifi-v116.cfg",
+    "dipper-compat-v118/graphics/libdipper_wifi_category_v134.so"
   ],
   "init_boot_unchanged": true,
   "dtb_unchanged": true,

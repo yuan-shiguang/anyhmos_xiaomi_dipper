@@ -1,4 +1,4 @@
-#ifdef SHENG_POLICY_HOST
+#ifdef DIPPER_POLICY_HOST
 using size_t = __SIZE_TYPE__;
 using ssize_t = __PTRDIFF_TYPE__;
 constexpr int O_RDONLY = 0, O_CLOEXEC = 1, O_NOFOLLOW = 2;
@@ -15,8 +15,8 @@ extern "C" void *memcpy(void *target, const void *source, size_t size)
 #include <unistd.h>
 #endif
 
-#ifndef SHENG_DEFAULT_DISPLAY_ROUTE
-#define SHENG_DEFAULT_DISPLAY_ROUTE 0
+#ifndef DIPPER_DEFAULT_DISPLAY_ROUTE
+#define DIPPER_DEFAULT_DISPLAY_ROUTE 0
 #endif
 
 namespace {
@@ -39,7 +39,7 @@ void Reset()
 extern "C" int __wrap_open(const char *path, int flags, ...)
 {
     ++opens;
-    if (!Equal(path, "/dev/sheng-display-route-mode") ||
+    if (!Equal(path, "/dev/dipper-display-route-mode") ||
         flags != (O_RDONLY | O_CLOEXEC | O_NOFOLLOW)) {
         ++unexpected; errno = EACCES; return -1;
     }
@@ -61,7 +61,7 @@ extern "C" int __wrap_close(int fd)
     return 0;
 }
 
-#ifdef SHENG_POLICY_HOST
+#ifdef DIPPER_POLICY_HOST
 #define open __wrap_open
 #define read __wrap_read
 #define close __wrap_close
@@ -82,7 +82,7 @@ int RunCase(unsigned number)
     int expected = 0;
     constexpr const char *routes[] = {"0", "1", "2"};
     if (number <= 2) { contents = routes[number]; expected = number; }
-    else if (number == 3) { openError = ENOENT; expected = SHENG_DEFAULT_DISPLAY_ROUTE; }
+    else if (number == 3) { openError = ENOENT; expected = DIPPER_DEFAULT_DISPLAY_ROUTE; }
     else if (number == 4) openError = EACCES;
     else if (number == 5) contents = "3";
     else if (number == 6) contents = "\n";
@@ -99,7 +99,7 @@ int RunCase(unsigned number)
     return 0;
 }
 
-#ifdef SHENG_POLICY_HOST
+#ifdef DIPPER_POLICY_HOST
 extern "C" __declspec(dllimport) __declspec(noreturn) void ExitProcess(unsigned);
 extern "C" __declspec(dllimport) char *GetCommandLineA();
 extern "C" void HostMain()
@@ -119,11 +119,11 @@ int main()
     for (unsigned number = 0; number < 12; ++number) {
         int result = RunCase(number);
         if (result) {
-            printf("ROUTE_POLICY_FAIL default=%d case=%u line=%d\n", SHENG_DEFAULT_DISPLAY_ROUTE, number, result);
+            printf("ROUTE_POLICY_FAIL default=%d case=%u line=%d\n", DIPPER_DEFAULT_DISPLAY_ROUTE, number, result);
             return 1;
         }
     }
-    printf("ROUTE_POLICY_OK default=%d cases=12 real_reader_mocked_files=1\n", SHENG_DEFAULT_DISPLAY_ROUTE);
+    printf("ROUTE_POLICY_OK default=%d cases=12 real_reader_mocked_files=1\n", DIPPER_DEFAULT_DISPLAY_ROUTE);
     return 0;
 }
 #endif

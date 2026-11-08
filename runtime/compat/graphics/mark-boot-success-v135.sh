@@ -6,8 +6,8 @@ R=/hmos-root
 D=/compat/bootcontrol-v135
 [ "$#" -eq 1 ] || exit 31
 [ "$1" = "$($B cat /proc/sys/kernel/random/boot_id)" ] || exit 32
-[ "$($B uname -r)" = 5.15.178-android13-8-00021-g6f2f96be86b9-ab13729987 ] || exit 33
-$B grep -q '^androidboot.hardware.sku = "sheng"$' /proc/bootconfig
+# 内核为 4.9 官方内核：不再按 5.15 GKI 版本号门禁，改由设备标识与模块存在性判断
+$B grep -q '^androidboot.hardware.sku = "dipper"$' /proc/bootconfig
 completed=$($B chroot "$R" /system/bin/param get bootevent.boot.completed)
 [ "$(echo "$completed" | $B tr -d ' \r\n')" = true ] || exit 34
 # 仅接受状态接口确认解锁后产生的完整记录
@@ -21,5 +21,5 @@ else
  $B ln -s /dev/block /dev/block/bootdevice
 fi
 $B timeout 8 $B env LD_LIBRARY_PATH="$D:/compat/audio-runtime/lib64" \
- LD_PRELOAD="$D/libsheng_bootcontrol_guarded_v135.so" SHENG_MARK_SUCCESS_BOOT_ID="$1" \
+ LD_PRELOAD="$D/libdipper_bootcontrol_guarded_v135.so" DIPPER_MARK_SUCCESS_BOOT_ID="$1" \
  /compat/audio-runtime/bin/linker64 /compat/audio-runtime/bin/agmplay -h

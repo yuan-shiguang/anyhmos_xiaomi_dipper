@@ -4,8 +4,8 @@ set -o pipefail
 umask 077
 B=/busybox
 R=/hmos-root
-P=/graphics/promax
-D=$R/data/local/tmp/sheng-hiview-events-v1
+P=/graphics/dipper
+D=$R/data/local/tmp/dipper-hiview-events-v1
 launcher_sha=@HIVIEW_LAUNCHER_SHA256@
 assets_sha=@HIVIEW_ASSETS_SHA256@
 

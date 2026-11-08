@@ -15,7 +15,7 @@ from unittest.mock import patch
 
 
 ROOT = Path(__file__).resolve().parents[1]
-BUILDER = ROOT / 'tools/build_promax_ramdisk.py'
+BUILDER = ROOT / 'tools/build_dipper_ramdisk.py'
 SPEC = importlib.util.spec_from_file_location(
     'parent_control_service', ROOT / 'tools/parent_control_service.py'
 )
@@ -184,7 +184,7 @@ class ParentControlServiceTests(unittest.TestCase):
                 elif mode == 'service':
                     target['services'].append({'name': 'parent_control_service'})
                 else:
-                    target['jobs'].append({'name': 'param:sheng-parentcontrol-start'
+                    target['jobs'].append({'name': 'param:dipper-parentcontrol-start'
                                            if mode == 'gate' else 'other-name',
                                            'cmds': ['start parent_control_service']
                                            if mode == 'command' else []})
@@ -264,7 +264,7 @@ class ParentControlServiceTests(unittest.TestCase):
                         prefix, MODULE.digest(before), MODULE.digest(after),
                         MODULE.digest(helper.read_bytes()), MODULE.digest(private.read_bytes()),
                     )
-                script = script.replace('/graphics/promax', shell_path(payload)).replace(
+                script = script.replace('/graphics/dipper', shell_path(payload)).replace(
                     '/hmos-init-debug.cfg', shell_path(private)
                 )
                 changes = {'private': private, 'helper-hash': helper, 'candidate-hash': candidate,

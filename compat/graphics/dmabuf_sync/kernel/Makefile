@@ -1,1 +1,1 @@
-obj-m += sheng_dmabuf_sync.o
+obj-m += dipper_dmabuf_sync.o

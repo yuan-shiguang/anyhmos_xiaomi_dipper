@@ -17,9 +17,9 @@ import samgr_original_role as role
 from private_persist_parameters import prepare_private_persist
 
 
-SOURCE = ROOT / 'tools/build_promax_ramdisk.py'
+SOURCE = ROOT / 'tools/build_dipper_ramdisk.py'
 TREE = ast.parse(SOURCE.read_text(encoding='utf-8'))
-MEMBER = 'sheng-compat-v118/hmos-init-debug.cfg'
+MEMBER = 'dipper-compat-v118/hmos-init-debug.cfg'
 BOOTSTRAP = 'fb1545f6027ded68368b434dcb15e71b0003f2110a385d9ac2084df157e12407'
 
 
@@ -53,7 +53,7 @@ def builder_stage(config, donor, flags):
         path.parent.mkdir(parents=True)
         path.write_bytes(donor)
         namespace = {
-            'ROOT': root, 'P': 'sheng-compat-v118/', 'args': flags,
+            'ROOT': root, 'P': 'dipper-compat-v118/', 'args': flags,
             'new': {MEMBER: (fields, config)}, 'SAMGR_INPUTS': role.SAMGR_INPUTS,
             'restore_samgr_role': role.restore_samgr_role,
         }

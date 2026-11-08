@@ -6,13 +6,13 @@ $script=@'
 set -e
 B=/busybox
 R=/hmos-root
-P=$R/data/local/tmp/sheng-capture/display0.jpeg
+P=$R/data/local/tmp/dipper-capture/display0.jpeg
 if [ -e "$P" ]; then $B mv "$P" "$R/data/local/tmp/__NAME__-previous.jpeg"; fi
-$B chroot $R /system/bin/param set sheng.debug.start.capture true
+$B chroot $R /system/bin/param set dipper.debug.start.capture true
 i=0
 while [ "$i" -lt 12 ]; do
  $B sleep 1
- state=$($B chroot $R /system/bin/param get startup.service.ctl.sheng_snapshot)
+ state=$($B chroot $R /system/bin/param get startup.service.ctl.dipper_snapshot)
  if [ "$state" -eq 5 ] 2>/dev/null && $B test -s "$P"; then
   $B cp "$P" "$R/data/local/tmp/__NAME__.jpeg"
   echo FRESH_SYSTEM_SCREENSHOT=1

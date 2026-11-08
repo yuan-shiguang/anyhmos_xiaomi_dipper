@@ -15,7 +15,7 @@ from unittest.mock import patch
 
 
 ROOT = Path(__file__).resolve().parents[1]
-SOURCE = ROOT / 'tools/build_promax_ramdisk.py'
+SOURCE = ROOT / 'tools/build_dipper_ramdisk.py'
 TREE = ast.parse(SOURCE.read_text(encoding='utf-8'))
 NAMES = {
     'sha',
@@ -207,12 +207,12 @@ class VibratorServiceTests(unittest.TestCase):
     def test_existing_service_or_gate_conflicts_are_rejected_atomically(self):
         for key, item in [
             ('services', {'name': 'sensors'}),
-            ('jobs', {'name': 'param:sheng-vibrator-service'}),
-            ('jobs', {'name': 'param:sheng-vibrator-service-stop'}),
-            ('jobs', {'name': 'other', 'condition': 'sheng.debug.start.vibrator=true'}),
+            ('jobs', {'name': 'param:dipper-vibrator-service'}),
+            ('jobs', {'name': 'param:dipper-vibrator-service-stop'}),
+            ('jobs', {'name': 'other', 'condition': 'dipper.debug.start.vibrator=true'}),
             (
                 'jobs',
-                {'name': 'other', 'condition': 'sheng.debug.start.vibrator=false'},
+                {'name': 'other', 'condition': 'dipper.debug.start.vibrator=false'},
             ),
         ]:
             desktop = copy.deepcopy(self.desktop)
@@ -291,7 +291,7 @@ bb() {
                 elif case == 'requestfail':
                     self.assertIn('VIBRATOR_START_REQUEST_FAILED=1', run.stdout)
                 else:
-                    self.assertIn('sheng.debug.start.vibrator true', run.stdout)
+                    self.assertIn('dipper.debug.start.vibrator true', run.stdout)
                     self.assertIn('PROFILE_MODE=0644', run.stdout)
         self.assertNotIn('sha256sum', generated)
         self.assertNotIn('native_sa_check', generated)
